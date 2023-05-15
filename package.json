@@ -1,0 +1,24 @@
+{
+  "name": "dorf-voller-trottel",
+  "version": "0.0.1",
+  "description": "Du bist ein IT-Experte in einem fremden Dorf mit vielen unerfahrenen Dorfeinwohnern. Da du gerne akzeptiert werden möchtest, entschließt du dich den Dorfbewohner bei ihren IT-Problemen zu helfen.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukasbaumweb/dorf-voller-trottel.git"
+  },
+  "keywords": [
+    "it-security",
+    "game",
+    "2d"
+  ],
+  "author": "Lukas Baum",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lukasbaumweb/dorf-voller-trottel/issues"
+  },
+  "homepage": "https://github.com/lukasbaumweb/dorf-voller-trottel#readme"
+}
