@@ -4,7 +4,11 @@
   "description": "Du bist ein IT-Experte in einem fremden Dorf mit vielen unerfahrenen Dorfeinwohnern. Da du gerne akzeptiert werden möchtest, entschließt du dich den Dorfbewohner bei ihren IT-Problemen zu helfen.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "gulp",
+    "build": "gulp build",
+    "clean": "gulp clean",
+    "lint": "eslint src",
+    "fix-styling": "prettier --write ./src"
   },
   "repository": {
     "type": "git",
@@ -20,5 +24,27 @@
   "bugs": {
     "url": "https://github.com/lukasbaumweb/dorf-voller-trottel/issues"
   },
-  "homepage": "https://github.com/lukasbaumweb/dorf-voller-trottel#readme"
+  "homepage": "https://github.com/lukasbaumweb/dorf-voller-trottel#readme",
+  "devDependencies": {
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.21.5",
+    "babelify": "^10.0.0",
+    "browser-sync": "^2.29.1",
+    "browserify": "^17.0.0",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-watch": "^5.0.1",
+    "prettier": "2.8.8",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "dependencies": {
+    "pixi.js": "^7.2.4"
+  }
 }
