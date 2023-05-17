@@ -23,7 +23,15 @@ gulp.task("clean", () => {
 });
 
 gulp.task("copy-assets", () =>
-  gulp.src("./assets/*").pipe(gulp.dest("dist/assets"))
+  gulp
+    .src([
+      "./assets/**/*.png",
+      "./assets/**/*.xml",
+      "./assets/**/*.svg",
+      "./assets/**/*.ico",
+      "./assets/**/*.webmanifest",
+    ])
+    .pipe(gulp.dest("dist/assets"))
 );
 
 gulp.task("copy-static-files", () =>
@@ -52,7 +60,7 @@ gulp.task(
 );
 
 gulp.task("watch", () => {
-  return gulp.watch("./src/*.js", gulp.series("build"));
+  return gulp.watch("./src/**/*.js", gulp.series("build"));
 });
 
 gulp.task("default", gulp.parallel("serve", "watch"));

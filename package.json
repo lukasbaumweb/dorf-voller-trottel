@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Du bist ein IT-Experte in einem fremden Dorf mit vielen unerfahrenen Dorfeinwohnern. Da du gerne akzeptiert werden möchtest, entschließt du dich den Dorfbewohner bei ihren IT-Problemen zu helfen.",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "dev": "gulp",
     "build": "gulp build",
