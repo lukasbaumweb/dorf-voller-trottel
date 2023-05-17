@@ -1,16 +1,26 @@
 import * as PIXI from "pixi.js";
-const app = new PIXI.Application({ background: "#1099bb" });
+
+import { Player } from "./entities";
+import { SPRITES } from "./sprites";
+import { Loader } from "./components/Loader";
+import { Keyboard } from "./components/Keyboard";
+
+const app = new PIXI.Application({ background: "#272d37" });
+window.app = app;
 document.body.appendChild(app.view);
 
-// create a new Sprite from an image path
-const bunny = PIXI.Sprite.from("./assets/sunset.png");
+app.ticker.add(gameloop);
 
-// center the sprite's anchor point
-bunny.anchor.set(0.5);
+const loader = new Loader();
 
-// move the sprite to the center of the screen
-bunny.x = app.screen.width / 2;
-bunny.y = app.screen.height / 2;
+loader.show();
 
-app.stage.addChild(bunny);
- 
+const keyboard = new Keyboard();
+keyboard.registerEventlisteners();
+
+loader.hide();
+
+const gameloop = (delta) => {
+  if (keyboard.keys["87"]) {
+  }
+};
