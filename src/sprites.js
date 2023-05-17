@@ -1,3 +1,3 @@
 export const SPRITES = {
-  loader: "assets/loader.png",
+  loader: import("./../assets/loader.png"),
 };

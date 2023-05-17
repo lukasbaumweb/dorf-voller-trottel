@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import "./style.css";
 
 import { Player } from "./entities";
 import { SPRITES } from "./sprites";
@@ -9,7 +10,10 @@ const app = new PIXI.Application({ background: "#272d37" });
 window.app = app;
 document.body.appendChild(app.view);
 
-app.ticker.add(gameloop);
+const gameloop = (delta) => {
+  if (keyboard.keys["87"]) {
+  }
+};
 
 const loader = new Loader();
 
@@ -20,7 +24,4 @@ keyboard.registerEventlisteners();
 
 loader.hide();
 
-const gameloop = (delta) => {
-  if (keyboard.keys["87"]) {
-  }
-};
+app.ticker.add(gameloop);

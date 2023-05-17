@@ -5,9 +5,9 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "dev": "gulp",
-    "build": "gulp build",
-    "clean": "gulp clean",
+    "start": "webpack serve --mode=development",
+    "watch": "webpack --watch --mode=development",
+    "build": "webpack",
     "lint": "eslint src",
     "fix-styling": "prettier --write ./src"
   },
@@ -27,23 +27,15 @@
   },
   "homepage": "https://github.com/lukasbaumweb/dorf-voller-trottel#readme",
   "devDependencies": {
-    "@babel/core": "^7.21.8",
-    "@babel/preset-env": "^7.21.5",
-    "babelify": "^10.0.0",
-    "browser-sync": "^2.29.1",
-    "browserify": "^17.0.0",
+    "css-loader": "^6.7.3",
     "eslint": "^8.40.0",
     "eslint-config-prettier": "^8.8.0",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-clean": "^0.4.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-uglify": "^3.0.2",
-    "gulp-watch": "^5.0.1",
+    "html-webpack-plugin": "^5.5.1",
     "prettier": "2.8.8",
-    "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
+    "style-loader": "^3.3.2",
+    "webpack": "^5.83.1",
+    "webpack-cli": "^5.1.1",
+    "webpack-dev-server": "^4.15.0"
   },
   "dependencies": {
     "pixi.js": "^7.2.4"

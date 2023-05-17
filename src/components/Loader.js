@@ -2,11 +2,9 @@ import * as PIXI from "pixi.js";
 import { SPRITES } from "../sprites";
 
 export class Loader {
-  show() {
+  async show() {
     window.app.stage.removeChildren();
-
-    const loader = PIXI.Sprite.from(SPRITES.loader);
-
+    const loader = PIXI.Sprite.from((await SPRITES.loader).default);
     loader.anchor.set(0.5);
 
     loader.x = window.app.screen.width / 2;
