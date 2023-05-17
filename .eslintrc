@@ -6,5 +6,8 @@
     "allowImportExportEverywhere": true
   },
   "root": true,
-  "ignorePatterns": ["*.js"]
+  "ignorePatterns": ["*.js"],
+  "rules": {
+    "no-unused-vars": "warn"
+  }
 }
