@@ -42,4 +42,7 @@ module.exports = {
       chunks: "all",
     },
   },
+  externals: {
+    jquery: "pixi",
+  },
 };

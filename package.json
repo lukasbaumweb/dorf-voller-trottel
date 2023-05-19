@@ -5,7 +5,7 @@
   "main": "src/main.js",
   "private": true,
   "scripts": {
-    "start": "webpack serve --mode=production",
+    "start": "webpack serve --mode=development",
     "watch": "webpack --watch --mode=production",
     "build": "webpack",
     "lint": "eslint src",
