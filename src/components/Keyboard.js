@@ -1,11 +1,11 @@
-export class Keyboard {
-  keyCodes = {
-    keyUp: "38",
-    keyDown: "40",
-    keyRight: "39",
-    keyLeft: "37",
-  };
+export const keyCodes = {
+  arrowKeyUp: "38",
+  arrowKeyDown: "40",
+  arrowKeyRight: "39",
+  arrowKeyLeft: "37",
+};
 
+export class Keyboard {
   keys = {};
   keyDown = (e) => {
     this.keys[e.keyCode] = true;
@@ -25,4 +25,8 @@ export class Keyboard {
     window.removeEventListener("keydown", this.keyDown);
     window.removeEventListener("keyup", this.keyUp);
   };
+
+  getKeyPressed(keyCode) {
+    return keyCode in keyCodes && keyCodes[keyCode];
+  }
 }

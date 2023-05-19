@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+import { Sprite } from "pixi.js";
 
 export class Tile {
   id = -1;
@@ -11,8 +11,8 @@ export class Tile {
     this.position = position;
   }
 
-  render() {
-    const tile = PIXI.Sprite.from(this.sprite);
+  render() { 
+    const tile = Sprite.from(this.sprite);
     window.app.stage.addChild(tile);
   }
 }

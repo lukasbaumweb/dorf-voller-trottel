@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: "./src/main.js",
@@ -11,7 +12,11 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Output Management",
+      title: "Dorf voller Trottel",
+      template: "app/index.html",
+    }),
+    new CopyPlugin({
+      patterns: [{ from: "assets", to: "assets" }],
     }),
   ],
   module: {
@@ -20,7 +25,6 @@ module.exports = {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
-
       {
         test: /\.(png|svg|jpg|jpeg|gif|ico|xml|webmanifest)$/i,
         type: "asset/resource",
@@ -29,6 +33,9 @@ module.exports = {
   },
   devServer: {
     static: "./dist",
+    client: {
+      overlay: false,
+    },
   },
   optimization: {
     splitChunks: {
