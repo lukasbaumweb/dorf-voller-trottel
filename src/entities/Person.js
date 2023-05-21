@@ -1,3 +1,4 @@
+import { CONFIG } from "../config";
 import { emitEvent, nextPosition } from "../utils";
 import { GameObject } from "./GameObject";
 
@@ -45,9 +46,10 @@ export class Person extends GameObject {
 
     //Set character direction to whatever behavior has
     this.direction = behavior.direction;
-
     if (behavior.type === "walk") {
       //Stop here if space is not free
+      // console.log(behavior.type);
+
       if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
         behavior.retry &&
           setTimeout(() => {
@@ -57,7 +59,7 @@ export class Person extends GameObject {
       }
 
       //Ready to walk!
-      this.movingProgressRemaining = 16;
+      this.movingProgressRemaining = CONFIG.PIXEL_SIZE;
 
       //Add next position intent
       const intentPosition = nextPosition(this.x, this.y, this.direction);
@@ -87,6 +89,7 @@ export class Person extends GameObject {
     this[property] += change;
     this.movingProgressRemaining -= 1;
 
+    // console.log(this.movingProgressRemaining)
     if (this.movingProgressRemaining === 0) {
       //We finished the walk!
       this.intentPosition = null;

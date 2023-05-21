@@ -1,12 +1,22 @@
-import { /* webpackChunkName: "pixi" */ Application, Assets } from "pixi.js";
+import {
+  /* webpackChunkName: "pixi" */ AnimatedSprite,
+  Application,
+  Assets,
+  BLEND_MODES,
+  Graphics,
+} from "pixi.js";
 
-import { Keyboard } from "./../components/Keyboard";
+import { PlayerKeyboard } from "../components/PlayerKeyboard";
 import { Map } from "./Map";
 import { withGrid } from "../utils";
+import { Keyboard } from "../components/Keyboard";
+import { demoLevel } from "../levels/demo";
+import { CONFIG } from "../config";
 
 export class World {
   constructor() {
-    this.keyboard = new Keyboard();
+    this.keyboard = new PlayerKeyboard();
+    this.debug = true;
   }
 
   start(mapConfig) {
@@ -15,10 +25,9 @@ export class World {
     this.map.mountObjects();
 
     this.app.ticker.add((delta) => {
-      //Establish the camera person
+      this.app.stage.removeChildren();
       const cameraPerson = this.map.gameObjects.hero;
 
-      //Update all objects
       Object.values(this.map.gameObjects).forEach((object) => {
         object.update({
           arrow: this.keyboard.direction,
@@ -26,28 +35,69 @@ export class World {
         });
       });
 
-      this.map.drawLowerImage(this.app);
+      this.map.drawLowerImage(this.app, cameraPerson);
 
-      //Draw Game Objects
       Object.values(this.map.gameObjects)
         .sort((a, b) => {
           return a.y - b.y;
         })
         .forEach((object) => {
-          object.sprite.draw(this.app, cameraPerson);
+          object.sprite.draw(this.app, delta, cameraPerson);
         });
 
-      this.map.drawUpperImage(this.app);
+      if (this.debug) {
+        this.drawWalls(cameraPerson);
+      }
+
+      this.map.drawUpperImage(this.app, cameraPerson);
     });
   }
 
-  checkKeys() {
-    if (this.keyboard.getKeyPressed(keyCodes.arrowKeyUp)) {
-      console.log("up");
-    }
+  drawWalls(cameraPerson) {
+    Object.entries(this.map.walls).forEach(([position, blocked]) => {
+      let graphics = null;
+      if (graphics == null) {
+        graphics = new Graphics();
+        graphics.blendMode = BLEND_MODES.DARKEN;
+        this.app.stage.addChild(graphics);
+      }
+
+      const [x, y] = position.split(",").map((s) => Number(s));
+
+      const wallX =
+        withGrid(CONFIG.OFFSET.x) - CONFIG.PIXEL_SIZE + x - cameraPerson.x;
+      const wallY =
+        withGrid(CONFIG.OFFSET.y) - CONFIG.PIXEL_SIZE + y - cameraPerson.y;
+
+      graphics.beginFill(0xde3249);
+      graphics.lineStyle(1, 0xfeeb77, 1);
+      graphics.drawRect(wallX, wallY, CONFIG.PIXEL_SIZE, CONFIG.PIXEL_SIZE);
+      graphics.endFill();
+    });
   }
 
-  init(doc) {
+  bindActionInput() {
+    new Keyboard("Enter", () => {
+      //Is there a person here to talk to?
+      // this.map.checkForActionCutscene();
+    });
+    new Keyboard("Escape", () => {
+      if (!this.map.isCutscenePlaying) {
+        // this.map.startCutscene([{ type: "pause" }]);
+      }
+    });
+  }
+
+  bindHeroPositionCheck() {
+    document.addEventListener("PersonWalkingComplete", (e) => {
+      if (e.detail.whoId === "hero") {
+        //Hero's position has changed
+        this.map.checkForFootstepCutscene();
+      }
+    });
+  }
+
+  async init(doc) {
     this.app = new Application({
       background: "#272d37",
       width: 352,
@@ -61,20 +111,9 @@ export class World {
 
     this.keyboard.init();
 
-    Assets.load(["assets/spritesheets/character.json"]);
+    await Assets.load(["assets/spritesheets/characters.json"]);
 
-    const map = {
-      lowerSrc: "/assets/DemoLower.png",
-      upperSrc: "/assets/DemoUpper.png",
-      configObjects: {
-        hero: {
-          type: "Person",
-          isPlayerControlled: true,
-          x: withGrid(5),
-          y: withGrid(6),
-        },
-      },
-    };
+    const map = demoLevel;
     this.start(map);
   }
 }

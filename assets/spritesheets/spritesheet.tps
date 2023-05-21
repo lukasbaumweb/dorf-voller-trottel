@@ -124,7 +124,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename></filename>
+                <filename>characters.json</filename>
             </struct>
         </map>
         <key>multiPackMode</key>
@@ -167,38 +167,46 @@
             <key>heuristicMask</key>
             <false/>
             <key>defaultPivotPoint</key>
-            <point_f>0,0</point_f>
+            <point_f>0.5,0.5</point_f>
             <key>writePivotPoints</key>
             <true/>
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">hero/hero-0.png</key>
-            <key type="filename">hero/hero-1.png</key>
+            <key type="filename">characters.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
+                <point_f>0,0</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>4,4,8,8</rect>
+                <rect>14,27,28,55</rect>
                 <key>scale9Paddings</key>
-                <rect>4,4,8,8</rect>
+                <rect>14,27,28,55</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">hero/hero-2.png</key>
-            <key type="filename">hero/hero-3.png</key>
-            <key type="filename">hero/hero-4.png</key>
-            <key type="filename">hero/hero-5.png</key>
-            <key type="filename">hero/hero-6.png</key>
-            <key type="filename">hero/hero-7.png</key>
-            <key type="filename">hero/hero-8.png</key>
+            <key type="filename">hero/hero-idle-down-1.png</key>
+            <key type="filename">hero/hero-idle-down-2.png</key>
+            <key type="filename">hero/hero-idle-left-1.png</key>
+            <key type="filename">hero/hero-idle-left-2.png</key>
+            <key type="filename">hero/hero-idle-right-1.png</key>
+            <key type="filename">hero/hero-idle-right-2.png</key>
+            <key type="filename">hero/hero-idle-up-1.png</key>
+            <key type="filename">hero/hero-idle-up-2.png</key>
+            <key type="filename">hero/hero-walk-down-1.png</key>
+            <key type="filename">hero/hero-walk-down-2.png</key>
+            <key type="filename">hero/hero-walk-left-1.png</key>
+            <key type="filename">hero/hero-walk-left-2.png</key>
+            <key type="filename">hero/hero-walk-right-1.png</key>
+            <key type="filename">hero/hero-walk-right-2.png</key>
+            <key type="filename">hero/hero-walk-up-1.png</key>
+            <key type="filename">hero/hero-walk-up-2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0,0</point_f>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>

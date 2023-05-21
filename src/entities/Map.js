@@ -1,6 +1,7 @@
 import { Sprite } from "pixi.js";
 import { nextPosition, withGrid } from "../utils";
 import { Person } from "./Person";
+import { CONFIG } from "../config";
 
 export class Map {
   constructor({ id, lowerSrc, upperSrc, configObjects, walls, app }) {
@@ -19,28 +20,18 @@ export class Map {
     let sprite = Sprite.from(this.lowerImage);
     sprite.anchor.set(0.5);
 
-    sprite.x = app.screen.width / 2;
-    sprite.y = app.screen.height / 2;
+    sprite.x = withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
+    sprite.y = withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
     app.stage.addChild(sprite);
-    // this.app.drawImage(
-    //   this.lowerImage,
-    //   withGrid(10.5), // - cameraPerson.x,
-    //   withGrid(6) // - cameraPerson.y
-    // );
   }
 
   drawUpperImage(app, cameraPerson) {
     let sprite = Sprite.from(this.upperImage);
     sprite.anchor.set(0.5);
 
-    sprite.x = app.screen.width / 2;
-    sprite.y = app.screen.height / 2;
+    sprite.x = withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
+    sprite.y = withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
     app.stage.addChild(sprite);
-    // this.app.drawImage(
-    //   this.upperImage,
-    //   withGrid(10.5), //- cameraPerson.x,
-    //   withGrid(6) // - cameraPerson.y
-    // );
   }
 
   isSpaceTaken(currentX, currentY, direction) {
@@ -71,7 +62,7 @@ export class Map {
 
       let instance;
       if (object.type === "Person") {
-        instance = new Person(object);
+        instance = new Person({ useShadow: true, ...object });
       }
 
       this.gameObjects[key] = instance;

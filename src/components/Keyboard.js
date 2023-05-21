@@ -1,45 +1,25 @@
 export class Keyboard {
-  constructor() {
-    this.heldDirections = [];
-
-    this.map = {
-      ArrowUp: "up",
-      KeyW: "up",
-      ArrowDown: "down",
-      KeyS: "down",
-      ArrowLeft: "left",
-      KeyA: "left",
-      ArrowRight: "right",
-      KeyD: "right",
+  constructor(keyCode, callback) {
+    let keySafe = true;
+    this.keydownFunction = function (event) {
+      if (event.code === keyCode) {
+        if (keySafe) {
+          keySafe = false;
+          callback();
+        }
+      }
     };
+    this.keyupFunction = function (event) {
+      if (event.code === keyCode) {
+        keySafe = true;
+      }
+    };
+    document.addEventListener("keydown", this.keydownFunction);
+    document.addEventListener("keyup", this.keyupFunction);
   }
 
-  get direction() {
-    return this.heldDirections[0];
-  }
-
-  init() {
-    document.addEventListener("keydown", this.onKeyDown);
-    document.addEventListener("keyup", this.onKeyUp);
-  }
-
-  onKeyUp = (e) => {
-    const dir = this.map[e.code];
-    const index = this.heldDirections.indexOf(dir);
-    if (index > -1) {
-      this.heldDirections.splice(index, 1);
-    }
-  };
-
-  onKeyDown = (e) => {
-    const dir = this.map[e.code];
-    if (dir && this.heldDirections.indexOf(dir) === -1) {
-      this.heldDirections.unshift(dir);
-    }
-  };
-
-  dispose() {
-    document.removeEventListener("keyup", onKeyUp);
-    document.removeEventListener("keydown", onKeyDown);
+  unbind() {
+    document.removeEventListener("keydown", this.keydownFunction);
+    document.removeEventListener("keyup", this.keyupFunction);
   }
 }

@@ -29,7 +29,9 @@ export class GameObject {
     }, 10);
   }
 
-  update() {}
+  update() {
+    
+  }
 
   async doBehaviorEvent(map) {
     //Don't do anything if I don't have config to do anything

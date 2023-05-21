@@ -1,15 +1,17 @@
+import { CONFIG } from "./config";
+
 const withGrid = (n) => {
-  return n * 16;
+  return n * CONFIG.PIXEL_SIZE;
 };
 
 const asGridCoord = (x, y) => {
-  return `${x * 16},${y * 16}`;
+  return `${withGrid(x)},${withGrid(y)}`;
 };
 
 const nextPosition = (initialX, initialY, direction) => {
   let x = initialX;
   let y = initialY;
-  const size = 16;
+  const size = CONFIG.PIXEL_SIZE;
   if (direction === "left") {
     x -= size;
   } else if (direction === "right") {

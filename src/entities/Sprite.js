@@ -1,58 +1,37 @@
+import { CONFIG } from "../config";
 import { withGrid } from "../utils";
-import { Sprite as PIXISprite } from "pixi.js";
+import { AnimatedSprite, Assets, Sprite as PIXISprite } from "pixi.js";
 export class Sprite {
   constructor(config) {
-    //Set up the image
-
     this.image = PIXISprite.from(config.src);
-    // TODO: Check loading
-    this.isLoaded = true;
 
-    this.useShadow = true; //config.useShadow || false;
+    this.useShadow = config.useShadow || false;
     if (this.useShadow) {
       this.shadow = PIXISprite.from("/assets/shadow.png");
-      this.isShadowLoaded = true;
     }
 
-    //Configure Animation & Initial State
-    this.animations = config.animations || {
-      "idle-down": [[0, 0]],
-      "idle-right": [[0, 1]],
-      "idle-up": [[0, 2]],
-      "idle-left": [[0, 3]],
-      "walk-down": [
-        [1, 0],
-        [0, 0],
-        [3, 0],
-        [0, 0],
-      ],
-      "walk-right": [
-        [1, 1],
-        [0, 1],
-        [3, 1],
-        [0, 1],
-      ],
-      "walk-up": [
-        [1, 2],
-        [0, 2],
-        [3, 2],
-        [0, 2],
-      ],
-      "walk-left": [
-        [1, 3],
-        [0, 3],
-        [3, 3],
-        [0, 3],
-      ],
+    this.animations = {
+      "idle-down": "hero/hero-idle-down",
+      "idle-right": "hero/hero-idle-right",
+      "idle-up": "hero/hero-idle-up",
+      "idle-left": "hero/hero-idle-left",
+      "walk-down": "hero/hero-walk-down",
+      "walk-right": "hero/hero-walk-right",
+      "walk-up": "hero/hero-walk-up",
+      "walk-left": "hero/hero-walk-left",
+      ...config.animations,
     };
-    this.currentAnimation = config.currentAnimation || "idle-down";
-    this.currentAnimationFrame = 0;
 
-    this.animationFrameLimit = config.animationFrameLimit || 8;
-    this.animationFrameProgress = this.animationFrameLimit;
+    this.loadedAnimations = Assets.cache.get(
+      "assets/spritesheets/characters.json"
+    )?.data.animations;
+
+    this.currentAnimation = config.currentAnimation || "idle-down";
+    this.animationFrameLimit = config.animationFrameLimit || 1 / 6;
 
     //Reference the game object
     this.gameObject = config.gameObject;
+    this.isAnimating = false;
   }
 
   get frame() {
@@ -60,6 +39,8 @@ export class Sprite {
   }
 
   setAnimation(key) {
+    // console.log(key);
+
     if (this.currentAnimation !== key) {
       this.currentAnimation = key;
       this.currentAnimationFrame = 0;
@@ -67,55 +48,36 @@ export class Sprite {
     }
   }
 
-  updateAnimationProgress() {
-    //Downtick frame progress
-    if (this.animationFrameProgress > 0) {
-      this.animationFrameProgress -= 1;
-      return;
+  draw(app, delta, cameraPerson) {
+    const x =
+      this.gameObject.x + withGrid(CONFIG.OFFSET.x) - cameraPerson.x - 8;
+    const y =
+      this.gameObject.y + withGrid(CONFIG.OFFSET.y) - cameraPerson.y - 8;
+
+    if (this.useShadow && this.shadow && !this.isMounted) {
+      this.shadow.x = x;
+      this.shadow.y = y;
+      app.stage.addChild(this.shadow);
+      this.isMounted = true;
     }
 
-    //Reset the counter
-    this.animationFrameProgress = this.animationFrameLimit;
-    this.currentAnimationFrame += 1;
+    const character = AnimatedSprite.fromFrames(
+      this.loadedAnimations[this.animations[this.currentAnimation]]
+    );
 
-    if (this.frame === undefined) {
-      this.currentAnimationFrame = 0;
+    if (!this.isAnimating) {
+      character.animationSpeed = 1 / 6; // 6 fps
+      this.isAnimating = false;
+      character.anchor.set(0.5);
+
+      character.onComplete = () => {
+        this.isAnimating = false;
+        character.destroy();
+      };
+      character.play();
     }
-  }
+    character.position.set(x, y);
 
-  draw(app, cameraPerson) {
-    const x = this.gameObject.x - 8 + withGrid(10.5) - cameraPerson.x;
-    const y = this.gameObject.y - 18 + withGrid(6) - cameraPerson.y;
-
-    this.shadow.x = x;
-    this.shadow.y = y;
-
-    this.isShadowLoaded && app.stage.addChild(this.shadow);
-
-    const [frameX, frameY] = this.frame;
-
-    if (this.isLoaded) {
-      // this.image.x = x;
-      // this.image.y = y;
-
-      this.image.position = { x, y };
-
-      this.image.width = frameX * 32;
-      this.image.height = frameY * 32;
-
-      app.stage.addChild(
-        this.image
-        // frameX * 32,
-        // frameY * 32,
-        // 32,
-        // 32,
-        // x,
-        // y,
-        // 32,
-        // 32
-      );
-    }
-
-    this.updateAnimationProgress();
+    app.stage.addChild(character);
   }
 }
