@@ -1,0 +1,59 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "dorf.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "basic terrain.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "basic terrrain.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2
+        },
+        "dorf.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 196.5,
+                "y": 134
+            }
+        },
+        "dorf.tmx#basic terrain": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "terrain.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 3
+        }
+    },
+    "last.exportedFilePath": "D:/source/dorf-voller-trottel/assets/map",
+    "last.externalTilesetPath": "D:/source/dorf-voller-trottel/assets/map",
+    "last.imagePath": "D:/source/dorf-voller-trottel/assets/tiles",
+    "map.lastUsedExportFilter": "JSON-Kartendateien (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+        "dorf.tmx"
+    ],
+    "project": "dorf.tiled-project",
+    "recentFiles": [
+        "dorf.tmx",
+        "terrain.tsx",
+        "basic terrain.tsx",
+        "basic terrrain.tsx"
+    ],
+    "tileset.lastUsedFilter": "Tiled-Kachelsatzdateien (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
