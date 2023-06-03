@@ -10,7 +10,8 @@ export class GameObject {
     this.direction = config.direction || "down";
     this.sprite = new Sprite({
       gameObject: this,
-      src: config.src || "assets/characters.png",
+      texture: config.texture,
+      json: config.json,
     });
 
     //These happen once on map startup.
@@ -29,9 +30,7 @@ export class GameObject {
     }, 10);
   }
 
-  update() {
-    
-  }
+  update() {}
 
   async doBehaviorEvent(map) {
     //Don't do anything if I don't have config to do anything

@@ -3,7 +3,7 @@ import { withGrid } from "../utils";
 import { AnimatedSprite, Assets, Sprite as PIXISprite } from "pixi.js";
 export class Sprite {
   constructor(config) {
-    this.image = PIXISprite.from(config.src);
+    this.image = PIXISprite.from(config.texture);
 
     this.useShadow = config.useShadow || false;
     if (this.useShadow) {
@@ -22,12 +22,11 @@ export class Sprite {
       ...config.animations,
     };
 
-    this.loadedAnimations = Assets.cache.get(
-      "assets/spritesheets/characters.json"
-    )?.data.animations;
+    this.loadedAnimations = Assets.cache.get(config.json)?.data.animations;
 
     this.currentAnimation = config.currentAnimation || "idle-down";
-    this.animationFrameLimit = config.animationFrameLimit || 1 / 6;
+    this.animationFrameLimit =
+      config.animationFrameLimit || CONFIG.animationFrameLimit;
 
     //Reference the game object
     this.gameObject = config.gameObject;
@@ -48,7 +47,7 @@ export class Sprite {
     }
   }
 
-  draw(app, delta, cameraPerson) {
+  render(container, cameraPerson, index) {
     const x =
       this.gameObject.x + withGrid(CONFIG.OFFSET.x) - cameraPerson.x - 8;
     const y =
@@ -57,27 +56,41 @@ export class Sprite {
     if (this.useShadow && this.shadow && !this.isMounted) {
       this.shadow.x = x;
       this.shadow.y = y;
-      app.stage.addChild(this.shadow);
+      container.addChild(this.shadow);
       this.isMounted = true;
     }
 
     const character = AnimatedSprite.fromFrames(
       this.loadedAnimations[this.animations[this.currentAnimation]]
     );
+    character.zIndex = index;
 
-    if (!this.isAnimating) {
-      character.animationSpeed = 1 / 6; // 6 fps
+    character.animationSpeed = 1 / 6;
+    this.isAnimating = false;
+    character.anchor.set(0.5);
+
+    character.onComplete = () => {
       this.isAnimating = false;
-      character.anchor.set(0.5);
+      character.destroy();
+    };
+    character.play();
 
-      character.onComplete = () => {
-        this.isAnimating = false;
-        character.destroy();
-      };
-      character.play();
-    }
     character.position.set(x, y);
+    character.eventMode = "static";
 
-    app.stage.addChild(character);
+    // Shows hand cursor
+    character.buttonMode = true;
+
+    character.on("pointerenter", (e) => {
+      character.alpha = 0.5;
+      console.log(e);
+    });
+
+    character.on("pointerleave", (e) => {
+      character.alpha = 1;
+      console.log(e);
+    });
+
+    container.addChild(character);
   }
 }
