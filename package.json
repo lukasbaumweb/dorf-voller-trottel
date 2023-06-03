@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/lukasbaumweb/dorf-voller-trottel#readme",
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
     "eslint": "^8.40.0",
@@ -39,6 +40,9 @@
     "webpack-dev-server": "^4.15.0"
   },
   "dependencies": {
+    "@pixi/core": "^7.2.4",
+    "@pixi/display": "^7.2.4",
+    "@pixi/tilemap": "^4.0.0",
     "pixi.js": "^7.2.4"
   },
   "overrides": {

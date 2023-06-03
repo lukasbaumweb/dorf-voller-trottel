@@ -3,7 +3,10 @@ import {
   Application,
   Assets,
   BLEND_MODES,
+  Container,
   Graphics,
+  Sprite,
+  Texture,
 } from "pixi.js";
 
 import { PlayerKeyboard } from "../components/PlayerKeyboard";
@@ -11,7 +14,7 @@ import { Map } from "./Map";
 import { withGrid } from "../utils";
 import { Keyboard } from "../components/Keyboard";
 import { demoLevel } from "../levels/demo";
-import { CONFIG } from "../config";
+import { CONFIG, getAssets } from "../config";
 
 export class World {
   constructor() {
@@ -24,42 +27,67 @@ export class World {
     this.map.world = this;
     this.map.mountObjects();
 
-    this.app.ticker.add((delta) => {
-      this.app.stage.removeChildren();
-      const cameraPerson = this.map.gameObjects.hero;
+    // let bg = new Sprite(Texture.WHITE);
+    // // Set it to fill the screen
+    // bg.width = this.app.screen.width;
+    // bg.height = this.app.screen.height;
+    // // Tint it to whatever color you want, here red
+    // bg.tint = 0xcccccc;
+    // bg.blendMode = BLEND_MODES.MULTIPLY;
+    // // Add a click handler
+    // bg.eventMode = "static";
+    // bg.cursor = "pointer";
+    // bg.on("click", function (e) {
+    //   console.log(e);
+    // });
 
-      Object.values(this.map.gameObjects).forEach((object) => {
-        object.update({
-          arrow: this.keyboard.direction,
-          map: this.map,
-        });
+    // bg.on("mousemove", (e) => {
+    //   console.log(e);
+    // });
+    // // Add it to the stage as the first object
+    // this.debug && this.gameObjectsContainer.addChild(bg);
+
+    const cameraPerson = this.map.gameObjects.hero;
+
+    Object.values(this.map.gameObjects).forEach((object) => {
+      object.update({
+        arrow: this.keyboard.direction,
+        map: this.map,
+      });
+    });
+
+    this.map.renderMap(this.gameObjectsContainer, cameraPerson);
+
+    Object.values(this.map.gameObjects)
+      .sort((a, b) => {
+        return a.y - b.y;
+      })
+      .forEach((object, index) => {
+        object.sprite.render(
+          this.gameObjectsContainer,
+          cameraPerson,
+          index
+        );
       });
 
-      this.map.drawLowerImage(this.app, cameraPerson);
+    if (this.debug) {
+      this.drawWalls(cameraPerson);
+    }
 
-      Object.values(this.map.gameObjects)
-        .sort((a, b) => {
-          return a.y - b.y;
-        })
-        .forEach((object) => {
-          object.sprite.draw(this.app, delta, cameraPerson);
-        });
+    // this.map.drawUpperImage(this.gameObjectsContainer, cameraPerson);
 
-      if (this.debug) {
-        this.drawWalls(cameraPerson);
-      }
-
-      this.map.drawUpperImage(this.app, cameraPerson);
-    });
+    this.app.ticker.add((delta) => this.gameloop(this, delta));
   }
+
+  gameloop(ctx, delta) {}
 
   drawWalls(cameraPerson) {
     Object.entries(this.map.walls).forEach(([position, blocked]) => {
       let graphics = null;
-      if (graphics == null) {
+      if (graphics === null) {
         graphics = new Graphics();
         graphics.blendMode = BLEND_MODES.DARKEN;
-        this.app.stage.addChild(graphics);
+        this.gameObjectsContainer.addChild(graphics);
       }
 
       const [x, y] = position.split(",").map((s) => Number(s));
@@ -97,12 +125,17 @@ export class World {
     });
   }
 
-  async init(doc) {
+  init(doc) {
     this.app = new Application({
       background: "#272d37",
       width: 352,
       height: 198,
     });
+    this.gameObjectsContainer = new Container();
+
+    this.gameObjectsContainer.sortableChildren = true;
+
+    this.app.stage.addChild(this.gameObjectsContainer);
 
     const gameContainer = doc.createElement("div");
     gameContainer.classList.add("game-wrapper");
@@ -110,8 +143,6 @@ export class World {
     doc.body.appendChild(gameContainer);
 
     this.keyboard.init();
-
-    await Assets.load(["assets/spritesheets/characters.json"]);
 
     const map = demoLevel;
     this.start(map);

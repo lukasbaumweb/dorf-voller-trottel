@@ -1,6 +1,6 @@
-const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const { IgnorePlugin } = require("webpack");
 
 module.exports = {
   entry: "./src/main.js",
@@ -17,7 +17,7 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [{ from: "assets", to: "assets" }],
-    }),
+    })
   ],
   module: {
     rules: [

@@ -1,15 +1,17 @@
+import { CONFIG, getAsset } from "../config";
 import { asGridCoord, withGrid } from "../utils";
 
 export const demoLevel = {
   id: "DemoRoom",
-  lowerSrc: "/assets/DemoLower.png",
-  upperSrc: "/assets/DemoUpper.png",
+  map: CONFIG.assets.maps.dorf,
   configObjects: {
     hero: {
       type: "Person",
       isPlayerControlled: true,
       x: withGrid(0),
       y: withGrid(0),
+      texture: getAsset(CONFIG.assets.textures.hero.img),
+      json: getAsset(CONFIG.assets.textures.hero.config),
     },
   },
   walls: {
@@ -22,4 +24,5 @@ export const demoLevel = {
     [asGridCoord(6, 3)]: true,
     [asGridCoord(6, 2)]: true,
   },
+  floor: { "0,0": { accessible: true, tileId: 0 } },
 };
