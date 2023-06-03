@@ -1,8 +1,16 @@
-import { Assets, Container, Loader, Sprite } from "pixi.js";
+import {
+  Assets,
+  Container,
+  Loader,
+  Rectangle,
+  Sprite,
+  Texture,
+  TilingSprite,
+} from "pixi.js";
 import { nextPosition, withGrid } from "../utils";
 import { Person } from "./Person";
 import { CONFIG, getAsset } from "../config";
-import { CompositeTilemap } from "@pixi/tilemap";
+
 export class Map {
   constructor({ id, map, configObjects, walls, app }) {
     this.id = id || `ID: ${new Date().getTime()}${Math.random()}`;
@@ -15,27 +23,50 @@ export class Map {
     this.gameObjects = {};
   }
 
-  renderMap(gameContainer, cameraPerson) {
+  initMap(gameContainer, cameraPerson) {
     const cached = Assets.get(getAsset(CONFIG.assets.maps.dorf));
-    const map = PIXI.Sprite.from(cached.tilesets[0].image);
-    console.log(cached);
-    console.log(map);
-
-    const tilemap = new CompositeTilemap();
+    const texture = Texture.from(CONFIG.assets.textures.dorf.img);
 
     // Render your first tile at (0, 0)!
     const newArr = [];
     while (cached.layers[0].data.length)
       newArr.push(cached.layers[0].data.splice(0, cached.layers[0].width));
-    console.log(newArr);
+
     for (let y = 0; y < newArr.length; y++) {
       for (let x = 0; x < newArr[y].length; x++) {
         const element = newArr[y][x];
-        tilemap.tile(getAsset(cached.tilesets[0].image), x, y);
+        // console.log(y + 1, x + 1);
+        // texture.frame = new Rectangle(
+        //   x*CONFIG.PIXEL_SIZE,
+        //   y*CONFIG.PIXEL_SIZE,
+        //   CONFIG.PIXEL_SIZE,
+        //   CONFIG.PIXEL_SIZE
+        // );
+        // const cat = new Sprite(texture);
+
+        // tilemap.tile(cat, x, y);
       }
     }
+    // texture.frame = new Rectangle(
+    //   0 * CONFIG.PIXEL_SIZE,
+    //   0 * CONFIG.PIXEL_SIZE,
+    //   0 * CONFIG.PIXEL_SIZE,
+    //   0 * CONFIG.PIXEL_SIZE
+    // );
+    // const cat = new Sprite(texture);
 
-    const container = new Container();
+    let container;
+    let tilemap;
+
+    if (!container) {
+      container = new Container();
+      gameContainer.addChild(container);
+    }
+    if (!tilemap) {
+      tilemap = new TilingSprite(texture, CONFIG.PIXEL_SIZE, CONFIG.PIXEL_SIZE);
+      container.addChild(tilemap);
+    }
+
     container.x = withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
     container.y = withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
 
@@ -46,12 +77,6 @@ export class Map {
       // console.log(e);
     });
 
-    let sprite = Sprite.from(getAsset(cached.tilesets[0].image));
-    sprite.anchor.set(0.5);
-
-    container.addChild(sprite);
-
-    gameContainer.addChild(container);
   }
 
   isSpaceTaken(currentX, currentY, direction) {
@@ -75,10 +100,11 @@ export class Map {
     });
   }
 
-  mountObjects() {
+  mountObjects(container) {
     Object.keys(this.configObjects).forEach((key) => {
       let object = this.configObjects[key];
       object.id = key;
+      object.container = container;
 
       let instance;
       if (object.type === "Person") {

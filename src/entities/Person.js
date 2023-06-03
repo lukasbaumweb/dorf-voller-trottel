@@ -4,7 +4,7 @@ import { GameObject } from "./GameObject";
 
 export class Person extends GameObject {
   constructor(config) {
-    super(config);
+    super({ ...config, interactable: true });
     this.movingProgressRemaining = 0;
     this.isStanding = false;
     this.intentPosition = null; // [x,y]

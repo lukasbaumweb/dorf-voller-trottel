@@ -12,6 +12,8 @@ export class GameObject {
       gameObject: this,
       texture: config.texture,
       json: config.json,
+      container: config.container,
+      interactable: !!config.interactable,
     });
 
     //These happen once on map startup.

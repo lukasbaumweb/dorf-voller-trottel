@@ -25,8 +25,12 @@ export class World {
   start(mapConfig) {
     this.map = new Map(mapConfig);
     this.map.world = this;
-    this.map.mountObjects();
 
+    this.map.mountObjects(this.gameObjectsContainer);
+    const cameraPerson = this.map.gameObjects.hero;
+
+    this.map.initMap(this.gameObjectsContainer, cameraPerson);
+    this.graphics = [];
     // let bg = new Sprite(Texture.WHITE);
     // // Set it to fill the screen
     // bg.width = this.app.screen.width;
@@ -47,7 +51,19 @@ export class World {
     // // Add it to the stage as the first object
     // this.debug && this.gameObjectsContainer.addChild(bg);
 
+    // this.map.drawUpperImage(this.gameObjectsContainer, cameraPerson);
+
+    this.app.ticker.add(this.gameLoopReference);
+  }
+
+  gameLoopReference = (delta) => this.gameloop(this, delta);
+
+  gameloop(ctx, delta) {
     const cameraPerson = this.map.gameObjects.hero;
+
+    if (this.debug) {
+      this.drawWalls(cameraPerson);
+    }
 
     Object.values(this.map.gameObjects).forEach((object) => {
       object.update({
@@ -56,38 +72,31 @@ export class World {
       });
     });
 
-    this.map.renderMap(this.gameObjectsContainer, cameraPerson);
-
     Object.values(this.map.gameObjects)
       .sort((a, b) => {
         return a.y - b.y;
       })
       .forEach((object, index) => {
-        object.sprite.render(
-          this.gameObjectsContainer,
-          cameraPerson,
-          index
-        );
+        object.sprite.render(cameraPerson, index);
       });
 
-    if (this.debug) {
-      this.drawWalls(cameraPerson);
-    }
-
-    // this.map.drawUpperImage(this.gameObjectsContainer, cameraPerson);
-
-    this.app.ticker.add((delta) => this.gameloop(this, delta));
+    console.log(this.app.stage.children[0].children.length);
   }
 
-  gameloop(ctx, delta) {}
-
   drawWalls(cameraPerson) {
-    Object.entries(this.map.walls).forEach(([position, blocked]) => {
-      let graphics = null;
-      if (graphics === null) {
-        graphics = new Graphics();
-        graphics.blendMode = BLEND_MODES.DARKEN;
-        this.gameObjectsContainer.addChild(graphics);
+    for (let i = 0; i < this.graphics.length; i++) {
+      const g = this.graphics[i];
+
+      if (g) {
+        g.destroy();
+      }
+    }
+    this.graphics = [];
+    Object.entries(this.map.walls).forEach(([position], index) => {
+      if (!this.graphics[index]) {
+        this.graphics[index] = new Graphics();
+        this.graphics[index].blendMode = BLEND_MODES.DARKEN;
+        this.gameObjectsContainer.addChild(this.graphics[index]);
       }
 
       const [x, y] = position.split(",").map((s) => Number(s));
@@ -97,10 +106,15 @@ export class World {
       const wallY =
         withGrid(CONFIG.OFFSET.y) - CONFIG.PIXEL_SIZE + y - cameraPerson.y;
 
-      graphics.beginFill(0xde3249);
-      graphics.lineStyle(1, 0xfeeb77, 1);
-      graphics.drawRect(wallX, wallY, CONFIG.PIXEL_SIZE, CONFIG.PIXEL_SIZE);
-      graphics.endFill();
+      this.graphics[index].beginFill(0xde3249);
+      this.graphics[index].lineStyle(1, 0xfeeb77, 1);
+      this.graphics[index].drawRect(
+        wallX,
+        wallY,
+        CONFIG.PIXEL_SIZE,
+        CONFIG.PIXEL_SIZE
+      );
+      this.graphics[index].endFill();
     });
   }
 
@@ -113,6 +127,8 @@ export class World {
       if (!this.map.isCutscenePlaying) {
         // this.map.startCutscene([{ type: "pause" }]);
       }
+      console.debug("Escaped clicked");
+      this.app.ticker.remove(this.gameLoopReference);
     });
   }
 
@@ -143,6 +159,8 @@ export class World {
     doc.body.appendChild(gameContainer);
 
     this.keyboard.init();
+
+    this.bindActionInput();
 
     const map = demoLevel;
     this.start(map);
