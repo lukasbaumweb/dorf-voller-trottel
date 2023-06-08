@@ -79,8 +79,6 @@ export class World {
       .forEach((object, index) => {
         object.sprite.render(cameraPerson, index);
       });
-
-    console.log(this.app.stage.children[0].children.length);
   }
 
   drawWalls(cameraPerson) {

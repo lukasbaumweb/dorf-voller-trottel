@@ -30,6 +30,7 @@ export class Sprite {
     this.isMounted = false;
     this.gameContainer = config.container;
     this.sprite = null;
+    this.animationPlaying = false;
   }
 
   get frame() {
@@ -37,11 +38,9 @@ export class Sprite {
   }
 
   setAnimation(key) {
-    console.log(key);
-
     if (this.currentAnimation !== key) {
       this.currentAnimation = key;
-      this.currentAnimationFrame = 0;
+
       this.animationFrameProgress = this.animationFrameLimit;
     }
   }
@@ -52,7 +51,7 @@ export class Sprite {
     const y =
       this.gameObject.y + withGrid(CONFIG.OFFSET.y) - cameraPerson.y - 8;
 
-    if (this.sprite === null) {
+    if (this.sprite === null && !this.animationPlaying)  {
       this.sprite = AnimatedSprite.fromFrames(
         this.loadedAnimations[this.animations[this.currentAnimation]]
       );
@@ -63,14 +62,16 @@ export class Sprite {
       this.sprite.animationSpeed = 1 / 6;
       this.sprite.loop = false;
       this.sprite.play();
+      this.animationPlaying = true;
+
       this.sprite.onComplete = () => {
-        this.sprite = null;
-        console.log("Animation finished");
         this.gameContainer.removeChild(this.sprite);
         this.sprite.destroy();
+        this.sprite = null;
       };
       this.sprite.eventMode = "static";
       this.gameContainer.addChild(this.sprite);
+      this.animationPlaying = false;
     }
 
     this.sprite.position.set(x, y);

@@ -5,9 +5,10 @@
   "main": "src/main.js",
   "private": true,
   "scripts": {
-    "start": "webpack serve --mode=development",
+    "dev": "webpack serve --mode=development",
+    "start": "webpack serve --mode=production",
     "watch": "webpack --watch --mode=production",
-    "build": "webpack",
+    "build": "webpack --mode=production",
     "lint": "eslint src",
     "fix-styling": "prettier --write ./src"
   },
@@ -41,8 +42,6 @@
   },
   "dependencies": {
     "@pixi/core": "^7.2.4",
-    "@pixi/display": "^7.2.4",
-    "@pixi/tilemap": "^4.0.0",
     "pixi.js": "^7.2.4"
   },
   "overrides": {

@@ -2,18 +2,18 @@ import { Assets } from "pixi.js";
 
 export const CONFIG = {
   PIXEL_SIZE: 16,
-  animationFrameLimit: 16,
+  animationFrameLimit: 6,
   OFFSET: { x: 10.5, y: 6 },
   assets: {
     textures: {
       hero: {
-        img: "assets/textures/characters/hero.png",
-        config: "assets/textures/characters/hero.json",
+        img: "public/textures/characters/hero.png",
+        config: "public/textures/characters/hero.json",
       },
-      dorf: { img: "assets/textures/maps/dorf.png" },
+      dorf: { img: "public/textures/maps/dorf.png" },
     },
     maps: {
-      dorf: "assets/maps/dorf.json",
+      dorf: "public/maps/dorf.json",
     },
   },
 };

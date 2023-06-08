@@ -1,6 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-const { IgnorePlugin } = require("webpack");
 
 module.exports = {
   entry: "./src/main.js",
@@ -16,8 +15,8 @@ module.exports = {
       template: "app/index.html",
     }),
     new CopyPlugin({
-      patterns: [{ from: "assets", to: "assets" }],
-    })
+      patterns: [{ from: "public", to: "public" }],
+    }),
   ],
   module: {
     rules: [
@@ -41,8 +40,5 @@ module.exports = {
     splitChunks: {
       chunks: "all",
     },
-  },
-  externals: {
-    jquery: "pixi",
   },
 };

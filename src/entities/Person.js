@@ -11,13 +11,15 @@ export class Person extends GameObject {
 
     this.isPlayerControlled = config.isPlayerControlled || false;
 
+    const movementSpeed = 1;
+
     this.directionUpdate = {
-      up: ["y", -1],
-      down: ["y", 1],
-      left: ["x", -1],
-      right: ["x", 1],
+      up: ["y", -movementSpeed],
+      down: ["y", movementSpeed],
+      left: ["x", -movementSpeed],
+      right: ["x", movementSpeed],
     };
-    this.standBehaviorTimeout;
+    this.standBehaviorTimeout = 1;
   }
 
   update(state) {
@@ -90,7 +92,7 @@ export class Person extends GameObject {
     this.movingProgressRemaining -= 1;
 
     // console.log(this.movingProgressRemaining)
-    if (this.movingProgressRemaining === 0) {
+    if (this.movingProgressRemaining <= 0) {
       //We finished the walk!
       this.intentPosition = null;
       emitEvent("PersonWalkingComplete", {
