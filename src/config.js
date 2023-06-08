@@ -3,7 +3,7 @@ import { Assets } from "pixi.js";
 export const CONFIG = {
   PIXEL_SIZE: 16,
   animationFrameLimit: 6,
-  OFFSET: { x: 10.5, y: 6 },
+  OFFSET: { x: 10, y: 6 },
   assets: {
     textures: {
       hero: {
@@ -16,7 +16,7 @@ export const CONFIG = {
       },
     },
     maps: {
-      dorf: "public/maps/dorf.json",
+      dorf: { config: "public/maps/dorf.json", width: 30, height: 20 },
     },
   },
 };
@@ -33,11 +33,10 @@ const getImages = () => {
   return Object.values(CONFIG.assets.textures).map(({ img }) => getAsset(img));
 };
 
-export const getAsset = (path) =>
-  `${window.location.origin}/${REL_PATH}/${path}`;
+export const getAsset = (path) => `${window.location.origin}/${REL_PATH}/${path}`;
 
 const getMaps = () => {
-  return Object.values(CONFIG.assets.maps).map((path) => getAsset(path));
+  return Object.values(CONFIG.assets.maps).map(({ config }) => getAsset(config));
 };
 
 export const assetLoader = async () => {

@@ -60,8 +60,10 @@ export class World {
 
   gameloop(ctx, delta) {
     const cameraPerson = this.map.gameObjects.hero;
+
     this.map.update(cameraPerson);
-    if (this.debug) {
+
+    if (!this.debug) {
       this.drawWalls(cameraPerson);
     }
 
@@ -79,6 +81,8 @@ export class World {
       .forEach((object, index) => {
         object.sprite.render(cameraPerson, index);
       });
+
+    // console.debug(this.gameObjectsContainer.children[0].children.length);
   }
 
   drawWalls(cameraPerson) {
@@ -99,19 +103,12 @@ export class World {
 
       const [x, y] = position.split(",").map((s) => Number(s));
 
-      const wallX =
-        withGrid(CONFIG.OFFSET.x) - CONFIG.PIXEL_SIZE + x - cameraPerson.x;
-      const wallY =
-        withGrid(CONFIG.OFFSET.y) - CONFIG.PIXEL_SIZE + y - cameraPerson.y;
+      const wallX = withGrid(CONFIG.OFFSET.x) - CONFIG.PIXEL_SIZE + x - cameraPerson.x;
+      const wallY = withGrid(CONFIG.OFFSET.y) - CONFIG.PIXEL_SIZE + y - cameraPerson.y;
 
       this.graphics[index].beginFill(0xde3249);
       this.graphics[index].lineStyle(1, 0xfeeb77, 1);
-      this.graphics[index].drawRect(
-        wallX,
-        wallY,
-        CONFIG.PIXEL_SIZE,
-        CONFIG.PIXEL_SIZE
-      );
+      this.graphics[index].drawRect(wallX, wallY, CONFIG.PIXEL_SIZE, CONFIG.PIXEL_SIZE);
       this.graphics[index].endFill();
     });
   }

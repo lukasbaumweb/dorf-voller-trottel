@@ -27,11 +27,7 @@ export class Person extends GameObject {
       this.updatePosition();
     } else {
       //We're keyboard ready and have an arrow pressed
-      if (
-        !state.map.isCutscenePlaying &&
-        this.isPlayerControlled &&
-        state.arrow
-      ) {
+      if (!state.map.isCutscenePlaying && this.isPlayerControlled && state.arrow) {
         this.startBehavior(state, {
           type: "walk",
           direction: state.arrow,
@@ -52,7 +48,10 @@ export class Person extends GameObject {
       //Stop here if space is not free
       // console.log(behavior.type);
 
-      if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
+      const isOutside = state.map.isOutofBounds(this.x, this.y, this.direction);
+      console.log(isOutside);
+
+      if (state.map.isSpaceTaken(this.x, this.y, this.direction) || isOutside) {
         behavior.retry &&
           setTimeout(() => {
             this.startBehavior(state, behavior);

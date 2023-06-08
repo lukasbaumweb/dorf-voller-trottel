@@ -1,16 +1,8 @@
-import {
-  Assets,
-  Container,
-  Loader,
-  Rectangle,
-  Sprite,
-  Texture,
-  TilingSprite,
-} from "pixi.js";
+import { Container } from "pixi.js";
 import { nextPosition, withGrid } from "../utils";
 import { Person } from "./Person";
-import { CONFIG, getAsset } from "../config";
-import { loadMap as loadLayers } from "../lib/MapLoader";
+import { CONFIG } from "../config";
+import { loadLayers, loadWalls } from "../lib/MapLoader";
 
 export class Map {
   constructor({ id, map, configObjects, walls, app }) {
@@ -26,10 +18,9 @@ export class Map {
   }
 
   initMap(gameContainer, cameraPerson) {
-    // const cached = Assets.get(getAsset(CONFIG.assets.maps.dorf));
-    // const texture = Texture.from(CONFIG.assets.textures.dorf.img);
+    this.layers = loadLayers(CONFIG.assets.maps.dorf.config);
+    this.walls = loadWalls(CONFIG.assets.maps.dorf.config, cameraPerson).tiles;
 
-    this.layers = loadLayers();
     console.log(this.layers);
 
     let container;
@@ -41,16 +32,16 @@ export class Map {
 
     for (let i = 0; i < this.layers.length; i++) {
       const layer = this.layers[i];
-
-      for (let j = 0; j < layer.tiles.length; j++) {
-        const tile = layer.tiles[j];
-
-        container.addChild(tile.sprite);
+      console.log(layer);
+      for (let y = 0; y < layer.tiles.length; y++) {
+        for (let x = 0; x < layer.tiles[y].length; x++) {
+          const tile = layer.tiles[y][x];
+          tile.sprite.x = withGrid(tile.x) - withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
+          tile.sprite.y = withGrid(tile.y) - withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
+          container.addChild(tile.sprite);
+        }
       }
     }
-
-    // container.x = withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
-    // container.y = withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
 
     container.eventMode = "static";
 
@@ -63,18 +54,12 @@ export class Map {
   update(cameraPerson) {
     for (let i = 0; i < this.layers.length; i++) {
       const layer = this.layers[i];
-
-      for (let j = 0; j < layer.tiles.length; j++) {
-        const tile = layer.tiles[j];
-
-        tile.sprite.x =
-          tile.x * CONFIG.PIXEL_SIZE -
-          withGrid(CONFIG.OFFSET.x) -
-          cameraPerson.x;
-        tile.sprite.y =
-          tile.y * CONFIG.PIXEL_SIZE -
-          withGrid(CONFIG.OFFSET.y) -
-          cameraPerson.y;
+      for (let y = 0; y < layer.tiles.length; y++) {
+        for (let x = 0; x < layer.tiles[y].length; x++) {
+          const tile = layer.tiles[y][x];
+          tile.sprite.x = withGrid(tile.x) - withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
+          tile.sprite.y = withGrid(tile.y) - withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
+        }
       }
     }
   }
@@ -84,20 +69,34 @@ export class Map {
     if (this.walls[`${x},${y}`]) {
       return true;
     }
+
     //Check for game objects at this position
     return Object.values(this.gameObjects).find((obj) => {
       if (obj.x === x && obj.y === y) {
         return true;
       }
-      if (
-        obj.intentPosition &&
-        obj.intentPosition[0] === x &&
-        obj.intentPosition[1] === y
-      ) {
+      if (obj.intentPosition && obj.intentPosition[0] === x && obj.intentPosition[1] === y) {
         return true;
       }
       return false;
     });
+  }
+
+  isOutofBounds(currentX, currentY, direction) {
+    const { x, y } = nextPosition(currentX, currentY, direction);
+
+    const topBorder = withGrid(-CONFIG.OFFSET.y * 2);
+    const bottomBorder = withGrid(-CONFIG.OFFSET.y * 2) + withGrid(CONFIG.assets.maps.dorf.height);
+    const leftBorder = withGrid(-CONFIG.OFFSET.x * 2);
+    const rightBorder = withGrid(-CONFIG.OFFSET.x * 2) + withGrid(CONFIG.assets.maps.dorf.width);
+
+    if (y <= topBorder || y > bottomBorder) {
+      return true;
+    }
+
+    if (x <= leftBorder || x > rightBorder) {
+      return true;
+    }
   }
 
   mountObjects(container) {

@@ -18,8 +18,7 @@ export class Sprite {
     this.loadedAnimations = Assets.cache.get(config.json)?.data.animations;
 
     this.currentAnimation = config.currentAnimation || "idle-down";
-    this.animationFrameLimit =
-      config.animationFrameLimit || CONFIG.animationFrameLimit;
+    this.animationFrameLimit = config.animationFrameLimit || CONFIG.animationFrameLimit;
 
     // Reference the game object
     this.gameObject = config.gameObject;
@@ -46,15 +45,11 @@ export class Sprite {
   }
 
   render(cameraPerson, index) {
-    const x =
-      this.gameObject.x + withGrid(CONFIG.OFFSET.x) - cameraPerson.x - 8;
-    const y =
-      this.gameObject.y + withGrid(CONFIG.OFFSET.y) - cameraPerson.y - 8;
+    const x = this.gameObject.x + withGrid(CONFIG.OFFSET.x) - cameraPerson.x - 8;
+    const y = this.gameObject.y + withGrid(CONFIG.OFFSET.y) - cameraPerson.y - 8;
 
-    if (this.sprite === null && !this.animationPlaying)  {
-      this.sprite = AnimatedSprite.fromFrames(
-        this.loadedAnimations[this.animations[this.currentAnimation]]
-      );
+    if (this.sprite === null && !this.animationPlaying) {
+      this.sprite = AnimatedSprite.fromFrames(this.loadedAnimations[this.animations[this.currentAnimation]]);
       this.sprite.anchor.set(0.5);
       this.sprite.zIndex = index;
       this.sprite.x = x;

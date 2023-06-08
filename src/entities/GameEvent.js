@@ -53,9 +53,7 @@ export class GameEvent {
   textMessage(resolve) {
     if (this.event.faceHero) {
       const obj = this.map.gameObjects[this.event.faceHero];
-      obj.direction = utils.oppositeDirection(
-        this.map.gameObjects["hero"].direction
-      );
+      obj.direction = utils.oppositeDirection(this.map.gameObjects["hero"].direction);
     }
 
     const message = new TextMessage({

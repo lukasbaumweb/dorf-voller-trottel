@@ -33,7 +33,6 @@ export class PlayerKeyboard {
 
   onKeyDown = (e) => {
     const dir = this.map[e.code];
-    console.debug(dir)
     if (dir && this.heldDirections.indexOf(dir) === -1) {
       this.heldDirections.unshift(dir);
     }
@@ -43,5 +42,4 @@ export class PlayerKeyboard {
     document.removeEventListener("keyup", onKeyUp);
     document.removeEventListener("keydown", onKeyDown);
   }
-
 }

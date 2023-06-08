@@ -44,8 +44,7 @@ const wait = (ms) =>
     }, ms);
   });
 
-const randomFromArray = (array) =>
-  array[Math.floor(Math.random() * array.length)];
+const randomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
 
 const emitEvent = (name, detail) => {
   const event = new CustomEvent(name, {
@@ -54,12 +53,4 @@ const emitEvent = (name, detail) => {
   document.dispatchEvent(event);
 };
 
-export {
-  withGrid,
-  asGridCoord,
-  emitEvent,
-  nextPosition,
-  oppositeDirection,
-  randomFromArray,
-  wait,
-};
+export { withGrid, asGridCoord, emitEvent, nextPosition, oppositeDirection, randomFromArray, wait };
