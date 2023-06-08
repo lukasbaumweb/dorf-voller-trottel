@@ -10,7 +10,10 @@ export const CONFIG = {
         img: "public/textures/characters/hero.png",
         config: "public/textures/characters/hero.json",
       },
-      dorf: { img: "public/textures/maps/dorf.png" },
+      dorf: {
+        img: "public/textures/maps/dorf.png",
+        config: "public/textures/maps/dorf.json",
+      },
     },
     maps: {
       dorf: "public/maps/dorf.json",
@@ -32,6 +35,7 @@ const getImages = () => {
 
 export const getAsset = (path) =>
   `${window.location.origin}/${REL_PATH}/${path}`;
+
 const getMaps = () => {
   return Object.values(CONFIG.assets.maps).map((path) => getAsset(path));
 };
@@ -40,5 +44,11 @@ export const assetLoader = async () => {
   const jsons = getJSON();
   const images = getImages();
   const maps = getMaps();
-  await Assets.load([...jsons, ...images, ...maps]);
+
+  const assets = [...jsons, ...images, ...maps];
+
+  assets.forEach((a) => {
+    console.debug(`Loading asset: ${a}`);
+  });
+  await Assets.load(assets);
 };

@@ -60,7 +60,7 @@ export class World {
 
   gameloop(ctx, delta) {
     const cameraPerson = this.map.gameObjects.hero;
-
+    this.map.update(cameraPerson);
     if (this.debug) {
       this.drawWalls(cameraPerson);
     }
