@@ -10,6 +10,7 @@ import {
 import { nextPosition, withGrid } from "../utils";
 import { Person } from "./Person";
 import { CONFIG, getAsset } from "../config";
+import { loadMap as loadLayers } from "../lib/MapLoader";
 
 export class Map {
   constructor({ id, map, configObjects, walls, app }) {
@@ -21,54 +22,35 @@ export class Map {
     this.configObjects = configObjects || {};
     this.app = app;
     this.gameObjects = {};
+    this.layers = [];
   }
 
   initMap(gameContainer, cameraPerson) {
-    const cached = Assets.get(getAsset(CONFIG.assets.maps.dorf));
-    const texture = Texture.from(CONFIG.assets.textures.dorf.img);
+    // const cached = Assets.get(getAsset(CONFIG.assets.maps.dorf));
+    // const texture = Texture.from(CONFIG.assets.textures.dorf.img);
 
-    // Render your first tile at (0, 0)!
-    const newArr = [];
-    while (cached.layers[0].data.length)
-      newArr.push(cached.layers[0].data.splice(0, cached.layers[0].width));
-
-    for (let y = 0; y < newArr.length; y++) {
-      for (let x = 0; x < newArr[y].length; x++) {
-        const element = newArr[y][x];
-        // console.log(y + 1, x + 1);
-        // texture.frame = new Rectangle(
-        //   x*CONFIG.PIXEL_SIZE,
-        //   y*CONFIG.PIXEL_SIZE,
-        //   CONFIG.PIXEL_SIZE,
-        //   CONFIG.PIXEL_SIZE
-        // );
-        // const cat = new Sprite(texture);
-
-        // tilemap.tile(cat, x, y);
-      }
-    }
-    // texture.frame = new Rectangle(
-    //   0 * CONFIG.PIXEL_SIZE,
-    //   0 * CONFIG.PIXEL_SIZE,
-    //   0 * CONFIG.PIXEL_SIZE,
-    //   0 * CONFIG.PIXEL_SIZE
-    // );
-    // const cat = new Sprite(texture);
+    this.layers = loadLayers();
+    console.log(this.layers);
 
     let container;
-    let tilemap;
 
     if (!container) {
       container = new Container();
       gameContainer.addChild(container);
     }
-    if (!tilemap) {
-      tilemap = new TilingSprite(texture, CONFIG.PIXEL_SIZE, CONFIG.PIXEL_SIZE);
-      container.addChild(tilemap);
+
+    for (let i = 0; i < this.layers.length; i++) {
+      const layer = this.layers[i];
+
+      for (let j = 0; j < layer.tiles.length; j++) {
+        const tile = layer.tiles[j];
+
+        container.addChild(tile.sprite);
+      }
     }
 
-    container.x = withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
-    container.y = withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
+    // container.x = withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
+    // container.y = withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
 
     container.eventMode = "static";
 
@@ -76,7 +58,25 @@ export class Map {
     container.on("pointermove", (e) => {
       // console.log(e);
     });
+  }
 
+  update(cameraPerson) {
+    for (let i = 0; i < this.layers.length; i++) {
+      const layer = this.layers[i];
+
+      for (let j = 0; j < layer.tiles.length; j++) {
+        const tile = layer.tiles[j];
+
+        tile.sprite.x =
+          tile.x * CONFIG.PIXEL_SIZE -
+          withGrid(CONFIG.OFFSET.x) -
+          cameraPerson.x;
+        tile.sprite.y =
+          tile.y * CONFIG.PIXEL_SIZE -
+          withGrid(CONFIG.OFFSET.y) -
+          cameraPerson.y;
+      }
+    }
   }
 
   isSpaceTaken(currentX, currentY, direction) {
