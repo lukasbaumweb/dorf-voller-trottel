@@ -55,7 +55,7 @@ export class Person extends GameObject {
         behavior.retry &&
           setTimeout(() => {
             this.startBehavior(state, behavior);
-          }, 10);
+          }, 100);
         return;
       }
 

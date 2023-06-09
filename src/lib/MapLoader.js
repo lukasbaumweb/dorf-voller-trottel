@@ -1,4 +1,4 @@
-import { Assets, TilingSprite } from "pixi.js";
+import { ALPHA_MODES, Assets, TilingSprite } from "pixi.js";
 import { CONFIG, getAsset } from "../config";
 import { asGridCoord, withGrid } from "../utils";
 
@@ -20,11 +20,22 @@ const resolveGid = (gid) => {
   let flipped_diagonally = gid & FLIPPED_DIAGONALLY_FLAG;
   let rotated_hex120 = gid & ROTATED_HEXAGONAL_120_FLAG;
 
-  // console.debug({ flipped_horizontally, flipped_vertically, flipped_diagonally, rotated_hex120 });
-
   gid &= ~(FLIPPED_HORIZONTALLY_FLAG | FLIPPED_VERTICALLY_FLAG | FLIPPED_DIAGONALLY_FLAG | ROTATED_HEXAGONAL_120_FLAG);
+  console.debug({ gid, flipped_horizontally, flipped_vertically, flipped_diagonally, rotated_hex120 });
 
-  return gid;
+  let settings = {};
+  if (flipped_horizontally === 0) {
+    settings = {
+      rotation: -1.5708,
+      anchor: {
+        x: 1,
+        y: 0,
+      },
+    };
+  }
+  // console.log(settings);
+
+  return { gid, settings };
 };
 
 const loadGround = (pathToMap) => {
@@ -36,22 +47,22 @@ const loadGround = (pathToMap) => {
 
   const ground = {
     name: cached.layers[layerIndex].name,
-    tiles: Array.from(Array(twoDmap.length), () => new Array(cached.layers[layerIndex].width)),
+    tiles: [],
   };
 
   for (let y = 0; y < twoDmap.length; y++) {
     for (let x = 0; x < twoDmap[y].length; x++) {
       const texture = (twoDmap[y][x] - 1).toString().padStart(3, 0);
-      ground.tiles[y][x] = {};
-      ground.tiles[y][x].sprite = TilingSprite.from(texture, {
+      ground.tiles.push({});
+      ground.tiles[ground.tiles.length - 1].sprite = TilingSprite.from(texture, {
         width: CONFIG.PIXEL_SIZE,
         height: CONFIG.PIXEL_SIZE,
         clampMargin: 1,
       });
-      ground.tiles[y][x].sprite.clampMargin = -0.5;
-      ground.tiles[y][x].sprite.zIndex = layerIndex;
-      ground.tiles[y][x].x = x;
-      ground.tiles[y][x].y = y;
+      ground.tiles[ground.tiles.length - 1].sprite.clampMargin = -0.5;
+      ground.tiles[ground.tiles.length - 1].sprite.zIndex = layerIndex;
+      ground.tiles[ground.tiles.length - 1].x = x;
+      ground.tiles[ground.tiles.length - 1].y = y;
     }
   }
 
@@ -95,33 +106,43 @@ const loadOtherLayers = (pathToMap) => {
 
   const layers = [];
   for (let i = layerRange[0]; i < layerRange[1]; i++) {
-    const twoDmap = convertTo2D(cached.layers[i].data, cached.layers[i].width);
+    const twoDmap = convertTo2D([...cached.layers[i].data], cached.layers[i].width);
     layers.push({});
     layers[i - 1] = {
       name: cached.layers[i].name,
-      tiles: Array.from(Array(twoDmap.length), () => new Array(cached.layers[i].width)),
+      tiles: [],
     };
 
     for (let y = 0; y < twoDmap.length; y++) {
       for (let x = 0; x < twoDmap[y].length; x++) {
         let texture = (Number(twoDmap[y][x]) - 1).toString();
-
-        if (texture === -1) continue;
+        let resolvedGid = {};
+        if (texture === "-1") continue;
         if (texture > 10000) {
-          texture = resolveGid(texture);
+          resolvedGid = resolveGid(texture);
+          texture = resolvedGid.gid;
         }
 
         texture = (texture + "").padStart(3, 0);
 
-        layers[i - 1].tiles[y][x] = {};
-        layers[i - 1].tiles[y][x].sprite = TilingSprite.from(texture, {
+        layers[i - 1].tiles.push({});
+        layers[i - 1].tiles[layers[i - 1].tiles.length - 1].sprite = TilingSprite.from(texture, {
           width: CONFIG.PIXEL_SIZE,
           height: CONFIG.PIXEL_SIZE,
           clampMargin: 1,
         });
-        layers[i - 1].tiles[y][x].sprite.zIndex = i;
-        layers[i - 1].tiles[y][x].x = x;
-        layers[i - 1].tiles[y][x].y = y;
+
+        if (resolvedGid.settings !== undefined && Object.keys(resolvedGid.settings).length > 0) {
+          // console.log(resolvedGid.settings);
+
+          Object.entries(resolvedGid.settings).forEach(([key, value]) => {
+            layers[i - 1].tiles[layers[i - 1].tiles.length - 1].sprite[key] = value;
+            // console.log(key, value);
+          });
+        }
+        layers[i - 1].tiles[layers[i - 1].tiles.length - 1].sprite.zIndex = i;
+        layers[i - 1].tiles[layers[i - 1].tiles.length - 1].x = x;
+        layers[i - 1].tiles[layers[i - 1].tiles.length - 1].y = y;
       }
     }
   }

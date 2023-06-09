@@ -1,4 +1,4 @@
-import { Container } from "pixi.js";
+import { Container, Sprite } from "pixi.js";
 import { nextPosition, withGrid } from "../utils";
 import { Person } from "./Person";
 import { CONFIG } from "../config";
@@ -34,12 +34,10 @@ export class Map {
       const layer = this.layers[i];
       console.log(layer);
       for (let y = 0; y < layer.tiles.length; y++) {
-        for (let x = 0; x < layer.tiles[y].length; x++) {
-          const tile = layer.tiles[y][x];
-          tile.sprite.x = withGrid(tile.x) - withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
-          tile.sprite.y = withGrid(tile.y) - withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
-          container.addChild(tile.sprite);
-        }
+        const tile = layer.tiles[y];
+        tile.sprite.x = withGrid(tile.x) - withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
+        tile.sprite.y = withGrid(tile.y) - withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
+        container.addChild(tile.sprite);
       }
     }
 
@@ -55,11 +53,9 @@ export class Map {
     for (let i = 0; i < this.layers.length; i++) {
       const layer = this.layers[i];
       for (let y = 0; y < layer.tiles.length; y++) {
-        for (let x = 0; x < layer.tiles[y].length; x++) {
-          const tile = layer.tiles[y][x];
-          tile.sprite.x = withGrid(tile.x) - withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
-          tile.sprite.y = withGrid(tile.y) - withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
-        }
+        const tile = layer.tiles[y];
+        tile.sprite.x = withGrid(tile.x) - withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
+        tile.sprite.y = withGrid(tile.y) - withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
       }
     }
   }
