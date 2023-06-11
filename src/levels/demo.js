@@ -8,12 +8,11 @@ export const demoLevel = {
     hero: {
       type: "Person",
       isPlayerControlled: true,
-      x: withGrid(-4),
-      y: withGrid(-8),
-      // x: -withGrid(CONFIG.OFFSET.x) * 2 + CONFIG.PIXEL_SIZE,
-      // y: -withGrid(CONFIG.OFFSET.y) * 2 + CONFIG.PIXEL_SIZE,
+      x: withGrid(CONFIG.OFFSET.x - 13),
+      y: withGrid(CONFIG.OFFSET.y + 2),
       texture: getAsset(CONFIG.assets.textures.hero.img),
       json: getAsset(CONFIG.assets.textures.hero.config),
+      index: 1,
     },
   },
 };

@@ -46,8 +46,10 @@ export const assetLoader = async () => {
 
   const assets = [...jsons, ...images, ...maps];
 
+  console.groupCollapsed("Assets");
   assets.forEach((a) => {
     console.debug(`Loading asset: ${a}`);
   });
+  console.groupEnd();
   await Assets.load(assets);
 };

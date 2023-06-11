@@ -21,7 +21,7 @@ export class Map {
     this.layers = loadLayers(CONFIG.assets.maps.dorf.config);
     this.walls = loadWalls(CONFIG.assets.maps.dorf.config, cameraPerson).tiles;
 
-    console.log(this.layers);
+    console.debug(this.layers);
 
     let container;
 
@@ -32,7 +32,6 @@ export class Map {
 
     for (let i = 0; i < this.layers.length; i++) {
       const layer = this.layers[i];
-      console.log(layer);
       for (let y = 0; y < layer.tiles.length; y++) {
         const tile = layer.tiles[y];
         tile.sprite.x = withGrid(tile.x) - withGrid(CONFIG.OFFSET.x) - cameraPerson.x;

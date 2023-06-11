@@ -20,6 +20,7 @@ export class Person extends GameObject {
       right: ["x", movementSpeed],
     };
     this.standBehaviorTimeout = 1;
+    this.index = config.index || 0;
   }
 
   update(state) {
@@ -49,9 +50,8 @@ export class Person extends GameObject {
       // console.log(behavior.type);
 
       const isOutside = state.map.isOutofBounds(this.x, this.y, this.direction);
-      console.log(isOutside);
-
-      if (state.map.isSpaceTaken(this.x, this.y, this.direction) || isOutside) {
+      const isSpaceTaken = state.map.isSpaceTaken(this.x, this.y, this.direction);
+      if (isSpaceTaken || isOutside) {
         behavior.retry &&
           setTimeout(() => {
             this.startBehavior(state, behavior);

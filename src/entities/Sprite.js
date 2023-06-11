@@ -22,10 +22,6 @@ export class Sprite {
 
     // Reference the game object
     this.gameObject = config.gameObject;
-    // this.sprite = AnimatedSprite.fromFrames(
-    //   this.loadedAnimations[this.animations[this.currentAnimation]]
-    // );
-
     this.isMounted = false;
     this.gameContainer = config.container;
     this.sprite = null;
@@ -58,14 +54,15 @@ export class Sprite {
       this.sprite.loop = false;
       this.sprite.play();
       this.animationPlaying = true;
+      console.log(index)
 
       this.sprite.onComplete = () => {
-        this.gameContainer.removeChild(this.sprite);
+        this.gameContainer.children[0].removeChild(this.sprite);
         this.sprite.destroy();
         this.sprite = null;
       };
       this.sprite.eventMode = "static";
-      this.gameContainer.addChild(this.sprite);
+      this.gameContainer.children[0].addChild(this.sprite);
       this.animationPlaying = false;
     }
 

@@ -78,11 +78,11 @@ export class World {
       .sort((a, b) => {
         return a.y - b.y;
       })
-      .forEach((object, index) => {
-        object.sprite.render(cameraPerson, index);
+      .forEach((object) => {
+        object.sprite.render(cameraPerson, object.index);
       });
 
-    // console.debug(this.gameObjectsContainer.children[0].children.length);
+    //  console.debug(this.gameObjectsContainer.children[0].children.length);
   }
 
   drawWalls(cameraPerson) {
@@ -149,6 +149,7 @@ export class World {
     this.app.stage.addChild(this.gameObjectsContainer);
 
     const gameContainer = doc.createElement("div");
+    gameContainer.sortableChildren = true;
     gameContainer.classList.add("game-wrapper");
     gameContainer.appendChild(this.app.view);
     doc.body.appendChild(gameContainer);
@@ -156,6 +157,7 @@ export class World {
     this.keyboard.init();
 
     this.bindActionInput();
+    //TODO: Fix z_index
 
     const map = demoLevel;
     this.start(map);
