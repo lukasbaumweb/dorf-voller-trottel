@@ -1,8 +1,8 @@
 import { Container } from 'pixi.js';
 import { nextPosition, withGrid } from '../utils';
-import { Player } from './Character';
+import { Player } from './Player';
 import { CONFIG } from '../config';
-import { loadLayers, loadWalls } from '../lib/MapLoader';
+import { loadLayers, loadMaps, loadWalls } from '../lib/MapLoader';
 import { getCurrentLevel } from '../gameState';
 
 export class Map {
@@ -19,32 +19,22 @@ export class Map {
   }
 
   initMap(layersContainer, cameraPerson) {
-    this.layers = loadLayers(getCurrentLevel().map.config);
+    this.maps = loadMaps(getCurrentLevel().map.lowerImage, getCurrentLevel().map.upperImage);
     this.walls = loadWalls(getCurrentLevel().map.config, cameraPerson).tiles;
+    this.layers = loadLayers(getCurrentLevel().map.config).map((layer) => {
+      const container = new Container();
+
+      container.name = layer.name;
+      container.zIndex = layer.zIndex;
+
+      layersContainer.addChild(container);
+      return container;
+    });
+
+    this.layers.find((l) => l.name === 'ground').addChild(this.maps.lower);
+    this.layers.find((l) => l.name === 'map (upper)').addChild(this.maps.upper);
 
     console.debug(this.layers);
-
-    const containers = [];
-
-    for (let i = 0; i < this.layers.length; i++) {
-      const layer = this.layers[i];
-
-      if (containers[i] === undefined) {
-        containers.push(new Container());
-        containers[i].zIndex = i;
-        containers[i].name = layer.name;
-        layersContainer.addChild(containers[i]);
-      }
-
-      const tiles = Object.values(layer.tiles);
-
-      for (let y = 0; y < tiles.length; y++) {
-        const tile = tiles[y];
-        tile.sprite.x = withGrid(tile.x) - withGrid(CONFIG.OFFSET.x) - cameraPerson.x;
-        tile.sprite.y = withGrid(tile.y) - withGrid(CONFIG.OFFSET.y) - cameraPerson.y;
-        containers[i].addChild(tile.sprite);
-      }
-    }
   }
 
   getInteractableLayers() {
@@ -53,13 +43,10 @@ export class Map {
   }
 
   update(cameraPerson) {
-    for (let i = 0; i < this.layers.length; i++) {
-      const layer = this.layers[i];
-      const tiles = Object.values(layer.tiles);
-      for (let y = 0; y < tiles.length; y++) {
-        const tile = tiles[y];
-        tile.sprite.x = withGrid(tile.x) - cameraPerson.x - withGrid(CONFIG.OFFSET.x);
-        tile.sprite.y = withGrid(tile.y) - cameraPerson.y - withGrid(CONFIG.OFFSET.y);
+    for (const layer of this.layers) {
+      if (layer.name === 'ground' || layer.name === 'map (upper)') {
+        layer.children[0].x = withGrid(0) - cameraPerson.x - withGrid(CONFIG.OFFSET.x);
+        layer.children[0].y = withGrid(0) - cameraPerson.y - withGrid(CONFIG.OFFSET.y);
       }
     }
   }
@@ -81,23 +68,6 @@ export class Map {
       }
       return false;
     });
-  }
-
-  isOutofBounds(currentX, currentY, direction) {
-    const { x, y } = nextPosition(currentX, currentY, direction);
-
-    const topBorder = 0;
-    const bottomBorder = withGrid(CONFIG.levels.dorf.height) - CONFIG.PIXEL_SIZE;
-    const leftBorder = 0 - CONFIG.PIXEL_SIZE;
-    const rightBorder = withGrid(CONFIG.levels.dorf.width) - CONFIG.PIXEL_SIZE;
-
-    if (y <= topBorder || y > bottomBorder) {
-      return true;
-    }
-
-    if (x <= leftBorder || x > rightBorder) {
-      return true;
-    }
   }
 
   mountObjects(layersContainer) {

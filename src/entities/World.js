@@ -50,7 +50,8 @@ export class World {
 
     this.map.mountObjects(this.layersContainer);
 
-    this.interactableLayers = this.map.getInteractableLayers();
+    //TODO:
+    // this.interactableLayers = this.map.getInteractableLayers();
 
     // init gameloop
     this.app.ticker.add(this.gameLoopReference);
@@ -85,7 +86,9 @@ export class World {
     const cameraPerson = this.map.gameObjects.hero;
 
     this.map.update(cameraPerson);
-    this.updateInteractableLayers(this.map.gameObjects.hero, true);
+    //TODO:
+
+    // this.updateInteractableLayers(this.map.gameObjects.hero, true);
 
     if (this.debug) {
       window._hud.show();
@@ -156,7 +159,7 @@ export class World {
 
     new Keyboard('BracketRight', () => {
       this.debug = !this.debug;
-      window._hud.toggle()
+      window._hud.toggle();
       if (!this.debug) {
         this.deleteWalls();
       }
@@ -168,7 +171,7 @@ export class World {
       if (e.detail.whoId === 'hero') {
         // Hero's position has changed
         // this.map.checkForFootstepCutscene();
-        this.updateInteractableLayers(this.map.gameObjects.hero, false);
+        // this.updateInteractableLayers(this.map.gameObjects.hero, false);
       }
     });
   }

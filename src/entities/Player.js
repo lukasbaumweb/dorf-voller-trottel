@@ -167,11 +167,10 @@ export class Player {
       // Stop here if space is not free
       // console.log(behavior.type);
 
-      const isOutside = map.isOutofBounds(this.x, this.y, this.direction);
       const isSpaceTaken = map.isSpaceTaken(this.x, this.y, this.direction);
       this.currentAnimation = 'walk-' + this.direction;
 
-      if (isSpaceTaken || isOutside) {
+      if (isSpaceTaken) {
         behavior.retry &&
           setTimeout(() => {
             this.startBehavior(map, behavior);

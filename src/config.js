@@ -17,16 +17,16 @@ export const CONFIG = {
       width: 30,
       height: 20,
       map: {
-        config: 'public/maps/dorf.json',
-        image: 'public/textures/maps/dorf.png',
-        tilesetConfig: 'public/textures/maps/dorf.json'
+        config: 'public/maps/dorf/dorf.json',
+        lowerImage: 'public/maps/dorf/dorf.png',
+        upperImage: 'public/maps/dorf/dorf-upper.png'
       },
       configObjects: {
         hero: {
           type: 'Character',
           isPlayerControlled: true,
-          x: 15 * PIXEL_SIZE,
-          y: 19 * PIXEL_SIZE,
+          x: 6 * PIXEL_SIZE,
+          y: 24 * PIXEL_SIZE,
           index: 5
         }
       }
