@@ -3,14 +3,14 @@ export class PlayerKeyboard {
     this.heldDirections = [];
 
     this.map = {
-      ArrowUp: "up",
-      KeyW: "up",
-      ArrowDown: "down",
-      KeyS: "down",
-      ArrowLeft: "left",
-      KeyA: "left",
-      ArrowRight: "right",
-      KeyD: "right",
+      ArrowUp: 'up',
+      KeyW: 'up',
+      ArrowDown: 'down',
+      KeyS: 'down',
+      ArrowLeft: 'left',
+      KeyA: 'left',
+      ArrowRight: 'right',
+      KeyD: 'right'
     };
   }
 
@@ -19,8 +19,8 @@ export class PlayerKeyboard {
   }
 
   init() {
-    document.addEventListener("keydown", this.onKeyDown);
-    document.addEventListener("keyup", this.onKeyUp);
+    document.addEventListener('keydown', this.onKeyDown);
+    document.addEventListener('keyup', this.onKeyUp);
   }
 
   onKeyUp = (e) => {
@@ -39,7 +39,7 @@ export class PlayerKeyboard {
   };
 
   dispose() {
-    document.removeEventListener("keyup", onKeyUp);
-    document.removeEventListener("keydown", onKeyDown);
+    document.removeEventListener('keyup', onKeyUp);
+    document.removeEventListener('keydown', onKeyDown);
   }
 }

@@ -1,5 +1,5 @@
-import { GameEvent } from "./GameEvent";
-import { Sprite } from "./Sprite";
+import { AnimatedSprite } from 'pixi.js';
+import { GameEvent } from './GameEvent';
 
 export class GameObject {
   constructor(config) {
@@ -7,14 +7,13 @@ export class GameObject {
     this.isMounted = false;
     this.x = config.x || 0;
     this.y = config.y || 0;
-    this.direction = config.direction || "down";
-    this.sprite = new Sprite({
-      gameObject: this,
-      texture: config.texture,
-      json: config.json,
-      container: config.container,
-      interactable: !!config.interactable,
-    });
+    this.direction = config.direction || 'down';
+    this.sprite = null;
+
+    this.texture = config.texture;
+    this.json = config.json;
+    this.charactersContainer = config.charactersContainer;
+    this.interactable = !!config.interactable;
 
     //These happen once on map startup.
     this.behaviorLoop = config.behaviorLoop || [];
@@ -32,7 +31,49 @@ export class GameObject {
     }, 10);
   }
 
-  update() {}
+  update({ cameraPerson }, index) {
+    const x = this.gameObject.x + withGrid(CONFIG.OFFSET.x) - cameraPerson.x - 8;
+    const y = this.gameObject.y + withGrid(CONFIG.OFFSET.y) - cameraPerson.y - 8;
+
+    if (!this.animationPlaying) {
+      this.sprite = AnimatedSprite.fromFrames(this.loadedAnimations[this.animations[this.currentAnimation]]);
+      this.sprite.anchor.set(0.5);
+      this.sprite.zIndex = index;
+      this.sprite.x = x;
+      this.sprite.y = y;
+      this.sprite.animationSpeed = 1 / 6;
+      this.sprite.loop = false;
+      this.sprite.play();
+      this.animationPlaying = true;
+
+      this.sprite.onComplete = () => {
+        // this.charactersContainer.removeChild(this.sprite);
+        // this.sprite.destroy();
+        // this.sprite = null;
+        this.animationPlaying = false;
+      };
+      this.sprite.eventMode = 'static';
+      this.charactersContainer.addChild(this.sprite);
+      this.animationPlaying = false;
+      this.makeInteractable();
+    }
+
+    this.sprite.position.set(x, y);
+  }
+
+  makeInteractable() {
+    // Shows hand cursor
+    this.sprite.buttonMode = true;
+
+    this.sprite.on('pointerenter', (e) => {
+      this.sprite.alpha = 0.5;
+      console.log(e);
+    });
+
+    this.sprite.on('pointerleave', (e) => {
+      this.sprite.alpha = 1;
+    });
+  }
 
   async doBehaviorEvent(map) {
     //Don't do anything if I don't have config to do anything
@@ -41,7 +82,7 @@ export class GameObject {
     }
 
     if (map.isCutscenePlaying) {
-      console.log("will retry", this.id);
+      console.log('will retry', this.id);
       if (this.retryTimeout) {
         clearTimeout(this.retryTimeout);
       }

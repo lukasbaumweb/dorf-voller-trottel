@@ -1,55 +1,35 @@
-import { Assets } from "pixi.js";
+const PIXEL_SIZE = 16;
 
 export const CONFIG = {
-  PIXEL_SIZE: 16,
+  PIXEL_SIZE: PIXEL_SIZE,
   animationFrameLimit: 6,
-  OFFSET: { x: 10, y: 6 },
-  assets: {
-    textures: {
-      hero: {
-        img: "public/textures/characters/hero.png",
-        config: "public/textures/characters/hero.json",
-      },
-      dorf: {
-        img: "public/textures/maps/dorf.png",
-        config: "public/textures/maps/dorf.json",
-      },
-    },
-    maps: {
-      dorf: { config: "public/maps/dorf.json", width: 30, height: 20 },
-    },
+  PLAYER_LAYER: '######players######',
+  OFFSET: { x: -10, y: -6 },
+  textures: {
+    hero: {
+      img: 'public/textures/characters/hero.png',
+      config: 'public/textures/characters/hero.json'
+    }
   },
-};
-
-const REL_PATH = "..";
-
-const getJSON = () => {
-  return Object.values(CONFIG.assets.textures)
-    .filter(({ config }) => !!config)
-    .map(({ config }) => getAsset(config));
-};
-
-const getImages = () => {
-  return Object.values(CONFIG.assets.textures).map(({ img }) => getAsset(img));
-};
-
-export const getAsset = (path) => `${window.location.origin}/${REL_PATH}/${path}`;
-
-const getMaps = () => {
-  return Object.values(CONFIG.assets.maps).map(({ config }) => getAsset(config));
-};
-
-export const assetLoader = async () => {
-  const jsons = getJSON();
-  const images = getImages();
-  const maps = getMaps();
-
-  const assets = [...jsons, ...images, ...maps];
-
-  console.groupCollapsed("Assets");
-  assets.forEach((a) => {
-    console.debug(`Loading asset: ${a}`);
-  });
-  console.groupEnd();
-  await Assets.load(assets);
+  levels: {
+    dorf: {
+      id: 'dorf',
+      width: 30,
+      height: 20,
+      map: {
+        config: 'public/maps/dorf.json',
+        image: 'public/textures/maps/dorf.png',
+        tilesetConfig: 'public/textures/maps/dorf.json'
+      },
+      configObjects: {
+        hero: {
+          type: 'Character',
+          isPlayerControlled: true,
+          x: 15 * PIXEL_SIZE,
+          y: 19 * PIXEL_SIZE,
+          index: 5
+        }
+      }
+    }
+  }
 };

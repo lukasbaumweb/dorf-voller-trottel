@@ -14,12 +14,12 @@ export class Keyboard {
         keySafe = true;
       }
     };
-    document.addEventListener("keydown", this.keydownFunction);
-    document.addEventListener("keyup", this.keyupFunction);
+    document.addEventListener('keydown', this.keydownFunction);
+    document.addEventListener('keyup', this.keyupFunction);
   }
 
   unbind() {
-    document.removeEventListener("keydown", this.keydownFunction);
-    document.removeEventListener("keyup", this.keyupFunction);
+    document.removeEventListener('keydown', this.keydownFunction);
+    document.removeEventListener('keyup', this.keyupFunction);
   }
 }

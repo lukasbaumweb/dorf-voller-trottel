@@ -1,12 +1,16 @@
-import { assetLoader } from "./config";
-import { World } from "./entities/World";
-import "./style.css";
-// install plugins
+import { World } from './entities/World';
+import { AssetLoader } from './lib/AssetLoader';
+import { Hud } from './lib/Hud';
+import './style.css';
 
-(async () => {
-  const world = new World();
-  world.debug = true;
+const world = new World();
+const hud = new Hud();
 
-  await assetLoader();
-  world.init(document);
-})();
+const assetLoader = new AssetLoader();
+assetLoader
+  .init()
+  .then(() => {
+    world.init();
+    hud.init();
+  })
+  .catch((err) => console.error(err));

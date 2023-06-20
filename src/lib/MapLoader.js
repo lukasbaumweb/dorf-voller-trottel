@@ -1,6 +1,7 @@
-import { ALPHA_MODES, Assets, TilingSprite } from "pixi.js";
-import { CONFIG, getAsset } from "../config";
-import { asGridCoord, withGrid } from "../utils";
+import { Assets, TilingSprite } from 'pixi.js';
+import { CONFIG } from '../config';
+import { asGridCoord } from '../utils';
+import { AssetLoader } from './AssetLoader';
 
 const convertTo2D = (oneDimensionArr, length) => {
   const newArr = [];
@@ -26,7 +27,8 @@ const resolveGid = (gid) => {
 };
 
 const loadGround = (pathToMap) => {
-  const cached = Assets.get(getAsset(pathToMap));
+  const assetLoader = new AssetLoader();
+  const cached = Assets.get(assetLoader.getAsset(pathToMap));
   console.log(cached);
   const layerIndex = 0;
 
@@ -34,22 +36,23 @@ const loadGround = (pathToMap) => {
 
   const ground = {
     name: cached.layers[layerIndex].name,
-    tiles: [],
+    tiles: {}
   };
 
   for (let y = 0; y < twoDmap.length; y++) {
     for (let x = 0; x < twoDmap[y].length; x++) {
       const texture = (twoDmap[y][x] - 1).toString().padStart(3, 0);
-      ground.tiles.push({});
-      ground.tiles[ground.tiles.length - 1].sprite = TilingSprite.from(texture, {
+      const key = asGridCoord(x, y);
+      ground.tiles[key] = {};
+      ground.tiles[key].sprite = TilingSprite.from(texture, {
         width: CONFIG.PIXEL_SIZE,
         height: CONFIG.PIXEL_SIZE,
-        clampMargin: 1,
+        clampMargin: 1
       });
-      ground.tiles[ground.tiles.length - 1].sprite.clampMargin = -0.5;
-      ground.tiles[ground.tiles.length - 1].sprite.zIndex = layerIndex;
-      ground.tiles[ground.tiles.length - 1].x = x;
-      ground.tiles[ground.tiles.length - 1].y = y;
+      ground.tiles[key].sprite.clampMargin = -0.5;
+      ground.tiles[key].sprite.zIndex = layerIndex;
+      ground.tiles[key].x = x;
+      ground.tiles[key].y = y;
     }
   }
 
@@ -57,29 +60,27 @@ const loadGround = (pathToMap) => {
 };
 
 const loadWalls = (pathToMap) => {
-  const cached = Assets.get(getAsset(pathToMap));
+  const assetLoader = new AssetLoader();
+
+  const cached = Assets.get(assetLoader.getAsset(pathToMap));
 
   const accessibleNumber = 290 - 1;
   const inAccessibleNumber = 289 - 1;
 
-  const layerIndex = cached.layers.findIndex((l) => l.name === "accessible");
+  const layerIndex = cached.layers.findIndex((l) => l.name === 'accessible');
 
   const walls = {
     name: cached.layers[layerIndex].name,
-    tiles: {},
+    tiles: {}
   };
 
   const twoDmap = convertTo2D([...cached.layers[layerIndex].data], cached.layers[layerIndex].width);
-
-  let c = 0;
 
   for (let y = 0; y < twoDmap.length; y++) {
     for (let x = 0; x < twoDmap[y].length; x++) {
       const element = twoDmap[y][x] - 1;
       if (element === accessibleNumber) continue;
-      walls.tiles[asGridCoord(x - CONFIG.OFFSET.x * 2 + 1, y - CONFIG.OFFSET.y * 2 + 1)] =
-        element === inAccessibleNumber;
-      c++;
+      walls.tiles[asGridCoord(x, y)] = element === inAccessibleNumber;
     }
   }
 
@@ -87,41 +88,44 @@ const loadWalls = (pathToMap) => {
 };
 
 const loadOtherLayers = (pathToMap) => {
-  const cached = Assets.get(getAsset(pathToMap));
+  const assetLoader = new AssetLoader();
+  const cached = Assets.get(assetLoader.getAsset(pathToMap));
 
   const layerRange = [1, cached.layers.length - 1];
 
   const layers = [];
   for (let i = layerRange[0]; i < layerRange[1]; i++) {
+    const currentLayer = i - 1;
     const twoDmap = convertTo2D([...cached.layers[i].data], cached.layers[i].width);
     layers.push({});
-    layers[i - 1] = {
+    layers[currentLayer] = {
       name: cached.layers[i].name,
-      tiles: [],
+      tiles: {}
     };
 
     for (let y = 0; y < twoDmap.length; y++) {
       for (let x = 0; x < twoDmap[y].length; x++) {
         let texture = (Number(twoDmap[y][x]) - 1).toString();
         let resolvedGid = {};
-        if (texture === "-1") continue;
+        if (texture === '-1') continue;
         if (texture > 10000) {
           resolvedGid = resolveGid(texture);
           texture = resolvedGid.gid;
         }
 
-        texture = (texture + "").padStart(3, 0);
+        const key = `${x},${y}`; // asGridCoord(x, y);
 
-        layers[i - 1].tiles.push({});
-        layers[i - 1].tiles[layers[i - 1].tiles.length - 1].sprite = TilingSprite.from(texture, {
+        texture = (texture + '').padStart(3, 0);
+        layers[currentLayer].tiles[key] = {};
+        layers[currentLayer].tiles[key].sprite = TilingSprite.from(texture, {
           width: CONFIG.PIXEL_SIZE,
           height: CONFIG.PIXEL_SIZE,
-          clampMargin: 1,
+          clampMargin: 1
         });
 
-        layers[i - 1].tiles[layers[i - 1].tiles.length - 1].sprite.zIndex = i + 10;
-        layers[i - 1].tiles[layers[i - 1].tiles.length - 1].x = x;
-        layers[i - 1].tiles[layers[i - 1].tiles.length - 1].y = y;
+        layers[currentLayer].tiles[key].sprite.zIndex = i + 10;
+        layers[currentLayer].tiles[key].x = x;
+        layers[currentLayer].tiles[key].y = y;
       }
     }
   }

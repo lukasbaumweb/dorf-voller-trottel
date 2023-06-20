@@ -8,59 +8,59 @@ export class GameEvent {
     const who = this.map.gameObjects[this.event.who];
     who.startBehavior(
       {
-        map: this.map,
+        map: this.map
       },
       {
-        type: "stand",
+        type: 'stand',
         direction: this.event.direction,
-        time: this.event.time,
+        time: this.event.time
       }
     );
 
     //Set up a handler to complete when correct person is done walking, then resolve the event
     const completeHandler = (e) => {
       if (e.detail.whoId === this.event.who) {
-        document.removeEventListener("PersonStandComplete", completeHandler);
+        document.removeEventListener('PersonStandComplete', completeHandler);
         resolve();
       }
     };
-    document.addEventListener("PersonStandComplete", completeHandler);
+    document.addEventListener('PersonStandComplete', completeHandler);
   }
 
   walk(resolve) {
     const who = this.map.gameObjects[this.event.who];
     who.startBehavior(
       {
-        map: this.map,
+        map: this.map
       },
       {
-        type: "walk",
+        type: 'walk',
         direction: this.event.direction,
-        retry: true,
+        retry: true
       }
     );
 
     //Set up a handler to complete when correct person is done walking, then resolve the event
     const completeHandler = (e) => {
       if (e.detail.whoId === this.event.who) {
-        document.removeEventListener("PersonWalkingComplete", completeHandler);
+        document.removeEventListener('PersonWalkingComplete', completeHandler);
         resolve();
       }
     };
-    document.addEventListener("PersonWalkingComplete", completeHandler);
+    document.addEventListener('PersonWalkingComplete', completeHandler);
   }
 
   textMessage(resolve) {
     if (this.event.faceHero) {
       const obj = this.map.gameObjects[this.event.faceHero];
-      obj.direction = utils.oppositeDirection(this.map.gameObjects["hero"].direction);
+      obj.direction = utils.oppositeDirection(this.map.gameObjects['hero'].direction);
     }
 
     const message = new TextMessage({
       text: this.event.text,
-      onComplete: () => resolve(),
+      onComplete: () => resolve()
     });
-    message.init(document.querySelector(".game-container"));
+    message.init(document.querySelector('.game-container'));
   }
 
   changeMap(resolve) {
@@ -70,11 +70,11 @@ export class GameEvent {
     });
 
     const sceneTransition = new SceneTransition();
-    sceneTransition.init(document.querySelector(".game-container"), () => {
+    sceneTransition.init(document.querySelector('.game-container'), () => {
       this.map.overworld.startMap(window.OverworldMaps[this.event.map], {
         x: this.event.x,
         y: this.event.y,
-        direction: this.event.direction,
+        direction: this.event.direction
       });
       resolve();
       sceneTransition.fadeOut();
@@ -86,10 +86,10 @@ export class GameEvent {
       enemy: Enemies[this.event.enemyId],
       arena: this.event.arena || null,
       onComplete: (didWin) => {
-        resolve(didWin ? "WON_BATTLE" : "LOST_BATTLE");
-      },
+        resolve(didWin ? 'WON_BATTLE' : 'LOST_BATTLE');
+      }
     });
-    battle.init(document.querySelector(".game-container"));
+    battle.init(document.querySelector('.game-container'));
   }
 
   pause(resolve) {
@@ -100,9 +100,9 @@ export class GameEvent {
         resolve();
         this.map.isPaused = false;
         this.map.overworld.startGameLoop();
-      },
+      }
     });
-    menu.init(document.querySelector(".game-container"));
+    menu.init(document.querySelector('.game-container'));
   }
 
   addStoryFlag(resolve) {
@@ -115,9 +115,9 @@ export class GameEvent {
       pizzas: this.event.pizzas,
       onComplete: () => {
         resolve();
-      },
+      }
     });
-    menu.init(document.querySelector(".game-container"));
+    menu.init(document.querySelector('.game-container'));
   }
 
   init() {
