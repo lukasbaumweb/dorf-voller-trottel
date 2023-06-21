@@ -37,11 +37,6 @@ export class Map {
     console.debug(this.layers);
   }
 
-  getInteractableLayers() {
-    const playerIndex = this.layers.findIndex((l) => l.name === CONFIG.PLAYER_LAYER);
-    return this.layers.filter((_, index) => index > playerIndex);
-  }
-
   update(cameraPerson) {
     for (const layer of this.layers) {
       if (layer.name === 'ground' || layer.name === 'map (upper)') {

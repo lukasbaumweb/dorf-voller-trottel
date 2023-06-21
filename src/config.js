@@ -4,7 +4,12 @@ export const CONFIG = {
   PIXEL_SIZE: PIXEL_SIZE,
   animationFrameLimit: 6,
   PLAYER_LAYER: '######players######',
-  OFFSET: { x: -10, y: -6 },
+  OFFSET: { x: -15, y: -9 },
+  GAME_CONFIG: {
+    width: 352,
+    height: 198,
+    scale: 3.5
+  },
   textures: {
     hero: {
       img: 'public/textures/characters/hero.png',

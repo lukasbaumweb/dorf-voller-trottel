@@ -1,3 +1,5 @@
+import { CONFIG } from '../config';
+
 class HudElement {
   htmlElement = null;
   constructor(id) {
@@ -21,11 +23,29 @@ export class Hud {
     if (window._hud === undefined) {
       this.hudContainer = document.createElement('div');
       this.hudContainer.classList.add('hudContainer');
+      this.hudContainer.classList.add('terminal-card');
 
-      this.hudContainer.innerHTML = `<div><b>Hud</b></div>`;
+      this.hudContainer.innerHTML = `
+        <h5 class="terminal-prompt">Hud</h5> 
+        <div>
+        <label for="game-scale">
+          Scale: 
+          <select id="game-scale" value="${CONFIG.GAME_CONFIG.scale}">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="3.5" selected>3.5</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </label>
+        </div>`;
       window._hud = this;
 
       document.body.appendChild(this.hudContainer);
+      document.getElementById('game-scale').onchange = (e) => {
+        window.world.DOMGameContainer.style.transform = `scale(${e.target.value}) translateY(50%)`;
+      };
     }
     if (window._hud !== undefined) {
       this.hudContainer = window._hud.hudContainer;

@@ -5,7 +5,6 @@ import { GameEvent } from './GameEvent';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
 import { getCurrentLevel } from '../gameState';
 import { AssetLoader } from '../lib/AssetLoader';
-import { Hud } from '../lib/Hud';
 
 export class Player {
   constructor(config) {

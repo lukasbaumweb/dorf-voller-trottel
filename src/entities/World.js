@@ -1,13 +1,13 @@
-import { Application, BLEND_MODES, Container, Graphics, Text, TextStyle } from 'pixi.js';
+import { Application, BLEND_MODES, Container, Graphics } from 'pixi.js';
 
 import { Map } from './Map';
-import { asGridCoord, withGrid } from '../utils';
+import { withGrid } from '../utils';
 import { Keyboard } from '../components/Keyboard';
 import { CONFIG } from '../config';
-import { getCurrentLevel } from '../gameState';
 
 export class World {
   constructor() {
+    this.DOMGameContainer = null;
     // debug variables
     this.debug = false;
     this.debugContainer = null;
@@ -19,18 +19,21 @@ export class World {
   init() {
     this.app = new Application({
       background: '#272d37',
-      width: 352,
-      height: 198
+      width: CONFIG.GAME_CONFIG.width,
+      height: CONFIG.GAME_CONFIG.height
     });
+
     this.layersContainer = new Container();
     this.layersContainer.sortableChildren = true;
     this.app.stage.addChild(this.layersContainer);
 
-    const DOMGameContainer = document.createElement('div');
-    DOMGameContainer.sortableChildren = true;
-    DOMGameContainer.classList.add('game-wrapper');
-    DOMGameContainer.appendChild(this.app.view);
-    document.body.appendChild(DOMGameContainer);
+    this.DOMGameContainer = document.createElement('div');
+    this.DOMGameContainer.sortableChildren = true;
+    this.DOMGameContainer.style.setProperty('--game-width', CONFIG.GAME_CONFIG.width + 'px');
+    this.DOMGameContainer.style.setProperty('--game-height', CONFIG.GAME_CONFIG.height + 'px');
+    this.DOMGameContainer.classList.add('game-wrapper');
+    this.DOMGameContainer.appendChild(this.app.view);
+    document.body.appendChild(this.DOMGameContainer);
 
     this.bindActionInput();
     this.bindHeroPositionCheck();
@@ -50,45 +53,16 @@ export class World {
 
     this.map.mountObjects(this.layersContainer);
 
-    //TODO:
-    // this.interactableLayers = this.map.getInteractableLayers();
-
     // init gameloop
     this.app.ticker.add(this.gameLoopReference);
   }
 
   gameLoopReference = (delta) => this.gameloop(this, delta);
 
-  updateInteractableLayers(target, isTransparent) {
-    for (let i = 0; i < this.interactableLayers.length; i++) {
-      const layer = this.interactableLayers[i];
-
-      const x = target.x / 16;
-      const y = target.y / 16;
-      const hit = layer.tiles[`${x},${y}`];
-      if (hit && isTransparent) {
-        Object.values(layer.tiles).forEach((tile) => {
-          tile.sprite.alpha = 0.5;
-
-          // tile.sprite.alpha = 1;
-        });
-      } else if (!isTransparent) {
-        Object.values(layer.tiles).forEach((tile) => {
-          tile.sprite.alpha = 1;
-
-          // tile.sprite.alpha = 1;
-        });
-      }
-    }
-  }
-
   gameloop(ctx, delta) {
     const cameraPerson = this.map.gameObjects.hero;
 
     this.map.update(cameraPerson);
-    //TODO:
-
-    // this.updateInteractableLayers(this.map.gameObjects.hero, true);
 
     if (this.debug) {
       window._hud.show();
