@@ -14,7 +14,10 @@ new AssetLoader()
     const world = new World();
     world.init();
     debugHud.init();
-    debugHud.show();
+
+    if (localStorage.getItem('debug')) {
+      debugHud.show();
+    }
 
     new TextMessage({
       text: Storage.get(Storage.STORAGE_KEYS.welcomeMessage, {
