@@ -41,7 +41,7 @@ export class Marker {
   }
 
   mount(map) {
-    console.debug(`Mounting ${this.id}`);
+    console.debug(`Mounting ${this.id} ...`);
     this.map = map;
     this.sprite = this.animation;
     this.sprite.anchor.set(0.5);

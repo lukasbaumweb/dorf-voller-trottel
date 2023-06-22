@@ -170,7 +170,6 @@ export class Player {
     this.direction = behavior.direction;
     if (behavior.type === 'walk') {
       // Stop here if space is not free
-      // console.log(behavior.type);
 
       const isSpaceTaken = map.isSpaceTaken(this.x, this.y, this.direction);
       this.currentAnimation = 'walk-' + this.direction;
@@ -198,7 +197,6 @@ export class Player {
     this[property] += change;
     this.movingProgressRemaining -= 1;
 
-    // console.log(this.movingProgressRemaining)
     if (this.movingProgressRemaining <= 0) {
       // We finished the walk!
       this.intentPosition = null;

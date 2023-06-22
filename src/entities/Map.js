@@ -82,8 +82,6 @@ export class Map {
         const savedPlayer = Storage.get(Storage.STORAGE_KEYS.player);
 
         const combined = Object.assign(object, savedPlayer);
-        console.debug(combined);
-
         instance = new Player(combined);
       }
 

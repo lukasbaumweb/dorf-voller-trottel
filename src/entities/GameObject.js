@@ -74,7 +74,6 @@ export class GameObject {
 
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.5;
-      console.log(e);
     });
 
     this.sprite.on('pointerleave', (e) => {
