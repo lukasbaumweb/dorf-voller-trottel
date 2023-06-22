@@ -5,6 +5,9 @@ import { GameEvent } from './GameEvent';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
 import { getCurrentLevel } from '../gameState';
 import { AssetLoader } from '../lib/AssetLoader';
+import { Tooltip } from '../lib/Tooltip';
+import { Translator } from '../lib/Translator';
+import { Storage } from '../lib/Storage';
 
 export class Player {
   constructor(config) {
@@ -17,8 +20,6 @@ export class Player {
     this.y = config.y || 0;
     this.direction = config.direction || 'down';
     this.sprite = null;
-
-    this.spriteIndex = Assets.get(this.assetLoader.getAsset(getCurrentLevel().map.config));
 
     this.keyboard = new PlayerKeyboard();
     this.keyboard.init();
@@ -51,7 +52,7 @@ export class Player {
       this.assetLoader.getAsset(CONFIG.textures.hero.config)
     )?.data.animations;
     this.animations = {};
-    this.currentAnimation = config.currentAnimation || 'idle-down';
+    this.currentAnimation = config.currentAnimation || `idle-${this.direction}`;
     Object.values(this.animationsMap).forEach((animation) => {
       this.animations[animation] = AnimatedSprite.fromFrames(this.animationsResources[animation]);
     });
@@ -60,7 +61,7 @@ export class Player {
 
     this.isMounted = false;
     this.sprite = null;
-    this.charactersContainer = config.charactersContainer;
+    this.container = config.container;
 
     // These happen once on map startup.
     this.behaviorLoop = config.behaviorLoop || [];
@@ -79,7 +80,7 @@ export class Player {
     this.makeInteractable();
     this.sprite.animationSpeed = 1 / 4;
     this.sprite.loop = false;
-    this.charactersContainer.addChild(this.sprite);
+    this.container.addChild(this.sprite);
 
     this.isMounted = true;
     this.sprite.play();
@@ -110,13 +111,18 @@ export class Player {
     this.sprite.buttonMode = true;
     this.sprite.eventMode = 'static';
 
+    const tooltip = new Tooltip();
+    tooltip.init();
+
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.5;
-      console.log(e);
+
+      tooltip.showMessage(Translator.translate(this.id));
     });
 
-    this.sprite.on('pointerleave', (e) => {
+    this.sprite.on('pointerleave', () => {
       this.sprite.alpha = 1;
+      tooltip.hide();
     });
   }
 
@@ -203,6 +209,13 @@ export class Player {
       emitEvent('PersonWalkingComplete', {
         whoId: this.id
       });
+
+      const state = {
+        x: this.x,
+        y: this.y,
+        direction: this.direction
+      };
+      Storage.set(Storage.STORAGE_KEYS.player, state);
     }
   }
 

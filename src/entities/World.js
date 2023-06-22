@@ -5,18 +5,46 @@ import { withGrid } from '../utils';
 import { Keyboard } from '../components/Keyboard';
 import { CONFIG } from '../config';
 
+import { DebugHud } from '../lib/DebugHud';
+
+const GLOBAL_KEY = '_world';
+
 export class World {
+  DOMGameContainer = null;
+
+  // debug variables
+  debug = false;
+  debugContainer = null;
+  debugGraphics = [];
+  runOnce = false;
+  debugTexts = [];
+  isMounted = false;
+
   constructor() {
-    this.DOMGameContainer = null;
-    // debug variables
-    this.debug = false;
-    this.debugContainer = null;
-    this.debugGraphics = [];
-    this.runOnce = false;
-    this.debugTexts = [];
+    this.getInstance();
   }
 
-  init() {
+  getInstance() {
+    if (window[GLOBAL_KEY] === undefined) {
+      if (!window[GLOBAL_KEY]) {
+        window[GLOBAL_KEY] = this;
+      } else {
+        let props = Object.getOwnPropertyNames(this);
+
+        for (const prop of props) {
+          this[prop] = window[GLOBAL_KEY][prop];
+        }
+      }
+      window[GLOBAL_KEY] = this;
+      return this;
+    } else {
+      return window[GLOBAL_KEY];
+    }
+  }
+
+  mount() {
+    if (this.isMounted) return;
+
     this.app = new Application({
       background: '#272d37',
       width: CONFIG.GAME_CONFIG.width,
@@ -37,6 +65,12 @@ export class World {
 
     this.bindActionInput();
     this.bindHeroPositionCheck();
+
+    this.isMounted = true;
+  }
+
+  init() {
+    this.mount();
 
     // TODO: Load game state from database (local or server?)
     const level = CONFIG.levels.dorf;
@@ -65,12 +99,16 @@ export class World {
     this.map.update(cameraPerson);
 
     if (this.debug) {
-      window._hud.show();
+      DebugHud.shared.show();
 
       this.drawWalls(cameraPerson);
     }
 
     Object.values(this.map.gameObjects).forEach((object) => {
+      object.update(this.map, cameraPerson);
+    });
+
+    Object.values(this.map.markerObjects).forEach((object) => {
       object.update(this.map, cameraPerson);
     });
 
@@ -133,7 +171,7 @@ export class World {
 
     new Keyboard('BracketRight', () => {
       this.debug = !this.debug;
-      window._hud.toggle();
+      DebugHud.shared.toggle();
       if (!this.debug) {
         this.deleteWalls();
       }

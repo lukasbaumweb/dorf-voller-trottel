@@ -6,9 +6,9 @@ import { AssetLoader } from './AssetLoader';
 const convertTo2D = (oneDimensionArr, length) => {
   const newArr = [];
   while (oneDimensionArr.length) newArr.push(oneDimensionArr.splice(0, length));
-
   return newArr;
 };
+
 const loadMaps = (lowerPath, upperPath) => {
   const assetLoader = new AssetLoader();
   const cachedLower = Assets.get(assetLoader.getAsset(lowerPath));

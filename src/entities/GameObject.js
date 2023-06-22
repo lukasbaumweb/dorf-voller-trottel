@@ -12,7 +12,7 @@ export class GameObject {
 
     this.texture = config.texture;
     this.json = config.json;
-    this.charactersContainer = config.charactersContainer;
+    this.container = config.container;
     this.interactable = !!config.interactable;
 
     //These happen once on map startup.
@@ -31,39 +31,46 @@ export class GameObject {
     }, 10);
   }
 
-  update({ cameraPerson }, index) {
-    const x = this.gameObject.x + withGrid(CONFIG.OFFSET.x) - cameraPerson.x - 8;
-    const y = this.gameObject.y + withGrid(CONFIG.OFFSET.y) - cameraPerson.y - 8;
+  mount(map) {
+    console.debug(`Mounting ${this.id}`);
+    this.map = map;
+    this.sprite = this.animations[this.animationsMap[this.currentAnimation]];
+    this.sprite.anchor.set(0.5);
+    this.sprite.zIndex = 5;
 
-    if (!this.animationPlaying) {
-      this.sprite = AnimatedSprite.fromFrames(this.loadedAnimations[this.animations[this.currentAnimation]]);
-      this.sprite.anchor.set(0.5);
-      this.sprite.zIndex = index;
-      this.sprite.x = x;
-      this.sprite.y = y;
-      this.sprite.animationSpeed = 1 / 6;
-      this.sprite.loop = false;
-      this.sprite.play();
-      this.animationPlaying = true;
+    this.makeInteractable();
+    this.sprite.animationSpeed = 1 / 4;
+    this.sprite.loop = false;
+    this.container.addChild(this.sprite);
 
-      this.sprite.onComplete = () => {
-        // this.charactersContainer.removeChild(this.sprite);
-        // this.sprite.destroy();
-        // this.sprite = null;
-        this.animationPlaying = false;
-      };
-      this.sprite.eventMode = 'static';
-      this.charactersContainer.addChild(this.sprite);
-      this.animationPlaying = false;
-      this.makeInteractable();
-    }
+    this.isMounted = true;
+    this.sprite.play();
+  }
+
+  update(map, cameraPerson) {
+    const x = this.x - cameraPerson.x - withGrid(CONFIG.OFFSET.x) + 8;
+    const y = this.y - cameraPerson.y - withGrid(CONFIG.OFFSET.y) + 8;
 
     this.sprite.position.set(x, y);
+
+    if (this.movingProgressRemaining > 0) {
+      this.updatePosition(cameraPerson);
+    } else {
+      // We're keyboard ready and have an arrow pressed
+      if (!map.isCutscenePlaying && this.keyboard.direction) {
+        this.startBehavior(map, {
+          type: 'walk',
+          direction: this.keyboard.direction
+        });
+      }
+      this.updateAnimationState();
+    }
   }
 
   makeInteractable() {
     // Shows hand cursor
     this.sprite.buttonMode = true;
+    this.sprite.eventMode = 'static';
 
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.5;

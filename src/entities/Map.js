@@ -4,15 +4,19 @@ import { Player } from './Player';
 import { CONFIG } from '../config';
 import { loadLayers, loadMaps, loadWalls } from '../lib/MapLoader';
 import { getCurrentLevel } from '../gameState';
+import { GameObject } from './GameObject';
+import { Marker } from './Marker';
+import { Storage } from '../lib/Storage';
 
 export class Map {
-  constructor({ id, map, configObjects, walls, app }) {
+  constructor({ id, map, configObjects, markerObjects, walls, app }) {
     this.id = id || `ID: ${new Date().getTime()}-${Math.random() * 1000}`;
     this.walls = walls || {};
 
     this.map = map;
 
     this.configObjects = configObjects || {};
+    this.markerObjects = markerObjects || {};
     this.app = app;
     this.gameObjects = {};
     this.layers = [];
@@ -67,18 +71,45 @@ export class Map {
 
   mountObjects(layersContainer) {
     const charactersContainer = layersContainer.children.find((layer) => layer.name === '######players######');
+    const objectsContainer = layersContainer.children.find((layer) => layer.name === 'objects');
     Object.keys(this.configObjects).forEach((key) => {
       const object = this.configObjects[key];
       object.id = key;
-      object.charactersContainer = charactersContainer;
 
       let instance;
       if (object.type === 'Character') {
-        instance = new Player(object);
+        object.container = charactersContainer;
+        const savedPlayer = Storage.get(Storage.STORAGE_KEYS.player);
+
+        const combined = Object.assign(object, savedPlayer);
+        console.debug(combined);
+
+        instance = new Player(combined);
+      }
+
+      if (object.type === 'Marker') {
+        object.container = objectsContainer;
+        instance = new Marker(object);
       }
 
       this.gameObjects[key] = instance;
       this.gameObjects[key].id = key;
+      instance.mount(this);
+    });
+
+    Object.keys(this.markerObjects).forEach((key) => {
+      const object = this.markerObjects[key];
+      object.id = key;
+
+      let instance;
+
+      if (object.type === 'Marker') {
+        object.container = objectsContainer;
+        instance = new Marker(object);
+      }
+
+      this.markerObjects[key] = instance;
+      this.markerObjects[key].id = key;
       instance.mount(this);
     });
   }

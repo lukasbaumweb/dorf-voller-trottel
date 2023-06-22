@@ -26,7 +26,7 @@ export class AssetLoader {
     return maps;
   };
 
-  init = () => {
+  load = () => {
     const configs = this.getConfigs();
     const images = this.getImages();
     const maps = this.getMaps();

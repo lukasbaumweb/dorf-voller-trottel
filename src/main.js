@@ -1,17 +1,28 @@
+import { TextMessage } from './components/TextMessage';
 import { World } from './entities/World';
 import { AssetLoader } from './lib/AssetLoader';
-import { Hud } from './lib/Hud';
+import { DebugHud } from './lib/DebugHud';
+
+import { Storage } from './lib/Storage';
 import './style.css';
 
-window.world = new World();
-window.hud = new Hud();
+const debugHud = new DebugHud();
 
-const assetLoader = new AssetLoader();
-assetLoader
-  .init()
+new AssetLoader()
+  .load()
   .then(() => {
-    window.world.init();
-    window.hud.init();
-    window.hud.show();
+    const world = new World();
+    world.init();
+    debugHud.init();
+    debugHud.show();
+
+    new TextMessage({
+      text: Storage.get(Storage.STORAGE_KEYS.welcomeMessage, {
+        message:
+          'Hallo Spieler, willkommen im Dorf voller Drottel! Hallo Spieler, willkommen im Dorf voller Drottel! Hallo Spieler, willkommen im Dorf voller Drottel!'
+      }).message
+    }).init();
+
+    Storage.set(Storage.STORAGE_KEYS.welcomeMessage, { message: 'Hallo Spieler, willkommen zurück!' });
   })
   .catch((err) => console.error(err));
