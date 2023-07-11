@@ -1,4 +1,3 @@
-import { AnimatedSprite } from 'pixi.js';
 import { GameEvent } from './GameEvent';
 
 export class GameObject {

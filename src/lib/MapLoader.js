@@ -50,7 +50,7 @@ const loadLayers = (pathToMap) => {
   const assetLoader = new AssetLoader();
   const cached = Assets.get(assetLoader.getAsset(pathToMap));
   const filtered = cached.layers.splice(0, cached.layers.length - 1).map((l, i) => ({ zIndex: i, ...l }));
-  console.debug(filtered);
   return filtered;
 };
+
 export { loadLayers, loadMaps, loadWalls };

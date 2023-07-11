@@ -1,3 +1,4 @@
+import App from '../components/App';
 import { World } from '../entities/World';
 
 const GLOBAL_KEY = '_tooltip';
@@ -29,8 +30,7 @@ export class Tooltip {
       this.tooltipContainer.classList.add('terminal-alert');
       this.tooltipContainer.style.opacity = 0;
 
-      const world = new World();
-      world.getInstance().DOMGameContainer.appendChild(this.tooltipContainer);
+      new App().getInstance().DOMGameContainer.appendChild(this.tooltipContainer);
 
       this.isMounted = true;
     }

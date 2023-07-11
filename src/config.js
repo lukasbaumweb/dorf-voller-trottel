@@ -8,15 +8,18 @@ export const CONFIG = {
   GAME_CONFIG: {
     width: 352,
     height: 198,
-    scale: 3.5
+    scale: 5
   },
   textures: {
     hero: {
       img: 'public/textures/characters/hero.png',
       config: 'public/textures/characters/hero.json'
     },
-    marker: { config: 'public/textures/utils/marker.json' },
-    bigMarker: { config: 'public/textures/utils/big-marker.json' }
+    'old-man': {
+      img: 'public/textures/characters/old-man.png',
+      config: 'public/textures/characters/old-man.json'
+    },
+    marker: { config: 'public/textures/utils/marker.json' }
   },
   levels: {
     dorf: {
@@ -30,34 +33,46 @@ export const CONFIG = {
       },
       configObjects: {
         hero: {
-          type: 'Character',
+          type: 'Player',
           isPlayerControlled: true,
           x: 6 * PIXEL_SIZE,
           y: 24 * PIXEL_SIZE,
+          index: 5
+        },
+        'old-man': {
+          type: 'NPC',
+          texture: 'old-man',
+          x: 21 * PIXEL_SIZE,
+          y: 6 * PIXEL_SIZE,
+          behaviorLoop: [],
           index: 5
         }
       },
       markerObjects: {
         homeMarker: {
           type: 'Marker',
-          x: 6 * PIXEL_SIZE + 8,
-          y: 23 * PIXEL_SIZE + 8
+          x: 6 * PIXEL_SIZE,
+          y: 23 * PIXEL_SIZE
         },
         largehouseMarker: {
           type: 'Marker',
-          x: 12 * PIXEL_SIZE + 8,
-          y: 9 * PIXEL_SIZE + 8
+          x: 12 * PIXEL_SIZE,
+          y: 9 * PIXEL_SIZE
         },
-        churchMarker: {
+        townhallMarker: {
           type: 'Marker',
-          x: 21 * PIXEL_SIZE,
-          y: 6 * PIXEL_SIZE + 8,
-          isBig: true
+          x: 20 * PIXEL_SIZE,
+          y: 6 * PIXEL_SIZE
         },
         smallMarker: {
           type: 'Marker',
-          x: 26 * PIXEL_SIZE + 8,
-          y: 15 * PIXEL_SIZE + 8
+          x: 25 * PIXEL_SIZE,
+          y: 18 * PIXEL_SIZE
+        },
+        bridgeMarker: {
+          type: 'Marker',
+          x: 33 * PIXEL_SIZE,
+          y: 7 * PIXEL_SIZE
         }
       }
     }

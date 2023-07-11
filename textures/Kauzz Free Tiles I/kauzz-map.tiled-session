@@ -1,0 +1,72 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "D:/source/dorf-voller-trottel/textures/map/dorf.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "Alle Dateien (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 0.75
+        },
+        "D:/source/dorf-voller-trottel/textures/map/dorf.tmx": {
+            "scale": 2,
+            "selectedLayer": 9,
+            "viewCenter": {
+                "x": 726.5,
+                "y": 269.5
+            }
+        },
+        "D:/source/dorf-voller-trottel/textures/map/dorf.tmx#basic terrain": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1.5
+        },
+        "D:/source/dorf-voller-trottel/textures/map/dorf.tmx#clouds": {
+            "dynamicWrapping": false
+        },
+        "D:/source/dorf-voller-trottel/textures/map/dorf.tmx#funk-mast": {
+            "dynamicWrapping": false
+        },
+        "D:/source/dorf-voller-trottel/textures/map/dorf.tmx#meta": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "unbenannt.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 396,
+                "y": 418.66666666666663
+            }
+        },
+        "unbenannt.tmx#funk-mast": {
+            "scaleInDock": 1
+        },
+        "unbenannt.tmx#nature_outside-tilef": {
+            "scaleInDock": 1
+        },
+        "unbenannt.tmx#rural-tileset-tilex": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "D:/source/dorf-voller-trottel/public/maps/dorf",
+    "last.imagePath": "D:/source/dorf-voller-trottel/textures",
+    "map.lastUsedExportFilter": "Alle Dateien (*)",
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+        "unbenannt.tmx",
+        "D:/source/dorf-voller-trottel/textures/map/dorf.tmx"
+    ],
+    "project": "kauzz-map.tiled-project",
+    "recentFiles": [
+        "unbenannt.tmx",
+        "D:/source/dorf-voller-trottel/textures/map/dorf.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

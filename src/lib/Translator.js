@@ -4,8 +4,9 @@ export class Translator {
   static languages = {
     de_DE: {
       homeMarker: 'Büro',
-      churchMarker: 'Dorfkirche',
-      hero: 'Spieler'
+      townhallMarker: 'Rathaus',
+      hero: 'Spieler',
+      'old-man': 'Alter Mann'
     }
   };
 

@@ -1,3 +1,4 @@
+import App from '../components/App';
 import { CONFIG } from '../config';
 import { World } from '../entities/World';
 
@@ -66,7 +67,7 @@ export class DebugHud {
         <div>
         <label for="game-scale">
           Scale: 
-          <select id="game-scale" value="${CONFIG.GAME_CONFIG.scale}">
+          <select id="game-scale" value="${currentValue}">
             ${values}
           </select>
         </label>
@@ -75,12 +76,12 @@ export class DebugHud {
 
       document.body.appendChild(this.hudContainer);
 
-      const world = new World();
+      const app = new App();
       document.getElementById('game-scale').onchange = (e) => {
-        world.getInstance().DOMGameContainer.style.transform = `scale(${e.target.value})`;
+        app.getInstance().DOMGameContainer.style.transform = `scale(${e.target.value})`;
         Storage.set(Storage.STORAGE_KEYS.gameScale, { scale: e.target.value });
       };
-      world.getInstance().DOMGameContainer.style.transform = `scale(${CONFIG.GAME_CONFIG.scale})`;
+      app.getInstance().DOMGameContainer.style.transform = `scale(${currentValue})`;
       this.isMounted = true;
     }
   }

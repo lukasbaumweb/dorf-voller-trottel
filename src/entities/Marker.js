@@ -1,9 +1,7 @@
-import { AnimatedSprite, Assets, Sprite } from 'pixi.js';
-import { CONFIG, getAsset } from '../config';
-import { emitEvent, nextPosition, withGrid } from '../utils';
-import { GameEvent } from './GameEvent';
+import { AnimatedSprite, Assets } from 'pixi.js';
+import { CONFIG } from '../config';
+import { withGrid } from '../utils';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
-import { getCurrentLevel } from '../gameState';
 import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
 import { Translator } from '../lib/Translator';
@@ -15,16 +13,13 @@ export class Marker {
     this.id = config.id;
     this.x = config.x || 0;
     this.y = config.y || 0;
-    this.isBig = config.isBig;
     this.sprite = null;
 
     this.keyboard = new PlayerKeyboard();
     this.keyboard.init();
     this.isStanding = true;
 
-    this.resource = Assets.cache.get(
-      this.assetLoader.getAsset(config.isBig ? CONFIG.textures.bigMarker.config : CONFIG.textures.marker.config)
-    );
+    this.resource = Assets.cache.get(this.assetLoader.getAsset(CONFIG.textures.marker.config));
 
     this.animationsResources = this.resource?.data.animations;
     this.animation = AnimatedSprite.fromFrames(this.resource._frameKeys);
@@ -41,12 +36,12 @@ export class Marker {
   }
 
   mount(map) {
+    if (this.isMounted) return;
     console.debug(`Mounting ${this.id} ...`);
     this.map = map;
     this.sprite = this.animation;
-    this.sprite.anchor.set(0.5);
     this.sprite.zIndex = 5;
-    this.sprite.width = this.isBig ? CONFIG.PIXEL_SIZE * 2 : CONFIG.PIXEL_SIZE;
+    this.sprite.width = CONFIG.PIXEL_SIZE;
     this.sprite.height = CONFIG.PIXEL_SIZE;
 
     this.makeInteractable();
@@ -75,7 +70,6 @@ export class Marker {
 
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.5;
-
       tooltip.showMessage(Translator.translate(this.id));
     });
 

@@ -81,6 +81,7 @@ canvas {
   padding: 0 0.3rem;
   font-size: 0.5rem;
   padding-bottom: 5px;
+  min-width: 200px;
 }
 
 .message-content::before {
@@ -101,9 +102,48 @@ canvas {
   opacity: 1;
 }
 
+.message-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
 .message-action {
   cursor: pointer;
   padding: 0.1rem 0.2rem;
-  float: right;
   margin-top: 3px;
+}
+
+/*
+Scene Transition
+*/
+.scene-transition {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  opacity: 0;
+  animation: scene-transition-fade-in 1.2s forwards;
+}
+.scene-transition.fade-out {
+  animation: scene-transition-fade-out 1.2s forwards;
+}
+
+@keyframes scene-transition-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scene-transition-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

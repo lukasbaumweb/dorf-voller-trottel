@@ -1,3 +1,6 @@
+import { SceneTransition } from '../components/SceneTransition';
+import { TextMessage } from '../components/TextMessage';
+
 export class GameEvent {
   constructor({ map, event }) {
     this.map = map;
@@ -27,29 +30,6 @@ export class GameEvent {
     document.addEventListener('PersonStandComplete', completeHandler);
   }
 
-  walk(resolve) {
-    const who = this.map.gameObjects[this.event.who];
-    who.startBehavior(
-      {
-        map: this.map
-      },
-      {
-        type: 'walk',
-        direction: this.event.direction,
-        retry: true
-      }
-    );
-
-    //Set up a handler to complete when correct person is done walking, then resolve the event
-    const completeHandler = (e) => {
-      if (e.detail.whoId === this.event.who) {
-        document.removeEventListener('PersonWalkingComplete', completeHandler);
-        resolve();
-      }
-    };
-    document.addEventListener('PersonWalkingComplete', completeHandler);
-  }
-
   textMessage(resolve) {
     if (this.event.faceHero) {
       const obj = this.map.gameObjects[this.event.faceHero];
@@ -60,7 +40,7 @@ export class GameEvent {
       text: this.event.text,
       onComplete: () => resolve()
     });
-    message.init(document.querySelector('.game-container'));
+    message.init();
   }
 
   changeMap(resolve) {
@@ -79,30 +59,6 @@ export class GameEvent {
       resolve();
       sceneTransition.fadeOut();
     });
-  }
-
-  battle(resolve) {
-    const battle = new Battle({
-      enemy: Enemies[this.event.enemyId],
-      arena: this.event.arena || null,
-      onComplete: (didWin) => {
-        resolve(didWin ? 'WON_BATTLE' : 'LOST_BATTLE');
-      }
-    });
-    battle.init(document.querySelector('.game-container'));
-  }
-
-  pause(resolve) {
-    this.map.isPaused = true;
-    const menu = new PauseMenu({
-      progress: this.map.overworld.progress,
-      onComplete: () => {
-        resolve();
-        this.map.isPaused = false;
-        this.map.overworld.startGameLoop();
-      }
-    });
-    menu.init(document.querySelector('.game-container'));
   }
 
   addStoryFlag(resolve) {

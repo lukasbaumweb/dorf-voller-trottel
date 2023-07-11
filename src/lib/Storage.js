@@ -2,7 +2,8 @@ export class Storage {
   static STORAGE_KEYS = {
     player: 'player',
     gameScale: 'gameScale',
-    welcomeMessage: 'welcomeMessage'
+    welcomeMessage: 'welcomeMessage',
+    npc: 'npc'
   };
 
   static get(key, defaultValue) {

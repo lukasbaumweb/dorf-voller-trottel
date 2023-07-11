@@ -1,9 +1,8 @@
-import { AnimatedSprite, Assets, Sprite } from 'pixi.js';
-import { CONFIG, getAsset } from '../config';
+import { AnimatedSprite, Assets } from 'pixi.js';
+import { CONFIG } from '../config';
 import { emitEvent, nextPosition, withGrid } from '../utils';
 import { GameEvent } from './GameEvent';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
-import { getCurrentLevel } from '../gameState';
 import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
 import { Translator } from '../lib/Translator';
@@ -60,7 +59,6 @@ export class Player {
     this.animationFrameLimit = config.animationFrameLimit || CONFIG.animationFrameLimit;
 
     this.isMounted = false;
-    this.sprite = null;
     this.container = config.container;
 
     // These happen once on map startup.
@@ -77,7 +75,7 @@ export class Player {
     this.sprite.anchor.set(0.5);
     this.sprite.zIndex = 5;
 
-    this.makeInteractable();
+    // this.makeInteractable();
     this.sprite.animationSpeed = 1 / 4;
     this.sprite.loop = false;
     this.container.addChild(this.sprite);
@@ -93,9 +91,8 @@ export class Player {
     this.sprite.position.set(x, y);
 
     if (this.movingProgressRemaining > 0) {
-      this.updatePosition(cameraPerson);
+      this.updatePosition();
     } else {
-      // We're keyboard ready and have an arrow pressed
       if (!map.isCutscenePlaying && this.keyboard.direction) {
         this.startBehavior(map, {
           type: 'walk',
@@ -126,51 +123,13 @@ export class Player {
     });
   }
 
-  async doBehaviorEvent(map) {
-    // Don't do anything if I don't have config to do anything
-    if (this.behaviorLoop.length === 0) {
-      return;
-    }
-
-    if (map.isCutscenePlaying) {
-      console.log('will retry', this.id);
-      if (this.retryTimeout) {
-        clearTimeout(this.retryTimeout);
-      }
-      this.retryTimeout = setTimeout(() => {
-        this.doBehaviorEvent(map);
-      }, 1000);
-      return;
-    }
-
-    // Setting up our event with relevant info
-    const eventConfig = this.behaviorLoop[this.behaviorLoopIndex];
-    eventConfig.who = this.id;
-
-    // Create an event instance out of our next event config
-    const eventHandler = new GameEvent({ map, event: eventConfig });
-    await eventHandler.init();
-
-    // Setting the next event to fire
-    this.behaviorLoopIndex += 1;
-    if (this.behaviorLoopIndex === this.behaviorLoop.length) {
-      this.behaviorLoopIndex = 0;
-    }
-
-    // Do it again!
-    this.doBehaviorEvent(map);
-  }
-
   startBehavior(map, behavior) {
     if (!this.isMounted) {
       return;
     }
 
-    // Set character direction to whatever behavior has
     this.direction = behavior.direction;
     if (behavior.type === 'walk') {
-      // Stop here if space is not free
-
       const isSpaceTaken = map.isSpaceTaken(this.x, this.y, this.direction);
       this.currentAnimation = 'walk-' + this.direction;
 
@@ -192,18 +151,16 @@ export class Player {
     }
   }
 
-  updatePosition(cameraPerson) {
+  updatePosition() {
     const [property, change] = this.directionUpdate[this.direction];
     this[property] += change;
     this.movingProgressRemaining -= 1;
 
     if (this.movingProgressRemaining <= 0) {
-      // We finished the walk!
       this.intentPosition = null;
-      // this.sprite.playing = false;
 
       this.currentAnimation = 'idle-' + this.direction;
-
+      this.updateAnimationState();
       emitEvent('PersonWalkingComplete', {
         whoId: this.id
       });
@@ -219,7 +176,7 @@ export class Player {
 
   updateAnimationState() {
     if (this.sprite.playing) return;
-    const nextAnimation = this.animationsMap[this.currentAnimation]; //  this.movingProgressRemaining > 0 ? this.currentAnimation : this.animationsMap["idle-" + this.direction];
+    const nextAnimation = this.animationsMap[this.currentAnimation];
     this.sprite.textures = this.animations[nextAnimation].textures;
 
     if (this.movingProgressRemaining > 0) {

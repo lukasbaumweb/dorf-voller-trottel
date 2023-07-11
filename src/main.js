@@ -1,3 +1,4 @@
+import App from './components/App';
 import { TextMessage } from './components/TextMessage';
 import { World } from './entities/World';
 import { AssetLoader } from './lib/AssetLoader';
@@ -11,6 +12,8 @@ const debugHud = new DebugHud();
 new AssetLoader()
   .load()
   .then(() => {
+    const app = new App();
+
     const world = new World();
     world.init();
     debugHud.init();
@@ -21,8 +24,7 @@ new AssetLoader()
 
     new TextMessage({
       text: Storage.get(Storage.STORAGE_KEYS.welcomeMessage, {
-        message:
-          'Hallo Spieler, willkommen im Dorf voller Drottel! Hallo Spieler, willkommen im Dorf voller Drottel! Hallo Spieler, willkommen im Dorf voller Drottel!'
+        message: 'Hallo Spieler, willkommen im Dorf voller Drottel! '
       }).message
     }).init();
 

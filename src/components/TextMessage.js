@@ -1,4 +1,5 @@
 import { World } from '../entities/World';
+import App from './App';
 import { Keyboard } from './Keyboard';
 
 class RevealingText {
@@ -52,9 +53,13 @@ class RevealingText {
 }
 
 export class TextMessage {
-  constructor({ text, onComplete }) {
+  constructor({ text, onComplete, onCancel, onAcceptText, onCancelText }) {
     this.text = text;
     this.onComplete = onComplete;
+    this.onCancel = onCancel;
+    this.cancelBtnText = onCancelText || 'Cancel';
+    this.acceptBtnText = onAcceptText || 'Ok';
+
     this.element = null;
   }
 
@@ -64,18 +69,35 @@ export class TextMessage {
 
     this.element.innerHTML = `
         <p class="message-content"></p>
-        <button class="message-action btn btn-error">Enter</button>
+        <div class="message-actions">
+          ${
+            this.onCancel
+              ? `<button class="message-action btn btn-error" id="btnCancel">${this.cancelBtnText}</button>`
+              : ''
+          }
+          <button class="message-action btn btn-error" id="btnEnter">${this.acceptBtnText}</button>  
+        </div>
       `;
 
-    //Init the typewriter effect
     this.revealingText = new RevealingText({
       element: this.element.querySelector('.message-content'),
       text: this.text
     });
 
-    this.element.querySelector('button').addEventListener('click', () => {
-      //Close the text message
+    if (this.onCancel) {
+      this.element.querySelector('#btnCancel').addEventListener('click', () => {
+        this.onCancel();
+        this.done();
+      });
+      this.actionListener = new Keyboard('Backspace', () => {
+        this.onCancel();
+        this.done();
+      });
+    }
+
+    this.element.querySelector('#btnEnter').addEventListener('click', () => {
       this.done();
+      this.onComplete && this.onComplete();
     });
 
     this.actionListener = new Keyboard('Enter', () => {
@@ -87,7 +109,6 @@ export class TextMessage {
     if (this.revealingText.isDone) {
       this.element.remove();
       this.actionListener.unbind();
-      this.onComplete && this.onComplete();
     } else {
       this.revealingText.warpToDone();
     }
@@ -96,8 +117,7 @@ export class TextMessage {
   init() {
     this.createElement();
 
-    const world = new World();
-    world.getInstance().DOMGameContainer.appendChild(this.element);
+    new App().getInstance().DOMGameContainer.appendChild(this.element);
 
     this.revealingText.init();
   }
