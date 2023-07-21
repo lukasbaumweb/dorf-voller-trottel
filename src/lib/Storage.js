@@ -3,7 +3,8 @@ export class Storage {
     player: 'player',
     gameScale: 'gameScale',
     welcomeMessage: 'welcomeMessage',
-    npc: 'npc'
+    npc: 'npc',
+    updatedOn: 'updatedOn'
   };
 
   static get(key, defaultValue) {
@@ -24,7 +25,20 @@ export class Storage {
     }
     const isObj = typeof value === 'object' && !Array.isArray(value) && value !== null;
 
-    if (isObj) localStorage.setItem(key, JSON.stringify(value));
-    else throw new Error('Value must be object');
+    if (isObj) {
+      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(this.STORAGE_KEYS.updatedOn, new Date().getTime());
+    } else throw new Error('Value must be object');
+  }
+
+  static clear() {
+    if (!'localStorage' in window) {
+      console.warn('No localstorage found, Cannot save data');
+      return;
+    }
+
+    Object.keys(this.STORAGE_KEYS).forEach((key) => {
+      localStorage.removeItem(key);
+    });
   }
 }

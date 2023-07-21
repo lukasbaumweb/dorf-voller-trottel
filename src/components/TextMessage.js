@@ -57,8 +57,8 @@ export class TextMessage {
     this.text = text;
     this.onComplete = onComplete;
     this.onCancel = onCancel;
-    this.cancelBtnText = onCancelText || 'Cancel';
-    this.acceptBtnText = onAcceptText || 'Ok';
+    this.cancelBtnText = onCancelText || 'Cancel (Esc)';
+    this.acceptBtnText = onAcceptText || 'Ok (Enter)';
 
     this.element = null;
   }

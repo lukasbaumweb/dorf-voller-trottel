@@ -8,7 +8,7 @@ export const CONFIG = {
   GAME_CONFIG: {
     width: 352,
     height: 198,
-    scale: 5
+    scale: 3
   },
   textures: {
     hero: {

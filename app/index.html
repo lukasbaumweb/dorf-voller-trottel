@@ -1,55 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="apple-touch-icon" sizes="180x180" href="public/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="public/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="public/favicon/favicon-16x16.png">
-    <link rel="manifest" href="public/favicon/site.webmanifest">
-    <link rel="mask-icon" href="public/favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="public/favicon/mstile-144x144.png">
-    <meta name="theme-color" content="#ffffff">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" sizes="180x180" href="public/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="public/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="public/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="public/favicon/site.webmanifest" />
+    <link rel="mask-icon" href="public/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="msapplication-TileImage" content="public/favicon/mstile-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
     <script src="https://pixijs.download/release/pixi.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" />
 
     <style>
-        :root {
-            --global-font-size: 15px;
-            --global-line-height: 1.4em;
-            --font-stack: -apple-system,
-                BlinkMacSystemFont,
-                Segoe UI,
-                Helvetica,
-                Arial,
-                sans-serif,
-                Apple Color Emoji,
-                Segoe UI Emoji,
-                Segoe UI Symbol;
-            --background-color: #222225;
-            --background-color-light-transparent: #222225aa;
-            --page-width: 60em;
-            --font-color: #e8e9ed;
-            --invert-font-color: #222225;
-            --secondary-color: #a3abba;
-            --tertiary-color: #a3abba;
-            --primary-color: #62c4ff;
-            --error-color: #ff3c74;
-            --progress-bar-background: #3f3f44;
-            --progress-bar-fill: #62c4ff;
-            --code-bg-color: #3f3f44;
-            --input-style: solid;
-            --display-h1-decoration: none;
-        }
+      :root {
+        --global-font-size: 15px;
+        --global-line-height: 1.4em;
+        --font-stack: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji,
+          Segoe UI Emoji, Segoe UI Symbol;
+        --background-color: #222225;
+        --background-color-light-transparent: #222225aa;
+        --page-width: 60em;
+        --font-color: #e8e9ed;
+        --invert-font-color: #222225;
+        --secondary-color: #a3abba;
+        --tertiary-color: #a3abba;
+        --primary-color: #62c4ff;
+        --error-color: #ff3c74;
+        --progress-bar-background: #3f3f44;
+        --progress-bar-fill: #62c4ff;
+        --code-bg-color: #3f3f44;
+        --input-style: solid;
+        --display-h1-decoration: none;
+      }
     </style>
+  </head>
 
-</head>
-
-<body>
-
-</body>
-
+  <body>
+    <div class="game-menu" id="gameMenu">
+      <div class="terminal-card">
+        <header class="title">Dorf voller Trottel</header>
+        <div class="description">
+          Beschreibung: Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam earum, quibusdam iure, sequi
+          autem inventore nemo eveniet commodi, quo ipsum dignissimos provident rem debitis! Eum laborum reiciendis rem
+          culpa dolore?
+        </div>
+      </div>
+      <div class="game-options">
+        <div class="load-game" id="lastGame">
+          <span class="last-game" id="lastGameTimestamp">Letztes Spiel</span>
+          <a class="btn btn-error" id="loadlastGame" href="#">Letztes Spiel laden</a>
+        </div>
+        <a class="btn btn-primary" id="newGame" href="#">Neues Spiel</a>
+      </div>
+    </div>
+  </body>
 </html>
