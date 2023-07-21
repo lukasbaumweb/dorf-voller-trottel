@@ -75,7 +75,7 @@ export class Player {
     this.sprite.anchor.set(0.5);
     this.sprite.zIndex = 5;
 
-    // this.makeInteractable();
+    this.makeInteractable();
     this.sprite.animationSpeed = 1 / 4;
     this.sprite.loop = false;
     this.container.addChild(this.sprite);

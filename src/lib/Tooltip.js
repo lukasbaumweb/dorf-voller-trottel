@@ -30,7 +30,7 @@ export class Tooltip {
       this.tooltipContainer.classList.add('terminal-alert');
       this.tooltipContainer.style.opacity = 0;
 
-      new App().getInstance().DOMGameContainer.appendChild(this.tooltipContainer);
+      document.body.appendChild(this.tooltipContainer);
 
       this.isMounted = true;
     }

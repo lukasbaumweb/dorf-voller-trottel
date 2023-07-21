@@ -117,7 +117,7 @@ export class TextMessage {
   init() {
     this.createElement();
 
-    new App().getInstance().DOMGameContainer.appendChild(this.element);
+    document.body.appendChild(this.element);
 
     this.revealingText.init();
   }
