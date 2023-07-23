@@ -36,25 +36,45 @@
         --input-style: solid;
         --display-h1-decoration: none;
       }
+
+      .game-menu {
+        max-width: 850px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        transition: 0.3s all ease;
+      }
+
+      .game-menu-init {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 10000;
+        background-color: var(--background-color);
+      }
     </style>
   </head>
 
   <body>
-    <div class="game-menu" id="gameMenu">
-      <div class="terminal-card">
-        <header class="title">Dorf voller Trottel</header>
-        <div class="description">
-          Beschreibung: Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam earum, quibusdam iure, sequi
-          autem inventore nemo eveniet commodi, quo ipsum dignissimos provident rem debitis! Eum laborum reiciendis rem
-          culpa dolore?
+    <div class="game-menu-init" id="gameMenuWrapper">
+      <div class="game-menu" id="gameMenu">
+        <div class="terminal-card">
+          <header class="title">Dorf voller Trottel</header>
+          <div class="description">
+            Rette dein Dorf vor Hackern durch das Verbessern der IT-Sicherheitskenntnisse deiner Dorfkollegen. Du bist
+            dabei der neu hinzugezogene IT-Sicherheitsexperte. Löse alle Aufgaben oder verlasse das Dorf voller Trottel!
+          </div>
         </div>
-      </div>
-      <div class="game-options">
-        <div class="load-game" id="lastGame">
-          <span class="last-game" id="lastGameTimestamp">Letztes Spiel</span>
-          <a class="btn btn-error" id="loadlastGame" href="#">Letztes Spiel laden</a>
+        <div class="game-options">
+          <div class="load-game" id="lastGame">
+            <span class="last-game" id="lastGameTimestamp">Letztes Spiel</span>
+            <a class="btn btn-default" id="loadlastGame" href="#">Letztes Spiel laden</a>
+          </div>
+          <a class="btn btn-primary" id="newGame" href="#">Neues Spiel</a>
         </div>
-        <a class="btn btn-primary" id="newGame" href="#">Neues Spiel</a>
       </div>
     </div>
   </body>

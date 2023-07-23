@@ -1,7 +1,7 @@
 import { AnimatedSprite, Assets } from 'pixi.js';
 import { CONFIG } from '../config';
 import { emitEvent, nextPosition, withGrid } from '../utils';
-import { GameEvent } from './GameEvent';
+import { GameEvent } from '../components/GameEvent';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
 import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
@@ -161,15 +161,16 @@ export class Player {
 
       this.currentAnimation = 'idle-' + this.direction;
       this.updateAnimationState();
-      emitEvent('PersonWalkingComplete', {
-        whoId: this.id
-      });
-
       const state = {
         x: this.x,
         y: this.y,
         direction: this.direction
       };
+      emitEvent('PersonWalkingComplete', {
+        whoId: this.id,
+        ...state
+      });
+
       Storage.set(Storage.STORAGE_KEYS.player, state);
     }
   }

@@ -1,7 +1,7 @@
 import { AnimatedSprite, Assets } from 'pixi.js';
 import { CONFIG } from '../config';
 import { emitEvent, nextPosition, withGrid } from '../utils';
-import { GameEvent } from './GameEvent';
+import { GameEvent } from '../components/GameEvent';
 
 import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';

@@ -59,7 +59,7 @@ export class TextMessage {
     this.onCancel = onCancel;
     this.cancelBtnText = onCancelText || 'Cancel (Esc)';
     this.acceptBtnText = onAcceptText || 'Ok (Enter)';
-
+    
     this.element = null;
   }
 
@@ -89,7 +89,7 @@ export class TextMessage {
         this.onCancel();
         this.done();
       });
-      this.actionListener = new Keyboard('Backspace', () => {
+      this.actionListener = new Keyboard('Escape', () => {
         this.onCancel();
         this.done();
       });
@@ -114,7 +114,7 @@ export class TextMessage {
     }
   }
 
-  init() {
+  async init() {
     this.createElement();
 
     document.body.appendChild(this.element);

@@ -1,5 +1,6 @@
-import { SceneTransition } from '../components/SceneTransition';
-import { TextMessage } from '../components/TextMessage';
+import { Storage } from '../lib/Storage';
+import { SceneTransition } from './SceneTransition';
+import { TextMessage } from './TextMessage';
 
 export class GameEvent {
   constructor({ map, event }) {
@@ -62,13 +63,12 @@ export class GameEvent {
   }
 
   addStoryFlag(resolve) {
-    window.playerState.storyFlags[this.event.flag] = true;
+    Storage.update(Storage.STORAGE_KEYS.playerStoryProgress, { [this.event.flag]: true });
     resolve();
   }
 
-  craftingMenu(resolve) {
-    const menu = new CraftingMenu({
-      pizzas: this.event.pizzas,
+  inventory(resolve) {
+    const menu = new Inventory({
       onComplete: () => {
         resolve();
       }

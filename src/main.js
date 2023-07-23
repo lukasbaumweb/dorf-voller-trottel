@@ -1,5 +1,6 @@
 import App from './components/App';
 import { GameMenu } from './components/GameMenu';
+import { Keyboard } from './components/Keyboard';
 import { TextMessage } from './components/TextMessage';
 import { World } from './entities/World';
 import { AssetLoader } from './lib/AssetLoader';
@@ -13,7 +14,7 @@ const startGame = () => {
 
   new AssetLoader()
     .load()
-    .then(() => {
+    .then(async () => {
       const app = new App();
 
       const world = new World();
@@ -45,3 +46,7 @@ menu.onLoadGame = () => {
 };
 
 menu.init();
+
+new Keyboard('Escape', () => {
+  menu.toggle();
+});
