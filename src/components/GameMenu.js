@@ -1,9 +1,9 @@
+import { ONE_HOUR } from '../entities/Helper';
 import { Storage } from '../lib/Storage';
 
 const defaultFunc = () => {
   alert('Not Implemented');
 };
-const HOURS = 60 * 1000 * 60;
 export class GameMenu {
   #onLoadGameFunc = defaultFunc;
   #onStartNewGameFunc = defaultFunc;
@@ -18,7 +18,8 @@ export class GameMenu {
   }
 
   init() {
-    document.getElementById('newGame').addEventListener('click', () => {
+    document.getElementById('createNewGameForm').addEventListener('submit', (e) => {
+      e.preventDefault();
       this.hide();
       this.#onStartNewGameFunc();
     });
@@ -29,11 +30,11 @@ export class GameMenu {
     });
 
     if (this.savedGameExists()) {
-      const timestampLastGame = new Date(Storage.get(Storage.STORAGE_KEYS.updatedOn));
+      const timestampLastGame = new Date(parseInt(Storage.get(Storage.STORAGE_KEYS.updatedOn)));
       document.getElementById('lastGame').style.display = 'flex';
       document.getElementById('lastGameTimestamp').innerText =
         'Letztes Spiel am: ' + timestampLastGame.toLocaleString();
-      if (new Date().getTime() - timestampLastGame.getTime() < HOURS) {
+      if (new Date().getTime() - timestampLastGame.getTime() < ONE_HOUR) {
         this.hide();
         this.#onLoadGameFunc();
       }
@@ -41,7 +42,7 @@ export class GameMenu {
   }
 
   savedGameExists() {
-    return Storage.get(Storage.STORAGE_KEYS.updatedOn, { result: false }).result !== false;
+    return Storage.get(Storage.STORAGE_KEYS.updatedOn, false) !== false;
   }
 
   hide() {

@@ -35,15 +35,15 @@ export const CONFIG = {
         hero: {
           type: 'Player',
           isPlayerControlled: true,
-          x: 6 * PIXEL_SIZE,
-          y: 24 * PIXEL_SIZE,
+          x: 31 * PIXEL_SIZE,
+          y: 7 * PIXEL_SIZE,
           index: 5
         },
         'old-man': {
           type: 'NPC',
           texture: 'old-man',
-          x: 21 * PIXEL_SIZE,
-          y: 6 * PIXEL_SIZE,
+          x: 23 * PIXEL_SIZE,
+          y: 11 * PIXEL_SIZE,
           behaviorLoop: [],
           index: 5
         }
@@ -68,13 +68,29 @@ export const CONFIG = {
           type: 'Marker',
           x: 25 * PIXEL_SIZE,
           y: 18 * PIXEL_SIZE
-        },
-        bridgeMarker: {
-          type: 'Marker',
-          x: 33 * PIXEL_SIZE,
-          y: 7 * PIXEL_SIZE
         }
+        // bridgeMarker: {
+        //   type: 'Marker',
+        //   x: 36 * PIXEL_SIZE,
+        //   y: 7 * PIXEL_SIZE
+        // }
       }
     }
-  }
+  },
+  quests: [
+    {
+      name: 'Erste Quest',
+      description: 'Rede mit dem Bürgermeister!',
+      //TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
+      hint: 'show image',
+      image: ''
+    },
+    {
+      name: 'Zweite Quest',
+      description: 'Finde dein Büro!',
+      //TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
+      hint: 'show image',
+      image: ''
+    }
+  ]
 };

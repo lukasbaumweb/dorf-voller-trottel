@@ -88,6 +88,17 @@ export class Map {
       this.markerObjects[key].id = key;
       instance.mount(this);
     });
+
+    const hero = this.gameObjects.hero;
+
+    const match = Object.values(this.markerObjects).find((object) => {
+      return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
+    });
+
+    if (match) {
+      console.log(this.gameObjects.hero);
+      this.gameObjects.hero.y += 16;
+    }
     console.groupEnd();
   }
 
@@ -102,7 +113,7 @@ export class Map {
 
   isSpaceTaken(currentX, currentY, direction) {
     const { x, y } = nextPosition(currentX, currentY, direction);
-
+    console.log(x, y);
     if (this.walls[`${x},${y}`]) return true;
 
     // Check for game objects at this position
@@ -122,19 +133,39 @@ export class Map {
   }
 
   checkForActionCutscene() {
-    if (this.isCutscenePlaying) return;
+    console.log(window._game.isBlocked);
+    if (window._game.isBlocked) return;
 
-    // check if player is on marker
-    for (const marker of Object.values(this.markerObjects)) {
-      if (this.cameraPerson.x === marker.x && this.cameraPerson.y === marker.y) {
-        console.debug();
-        new TextMessage({
-          text: Translator.translate(marker.id),
-          onCancel: () => {
-            console.debug('canceled');
-          }
-        }).init();
-      }
+    const hero = this.gameObjects.hero;
+    const nextCoords = nextPosition(hero.x, hero.y, hero.direction);
+    const match = Object.values(this.gameObjects).find((object) => {
+      return `${object.x},${object.y}` === `${nextCoords.x},${nextCoords.y}`;
+    });
+
+    if (!this.isCutscenePlaying && match && match.talking.length) {
+      const relevantScenario = match.talking.find((scenario) => {
+        return (scenario.required || []).every((sf) => {
+          return playerState.storyFlags[sf];
+        });
+      });
+      relevantScenario && this.startCutscene(relevantScenario.events);
+    }
+  }
+
+  checkForMarkers() {
+    const hero = this.gameObjects.hero;
+
+    const match = Object.values(this.markerObjects).find((object) => {
+      return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
+    });
+
+    if (match) {
+      new TextMessage({
+        text: `${Translator.translate(match.id)} betreten`,
+        onCancel: () => {
+          console.debug('canceled');
+        }
+      }).init();
     }
   }
 }

@@ -24,6 +24,8 @@ export class PlayerKeyboard {
   }
 
   onKeyUp = (e) => {
+    if (window._game?.isBlocked) return;
+
     const dir = this.map[e.code];
     const index = this.heldDirections.indexOf(dir);
     if (index > -1) {
@@ -32,6 +34,8 @@ export class PlayerKeyboard {
   };
 
   onKeyDown = (e) => {
+    if (window._game?.isBlocked) return;
+
     const dir = this.map[e.code];
     if (dir && this.heldDirections.indexOf(dir) === -1) {
       this.heldDirections.unshift(dir);

@@ -22,11 +22,10 @@ const loadWalls = (pathToMap) => {
   const assetLoader = new AssetLoader();
 
   const cached = Assets.get(assetLoader.getAsset(pathToMap));
-
-  const accessibleNumber = 290 - 1;
-  const inAccessibleNumber = 289 - 1;
-
   const layerIndex = cached.layers.findIndex((l) => l.name === 'accessible');
+
+  const accessibleNumber = cached.layers[layerIndex].data[0];
+  const inAccessibleNumber = cached.layers[layerIndex].data[0] - 1;
 
   const walls = {
     name: cached.layers[layerIndex].name,

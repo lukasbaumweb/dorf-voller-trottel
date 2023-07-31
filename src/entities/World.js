@@ -1,46 +1,29 @@
-import { Application, BLEND_MODES, Container, Graphics } from 'pixi.js';
+import { Container } from 'pixi.js';
 
 import { Map } from './Map';
-import { withGrid } from '../utils';
 import { Keyboard } from '../components/Keyboard';
 import { CONFIG } from '../config';
 
 import { DebugHud } from '../lib/DebugHud';
 import App from '../components/App';
-
-const GLOBAL_KEY = '_world';
+import _ from 'lodash';
 
 export class World {
   DOMGameContainer = null;
-
   isMounted = false;
+  timer;
 
-  constructor() {
-    this.getInstance();
-  }
+  debounce = (callback, timeout = 300) => {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      callback();
+    }, timeout);
+  };
 
-  getInstance() {
-    if (window[GLOBAL_KEY] === undefined) {
-      if (!window[GLOBAL_KEY]) {
-        window[GLOBAL_KEY] = this;
-      } else {
-        let props = Object.getOwnPropertyNames(this);
-
-        for (const prop of props) {
-          this[prop] = window[GLOBAL_KEY][prop];
-        }
-      }
-      window[GLOBAL_KEY] = this;
-      return this;
-    } else {
-      return window[GLOBAL_KEY];
-    }
-  }
-
-  mount() {
+  mount(appInstance) {
     if (this.isMounted) return;
 
-    this.app = new App().getInstance()._appInstance;
+    this.app = appInstance;
 
     this.layersContainer = new Container();
     this.layersContainer.sortableChildren = true;
@@ -52,8 +35,8 @@ export class World {
     this.isMounted = true;
   }
 
-  init() {
-    this.mount();
+  init(appInstance) {
+    this.mount(appInstance);
 
     // TODO: Load game state from database (local or server?)
     const level = CONFIG.levels.dorf;
@@ -84,7 +67,7 @@ export class World {
     if (this.debug) {
       DebugHud.shared.show();
     }
-    +Object.values(this.map.gameObjects).forEach((object) => {
+    Object.values(this.map.gameObjects).forEach((object) => {
       object.update(this.map, cameraPerson);
     });
 
@@ -94,10 +77,6 @@ export class World {
   }
 
   bindActionInput() {
-    new Keyboard('Enter', () => {
-      this.map.checkForActionCutscene();
-    });
-
     new Keyboard('Escape', () => {
       if (this.map.isCutscenePlaying) {
         this.map.startCutscene([{ type: 'pause' }]);
@@ -110,7 +89,11 @@ export class World {
       DebugHud.shared.toggle();
     });
 
-    new Keyboard('Backslash', () => {
+    new Keyboard('Enter', () => {
+      this.map.checkForActionCutscene();
+    });
+
+    new Keyboard('KeyP', () => {
       console.debug('Game stopped completly!');
       this.app.ticker.remove(this.gameLoopReference);
     });
@@ -118,10 +101,9 @@ export class World {
 
   bindHeroPositionCheck() {
     document.addEventListener('PersonWalkingComplete', (e) => {
+      // Hero's position has changed
       if (e.detail.whoId === 'hero') {
-        // Hero's position has changed
-        // this.map.checkForFootstepCutscene();
-        // this.updateInteractableLayers(this.map.gameObjects.hero, false);
+        this.debounce(() => this.map.checkForMarkers(), 300);
       }
     });
   }

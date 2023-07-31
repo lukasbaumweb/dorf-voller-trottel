@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@pixi/core": "^7.2.4",
+    "lodash": "^4.17.21",
     "pixi.js": "^7.2.4"
   },
   "overrides": {

@@ -5,7 +5,8 @@ export class Storage {
     welcomeMessage: 'welcomeMessage',
     npc: 'npc',
     updatedOn: 'updatedOn',
-    playerStoryProgress: 'playerStoryProgress'
+    playerStoryProgress: 'playerStoryProgress',
+    username: 'username'
   };
 
   static get(key, defaultValue) {
@@ -14,8 +15,10 @@ export class Storage {
       return;
     }
     if (this.STORAGE_KEYS[key]) {
-      const value = JSON.parse(localStorage.getItem(key));
-      return value === null ? defaultValue : value;
+      const value = localStorage.getItem(key);
+      const isObj = value?.charAt(0) === '{';
+
+      return value === null ? defaultValue : isObj ? JSON.parse(value) : value;
     } else throw new Error(`Storage key is not valid: ${key}`);
   }
 
@@ -28,8 +31,10 @@ export class Storage {
 
     if (isObj) {
       localStorage.setItem(key, JSON.stringify(value));
-      localStorage.setItem(this.STORAGE_KEYS.updatedOn, new Date().getTime());
-    } else throw new Error('Value must be object');
+    } else {
+      localStorage.setItem(key, value);
+    }
+    localStorage.setItem(this.STORAGE_KEYS.updatedOn, new Date().getTime());
   }
 
   static update(key, value) {
@@ -50,7 +55,7 @@ export class Storage {
     } else throw new Error('Value must be object');
   }
 
-  static clear() {
+  static clearData() {
     if (!'localStorage' in window) {
       console.warn('No localstorage found, Cannot save data');
       return;

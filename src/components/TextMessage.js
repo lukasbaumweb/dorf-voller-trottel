@@ -1,5 +1,3 @@
-import { World } from '../entities/World';
-import App from './App';
 import { Keyboard } from './Keyboard';
 
 class RevealingText {
@@ -59,7 +57,7 @@ export class TextMessage {
     this.onCancel = onCancel;
     this.cancelBtnText = onCancelText || 'Cancel (Esc)';
     this.acceptBtnText = onAcceptText || 'Ok (Enter)';
-    
+
     this.element = null;
   }
 
@@ -112,11 +110,12 @@ export class TextMessage {
     } else {
       this.revealingText.warpToDone();
     }
+    window._game.isBlocked = false;
   }
 
   async init() {
+    window._game.isBlocked = true;
     this.createElement();
-
     document.body.appendChild(this.element);
 
     this.revealingText.init();

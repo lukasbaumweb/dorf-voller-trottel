@@ -1,4 +1,4 @@
-import App from '../components/App';
+import App, { AppHelper } from '../components/App';
 import { CONFIG } from '../config';
 import { World } from '../entities/World';
 
@@ -34,7 +34,6 @@ export class DebugHud {
       return hud;
     }
   }
-
   constructor() {
     if (!window[GLOBAL_KEY]) {
       window[GLOBAL_KEY] = this;
@@ -65,23 +64,30 @@ export class DebugHud {
       this.hudContainer.innerHTML = `
         <h5 class="terminal-prompt">Hud</h5> 
         <div>
-        <label for="game-scale">
-          Scale: 
-          <select id="game-scale" value="${currentValue}">
-            ${values}
-          </select>
-        </label>
+          <label for="game-scale">
+            Scale: 
+            <select id="game-scale" value="${currentValue}">
+              ${values}
+            </select>
+          </label>
+          <input id="clear-data" type="button" value="Daten Löschen"/>
         </div>`;
       window[GLOBAL_KEY] = this;
 
       document.body.appendChild(this.hudContainer);
 
-      const app = new App();
       document.getElementById('game-scale').onchange = (e) => {
-        app.getInstance().DOMGameContainer.style.transform = `scale(${e.target.value})`;
+        AppHelper.getDOMGamecontainer().style.transform = `scale(${e.target.value})`;
         Storage.set(Storage.STORAGE_KEYS.gameScale, { scale: e.target.value });
       };
-      app.getInstance().DOMGameContainer.style.transform = `scale(${currentValue})`;
+      AppHelper.getDOMGamecontainer().style.transform = `scale(${currentValue})`;
+
+      document.getElementById('clear-data').addEventListener('click', () => {
+        if (confirm('Alle gespeicherten Daten löschen?')) {
+          Storage.clearData();
+          window.location.reload();
+        }
+      });
       this.isMounted = true;
     }
   }

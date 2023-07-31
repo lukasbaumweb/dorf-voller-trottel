@@ -1,35 +1,16 @@
 import { Application, Container } from 'pixi.js';
 import { CONFIG } from '../config';
 
-const GLOBAL_KEY = '_app';
+export class AppHelper {
+  static getDOMGamecontainer() {
+    return document.getElementById('dvtGameContainer');
+  }
+}
 
 export default class App {
   _appInstance = null;
   DOMGameContainer = null;
   isMounted = false;
-
-  constructor() {
-    this.getInstance();
-  }
-
-  getInstance() {
-    if (window[GLOBAL_KEY] === undefined) {
-      if (!window[GLOBAL_KEY]) {
-        window[GLOBAL_KEY] = this;
-      } else {
-        let props = Object.getOwnPropertyNames(this);
-
-        for (const prop of props) {
-          this[prop] = window[GLOBAL_KEY][prop];
-        }
-      }
-      window[GLOBAL_KEY] = this;
-    }
-    if (!window[GLOBAL_KEY].isMounted) {
-      this.mount();
-    }
-    return window[GLOBAL_KEY];
-  }
 
   mount() {
     if (this.isMounted) return;
@@ -40,6 +21,7 @@ export default class App {
     });
 
     this.DOMGameContainer = document.createElement('div');
+    this.DOMGameContainer.id = 'dvtGameContainer';
     this.DOMGameContainer.sortableChildren = true;
     this.DOMGameContainer.style.setProperty('--game-width', CONFIG.GAME_CONFIG.width + 'px');
     this.DOMGameContainer.style.setProperty('--game-height', CONFIG.GAME_CONFIG.height + 'px');
@@ -48,5 +30,12 @@ export default class App {
     document.body.appendChild(this.DOMGameContainer);
 
     this.isMounted = true;
+    window._game = {
+      isBlocked: false
+    };
+  }
+
+  get instance() {
+    return this._appInstance;
   }
 }

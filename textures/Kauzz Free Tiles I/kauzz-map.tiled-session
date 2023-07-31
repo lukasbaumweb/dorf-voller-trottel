@@ -12,11 +12,11 @@
             "scaleInDock": 0.75
         },
         "D:/source/dorf-voller-trottel/textures/map/dorf.tmx": {
-            "scale": 2,
-            "selectedLayer": 9,
+            "scale": 1.5,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 726.5,
-                "y": 269.5
+                "x": 534.6666666666666,
+                "y": 206.66666666666663
             }
         },
         "D:/source/dorf-voller-trottel/textures/map/dorf.tmx#basic terrain": {
@@ -37,8 +37,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 396,
-                "y": 418.66666666666663
+                "x": 479.66666666666663,
+                "y": 319.66666666666663
             }
         },
         "unbenannt.tmx#funk-mast": {

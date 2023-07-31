@@ -1,81 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="180x180" href="public/favicon/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="public/favicon/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="public/favicon/favicon-16x16.png" />
-    <link rel="manifest" href="public/favicon/site.webmanifest" />
-    <link rel="mask-icon" href="public/favicon/safari-pinned-tab.svg" color="#5bbad5" />
-    <meta name="msapplication-TileColor" content="#da532c" />
-    <meta name="msapplication-TileImage" content="public/favicon/mstile-144x144.png" />
-    <meta name="theme-color" content="#ffffff" />
-    <script src="https://pixijs.download/release/pixi.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" />
 
-    <style>
-      :root {
-        --global-font-size: 15px;
-        --global-line-height: 1.4em;
-        --font-stack: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji,
-          Segoe UI Emoji, Segoe UI Symbol;
-        --background-color: #222225;
-        --background-color-light-transparent: #222225aa;
-        --page-width: 60em;
-        --font-color: #e8e9ed;
-        --invert-font-color: #222225;
-        --secondary-color: #a3abba;
-        --tertiary-color: #a3abba;
-        --primary-color: #62c4ff;
-        --error-color: #ff3c74;
-        --progress-bar-background: #3f3f44;
-        --progress-bar-fill: #62c4ff;
-        --code-bg-color: #3f3f44;
-        --input-style: solid;
-        --display-h1-decoration: none;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="apple-touch-icon" sizes="180x180" href="public/favicon/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="public/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="public/favicon/favicon-16x16.png" />
+  <link rel="manifest" href="public/favicon/site.webmanifest" />
+  <link rel="mask-icon" href="public/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+  <meta name="msapplication-TileColor" content="#da532c" />
+  <meta name="msapplication-TileImage" content="public/favicon/mstile-144x144.png" />
+  <meta name="theme-color" content="#ffffff" />
+  <script src="https://pixijs.download/release/pixi.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" />
 
-      .game-menu {
-        max-width: 850px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-        transition: 0.3s all ease;
-      }
+  <style>
+    :root {
+      --global-font-size: 15px;
+      --global-line-height: 1.4em;
+      --font-stack: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji,
+        Segoe UI Emoji, Segoe UI Symbol;
+      --background-color: #222225;
+      --background-color-light-transparent: #222225aa;
+      --page-width: 60em;
+      --font-color: #e8e9ed;
+      --invert-font-color: #222225;
+      --secondary-color: #a3abba;
+      --tertiary-color: #a3abba;
+      --primary-color: #62c4ff;
+      --error-color: #ff3c74;
+      --progress-bar-background: #3f3f44;
+      --progress-bar-fill: #62c4ff;
+      --code-bg-color: #3f3f44;
+      --input-style: solid;
+      --display-h1-decoration: none;
+    }
 
-      .game-menu-init {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        z-index: 10000;
-        background-color: var(--background-color);
-      }
-    </style>
-  </head>
+    .game-menu {
+      max-width: 850px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      padding: 1rem;
+      transform: translateX(-50%) translateY(-50%);
+      transition: 0.3s all ease;
+      opacity: 1;
+      border: 1px solid var(--secondary-color);
+    }
 
-  <body>
-    <div class="game-menu-init" id="gameMenuWrapper">
-      <div class="game-menu" id="gameMenu">
-        <div class="terminal-card">
-          <header class="title">Dorf voller Trottel</header>
-          <div class="description">
-            Rette dein Dorf vor Hackern durch das Verbessern der IT-Sicherheitskenntnisse deiner Dorfkollegen. Du bist
-            dabei der neu hinzugezogene IT-Sicherheitsexperte. Löse alle Aufgaben oder verlasse das Dorf voller Trottel!
-          </div>
-        </div>
-        <div class="game-options">
-          <div class="load-game" id="lastGame">
-            <span class="last-game" id="lastGameTimestamp">Letztes Spiel</span>
-            <a class="btn btn-default" id="loadlastGame" href="#">Letztes Spiel laden</a>
-          </div>
-          <a class="btn btn-primary" id="newGame" href="#">Neues Spiel</a>
+    .game-menu.hide {
+      opacity: 0;
+    }
+
+    .create-new-game-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-options {
+      padding-top: 2rem;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .load-game {
+      display: none;
+      flex-direction: column;
+    }
+
+    .game-menu-init {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      z-index: 10000;
+      background-color: var(--background-color);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game-menu-init" id="gameMenuWrapper">
+    <div class="game-menu" id="gameMenu">
+      <div class="terminal-card">
+        <header class="title">Dorf voller Trottel</header>
+        <div class="description">
+          Rette dein Dorf vor Hackern durch das Verbessern der IT-Sicherheitskenntnisse deiner Dorfkollegen. Du bist
+          dabei der neu hinzugezogene IT-Sicherheitsexperte. Löse alle Aufgaben oder verlasse das Dorf voller Trottel!
         </div>
       </div>
+      <div class="game-options">
+        <div class="load-game" id="lastGame">
+          <span class="last-game" id="lastGameTimestamp">Letztes Spiel</span>
+          <a class="btn btn-default" id="loadlastGame" href="#">Letztes Spiel laden</a>
+        </div>
+
+        <form id="createNewGameForm" class="create-new-game-form">
+          <div class="form-group">
+            <label for="username">Nutzername:</label>
+            <input id="username" name="username" type="text" required minlength="3"
+              placeholder="Bitte Nutzername eingeben...">
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary" type="submit" role="button" name="submit" id="newGame">Neues Spiel</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
