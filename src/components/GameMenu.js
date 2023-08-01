@@ -2,20 +2,30 @@ import { ONE_HOUR } from '../entities/Helper';
 import { Storage } from '../lib/Storage';
 
 const defaultFunc = () => {
-  alert('Not Implemented');
+  window.alert('Not Implemented');
 };
 export class GameMenu {
   #onLoadGameFunc = defaultFunc;
   #onStartNewGameFunc = defaultFunc;
   visible = true;
 
+  /**
+   * @param {() => void} value
+   */
   set onLoadGame(value) {
     this.#onLoadGameFunc = value;
   }
 
+  get onLoadGame() {}
+
+  /**
+   * @param {() => void} value
+   */
   set onStartNewGame(value) {
     this.#onStartNewGameFunc = value;
   }
+
+  get onStartNewGame() {}
 
   init() {
     document.getElementById('createNewGameForm').addEventListener('submit', (e) => {

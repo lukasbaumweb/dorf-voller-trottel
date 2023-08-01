@@ -2,6 +2,7 @@ export class SceneTransition {
   constructor() {
     this.element = null;
   }
+
   createElement() {
     this.element = document.createElement('div');
     this.element.classList.add('scene-transition');

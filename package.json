@@ -10,6 +10,7 @@
     "watch": "webpack --watch --mode=production",
     "build": "webpack --mode=production",
     "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "fix-styling": "prettier --write ./src"
   },
   "repository": {

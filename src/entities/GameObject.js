@@ -1,3 +1,5 @@
+import { CONFIG } from '../config';
+import { withGrid } from '../utils';
 import { GameEvent } from './GameEvent';
 
 export class GameObject {
@@ -14,20 +16,11 @@ export class GameObject {
     this.container = config.container;
     this.interactable = !!config.interactable;
 
-    //These happen once on map startup.
+    // These happen once on map startup.
     this.behaviorLoop = config.behaviorLoop || [];
     this.behaviorLoopIndex = 0;
     this.talking = config.talking || [];
     this.retryTimeout = null;
-  }
-
-  mount(map) {
-    this.isMounted = true;
-
-    //If we have a behavior, kick off after a short delay
-    setTimeout(() => {
-      this.doBehaviorEvent(map);
-    }, 10);
   }
 
   mount(map) {
@@ -44,6 +37,11 @@ export class GameObject {
 
     this.isMounted = true;
     this.sprite.play();
+
+    // If we have a behavior, kick off after a short delay
+    setTimeout(() => {
+      this.doBehaviorEvent(map);
+    }, 10);
   }
 
   update(map, cameraPerson) {
@@ -81,7 +79,7 @@ export class GameObject {
   }
 
   async doBehaviorEvent(map) {
-    //Don't do anything if I don't have config to do anything
+    // Don't do anything if I don't have config to do anything
     if (this.behaviorLoop.length === 0) {
       return;
     }
@@ -97,21 +95,21 @@ export class GameObject {
       return;
     }
 
-    //Setting up our event with relevant info
-    let eventConfig = this.behaviorLoop[this.behaviorLoopIndex];
+    // Setting up our event with relevant info
+    const eventConfig = this.behaviorLoop[this.behaviorLoopIndex];
     eventConfig.who = this.id;
 
-    //Create an event instance out of our next event config
+    // Create an event instance out of our next event config
     const eventHandler = new GameEvent({ map, event: eventConfig });
     await eventHandler.init();
 
-    //Setting the next event to fire
+    // Setting the next event to fire
     this.behaviorLoopIndex += 1;
     if (this.behaviorLoopIndex === this.behaviorLoop.length) {
       this.behaviorLoopIndex = 0;
     }
 
-    //Do it again!
+    // Do it again!
     this.doBehaviorEvent(map);
   }
 }

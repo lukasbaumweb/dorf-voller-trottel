@@ -1,7 +1,7 @@
 module.exports = {
   extends: ['semistandard'],
   rules: {
-    'space-before-function-paren': ['ignore', 'never'],
-    'no-new': ['warn']
+    'space-before-function-paren': [0, 'never'],
+    'no-new': [0]
   }
 };

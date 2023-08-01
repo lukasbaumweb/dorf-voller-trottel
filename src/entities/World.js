@@ -5,8 +5,6 @@ import { Keyboard } from '../components/Keyboard';
 import { CONFIG } from '../config';
 
 import { DebugHud } from '../lib/DebugHud';
-import App from '../components/App';
-import _ from 'lodash';
 
 export class World {
   DOMGameContainer = null;

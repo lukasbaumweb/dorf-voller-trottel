@@ -47,7 +47,7 @@ const wait = (ms) =>
 const randomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
 
 const emitEvent = (name, detail) => {
-  const event = new CustomEvent(name, {
+  const event = new window.CustomEvent(name, {
     detail
   });
   document.dispatchEvent(event);

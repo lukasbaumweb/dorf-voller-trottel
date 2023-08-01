@@ -1,5 +1,4 @@
 import { Assets, Sprite } from 'pixi.js';
-import { CONFIG } from '../config';
 import { asGridCoord } from '../utils';
 import { AssetLoader } from './AssetLoader';
 

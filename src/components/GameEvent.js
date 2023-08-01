@@ -1,4 +1,5 @@
 import { Storage } from '../lib/Storage';
+import { oppositeDirection } from '../utils';
 import { SceneTransition } from './SceneTransition';
 import { TextMessage } from './TextMessage';
 
@@ -21,7 +22,7 @@ export class GameEvent {
       }
     );
 
-    //Set up a handler to complete when correct person is done walking, then resolve the event
+    // Set up a handler to complete when correct person is done walking, then resolve the event
     const completeHandler = (e) => {
       if (e.detail.whoId === this.event.who) {
         document.removeEventListener('PersonStandComplete', completeHandler);
@@ -34,7 +35,7 @@ export class GameEvent {
   textMessage(resolve) {
     if (this.event.faceHero) {
       const obj = this.map.gameObjects[this.event.faceHero];
-      obj.direction = utils.oppositeDirection(this.map.gameObjects['hero'].direction);
+      obj.direction = oppositeDirection(this.map.gameObjects.hero.direction);
     }
 
     const message = new TextMessage({
@@ -45,7 +46,7 @@ export class GameEvent {
   }
 
   changeMap(resolve) {
-    //Deactivate old objects
+    // Deactivate old objects
     Object.values(this.map.gameObjects).forEach((obj) => {
       obj.isMounted = false;
     });
@@ -62,19 +63,23 @@ export class GameEvent {
     });
   }
 
+  pause(resolve) {
+    this.map.isPaused = true;
+  }
+
   addStoryFlag(resolve) {
     Storage.update(Storage.STORAGE_KEYS.playerStoryProgress, { [this.event.flag]: true });
     resolve();
   }
 
-  inventory(resolve) {
-    const menu = new Inventory({
-      onComplete: () => {
-        resolve();
-      }
-    });
-    menu.init(document.querySelector('.game-container'));
-  }
+  // inventory(resolve) {
+  //   const menu = new Inventory({
+  //     onComplete: () => {
+  //       resolve();
+  //     }
+  //   });
+  //   menu.init(document.querySelector('.game-container'));
+  // }
 
   init() {
     return new Promise((resolve) => {

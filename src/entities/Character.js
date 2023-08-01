@@ -94,7 +94,6 @@ export class Character {
     if (this.movingProgressRemaining > 0) {
       this.updatePosition(cameraPerson);
     } else {
-
       if (!map.isCutscenePlaying) {
         // this.startBehavior(map, {
         //   type: 'walk',
@@ -211,7 +210,7 @@ export class Character {
         y: this.y,
         direction: this.direction
       };
-      // Storage.set(Storage.STORAGE_KEYS.npc, state);
+      Storage.set(Storage.STORAGE_KEYS.npc, state);
     }
   }
 

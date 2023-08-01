@@ -22,7 +22,7 @@ const startGame = async () => {
     world.init(app.instance);
     debugHud.init();
 
-    if (localStorage.getItem('debug')) {
+    if (window.localStorage.getItem('debug')) {
       debugHud.show();
     }
   } catch (err) {

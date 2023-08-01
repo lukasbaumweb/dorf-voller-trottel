@@ -1,6 +1,5 @@
-import App, { AppHelper } from '../components/App';
+import { AppHelper } from '../components/App';
 import { CONFIG } from '../config';
-import { World } from '../entities/World';
 
 import { Storage } from './Storage';
 
@@ -34,17 +33,19 @@ export class DebugHud {
       return hud;
     }
   }
+
   constructor() {
     if (!window[GLOBAL_KEY]) {
       window[GLOBAL_KEY] = this;
     } else {
-      let props = Object.getOwnPropertyNames(this);
+      const props = Object.getOwnPropertyNames(this);
 
       for (const prop of props) {
         this[prop] = window[GLOBAL_KEY][prop];
       }
     }
   }
+
   init() {
     this.mount();
   }
@@ -83,7 +84,7 @@ export class DebugHud {
       AppHelper.getDOMGamecontainer().style.transform = `scale(${currentValue})`;
 
       document.getElementById('clear-data').addEventListener('click', () => {
-        if (confirm('Alle gespeicherten Daten löschen?')) {
+        if (window.confirm('Alle gespeicherten Daten löschen?')) {
           Storage.clearData();
           window.location.reload();
         }

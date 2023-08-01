@@ -1,7 +1,7 @@
 const PIXEL_SIZE = 16;
 
 export const CONFIG = {
-  PIXEL_SIZE: PIXEL_SIZE,
+  PIXEL_SIZE,
   animationFrameLimit: 6,
   PLAYER_LAYER: '######players######',
   OFFSET: { x: -11, y: -6 },
@@ -81,14 +81,14 @@ export const CONFIG = {
     {
       name: 'Erste Quest',
       description: 'Rede mit dem Bürgermeister!',
-      //TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
+      // TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
       hint: 'show image',
       image: ''
     },
     {
       name: 'Zweite Quest',
       description: 'Finde dein Büro!',
-      //TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
+      // TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
       hint: 'show image',
       image: ''
     }

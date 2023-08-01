@@ -1,4 +1,4 @@
-import { Application, Container } from 'pixi.js';
+import { Application } from 'pixi.js';
 import { CONFIG } from '../config';
 
 export class AppHelper {

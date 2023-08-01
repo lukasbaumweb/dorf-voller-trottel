@@ -79,27 +79,27 @@ export class Map {
       const object = this.markerObjects[key];
       object.id = key;
 
-      let instance;
-
       object.container = objectsContainer;
-      instance = new Marker(object);
+      const instance = new Marker(object);
 
       this.markerObjects[key] = instance;
       this.markerObjects[key].id = key;
       instance.mount(this);
     });
+    this.movePlayerIfOnMarker();
 
+    console.groupEnd();
+  }
+
+  movePlayerIfOnMarker() {
     const hero = this.gameObjects.hero;
 
     const match = Object.values(this.markerObjects).find((object) => {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
-
     if (match) {
-      console.log(this.gameObjects.hero);
       this.gameObjects.hero.y += 16;
     }
-    console.groupEnd();
   }
 
   update(cameraPerson) {
@@ -128,9 +128,7 @@ export class Map {
     });
   }
 
-  startCutscene({ type, parameters: {} }) {
-    console.log(type, parameters);
-  }
+  startCutscene() {}
 
   checkForActionCutscene() {
     console.log(window._game.isBlocked);
@@ -143,12 +141,12 @@ export class Map {
     });
 
     if (!this.isCutscenePlaying && match && match.talking.length) {
-      const relevantScenario = match.talking.find((scenario) => {
-        return (scenario.required || []).every((sf) => {
-          return playerState.storyFlags[sf];
-        });
-      });
-      relevantScenario && this.startCutscene(relevantScenario.events);
+      // const relevantScenario = match.talking.find((scenario) => {
+      //   return (scenario.required || []).every((sf) => {
+      //     return playerState.storyFlags[sf];
+      //   });
+      // });
+      // relevantScenario && this.startCutscene(relevantScenario.events);
     }
   }
 

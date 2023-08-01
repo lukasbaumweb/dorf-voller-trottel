@@ -1,6 +1,3 @@
-import App from '../components/App';
-import { World } from '../entities/World';
-
 const GLOBAL_KEY = '_tooltip';
 export class Tooltip {
   isMounted = false;
@@ -11,7 +8,7 @@ export class Tooltip {
     if (!window[GLOBAL_KEY]) {
       window[GLOBAL_KEY] = this;
     } else {
-      let props = Object.getOwnPropertyNames(this);
+      const props = Object.getOwnPropertyNames(this);
 
       for (const prop of props) {
         this[prop] = window[GLOBAL_KEY][prop];
