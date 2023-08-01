@@ -2,9 +2,9 @@ import { Container } from 'pixi.js';
 
 import { Map } from './Map';
 import { Keyboard } from '../components/Keyboard';
-import { CONFIG } from '../config';
 
 import { DebugHud } from '../lib/DebugHud';
+import { getCurrentLevel } from '../gameState';
 
 export class World {
   DOMGameContainer = null;
@@ -37,17 +37,16 @@ export class World {
     this.mount(appInstance);
 
     // TODO: Load game state from database (local or server?)
-    const level = CONFIG.levels.dorf;
+
+    //TODO: Load Level from storage
+    const level = getCurrentLevel();
     this.start(level);
   }
 
   start(level) {
-    this.map = new Map(level);
-    this.map.world = this;
+    this.map = new Map({ level, world: this, layersContainer: this.layersContainer });
 
-    const cameraPerson = level.configObjects.hero;
-
-    this.map.initMap(this.layersContainer, cameraPerson);
+    this.map.initMap(this.layersContainer);
 
     this.map.mountObjects(this.layersContainer);
 
@@ -75,13 +74,6 @@ export class World {
   }
 
   bindActionInput() {
-    new Keyboard('Escape', () => {
-      if (this.map.isCutscenePlaying) {
-        this.map.startCutscene([{ type: 'pause' }]);
-      }
-      console.debug('Escaped clicked');
-    });
-
     new Keyboard('BracketRight', () => {
       this.debug = !this.debug;
       DebugHud.shared.toggle();

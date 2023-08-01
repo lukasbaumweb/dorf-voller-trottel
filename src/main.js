@@ -1,6 +1,5 @@
 import App from './components/App';
 import { GameMenu } from './components/GameMenu';
-import { Keyboard } from './components/Keyboard';
 import { TextMessage } from './components/TextMessage';
 import { ONE_MINUTE } from './entities/Helper';
 import { World } from './entities/World';
@@ -54,6 +53,6 @@ menu.onLoadGame = async () => {
 
 menu.init();
 
-new Keyboard('Escape', () => {
-  menu.toggle();
-});
+// new Keyboard('Escape', () => {
+//   menu.toggle();
+// });

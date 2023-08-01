@@ -1,0 +1,124 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Elements/TopDownHouse_FloorsAndWalls.tsx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "Elements/FinalCombo.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Elements/Floors_Walls.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Elements/Furniture.tsx": {
+            "scaleInDock": 1
+        },
+        "Elements/Interiors_free_16x16.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Elements/PC.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Elements/SmallItems.tsx": {
+            "scaleInDock": 1
+        },
+        "Elements/TopDownHouse_FloorsAndWalls.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Elements/TopDownHouse_FurnitureState2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Elements/TopDownHouse_SmallItems.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Map/Elements/Floors_Walls.tsx": {
+            "scaleInDock": 1
+        },
+        "Map/Elements/Furniture.tsx": {
+            "scaleInDock": 1
+        },
+        "Map/Elements/Interiors_16x16.tsx": {
+            "scaleInDock": 1
+        },
+        "Map/Elements/PC.tsx": {
+            "scaleInDock": 1
+        },
+        "Map/Elements/SmallItems.tsx": {
+            "scaleInDock": 1
+        },
+        "Map/Haus_Map.tmx": {
+            "scale": 1.84,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 239.1304347826087,
+                "y": 243.20652173913044
+            }
+        },
+        "Map/Haus_Map_2.js": {
+            "scale": 2.75,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 249.27272727272728,
+                "y": 240.1818181818182
+            }
+        },
+        "Map/Haus_Map_2.tmx": {
+            "scale": 2.75,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 247.63636363636368,
+                "y": 262.3636363636364
+            }
+        },
+        "Map/Zimmer_A.tmx": {
+            "scale": 2.73,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 326.00732600732596,
+                "y": 233.88278388278388
+            }
+        }
+    },
+    "last.externalTilesetPath": "/Users/victoriamoruz/Library/CloudStorage/OneDrive-BildungsCentrumderWirtschaftgemeinnützigeGesellschaftmbH/Uni/Seme6/Anwendungsprojekt/Haus_alte_Dame_Tiled/root/Elements",
+    "last.imagePath": "/Users/victoriamoruz/Downloads/Modern tiles_Free/Interiors_free/16x16",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "Map/Haus_Map_2.tmx",
+        "Elements/TopDownHouse_FurnitureState2.tsx",
+        "Elements/TopDownHouse_SmallItems.tsx",
+        "Elements/TopDownHouse_FloorsAndWalls.tsx",
+        "Elements/Interiors_free_16x16.tsx"
+    ],
+    "project": "Haus_alte_Dame_2.tiled-project",
+    "recentFiles": [
+        "Map/Zimmer_A.tmx",
+        "Map/Haus_Map_2.js",
+        "Map/Haus_Map_2.tmx",
+        "Elements/TopDownHouse_FurnitureState2.tsx",
+        "Elements/TopDownHouse_SmallItems.tsx",
+        "Elements/Interiors_free_16x16.tsx",
+        "Elements/TopDownHouse_FloorsAndWalls.tsx",
+        "Elements/Floors_Walls.tsx",
+        "Elements/PC.tsx",
+        "Elements/FinalCombo.tsx",
+        "Map/Haus_Map.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

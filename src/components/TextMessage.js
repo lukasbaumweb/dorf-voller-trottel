@@ -100,6 +100,7 @@ export class TextMessage {
 
     this.actionListener = new Keyboard('Enter', () => {
       this.done();
+      this.onComplete && this.onComplete();
     });
   }
 

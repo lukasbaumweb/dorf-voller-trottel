@@ -13,6 +13,8 @@ export class Marker {
     this.id = config.id;
     this.x = config.x || 0;
     this.y = config.y || 0;
+    this.transitionToMap = config.transitionToMap;
+
     this.sprite = null;
 
     this.keyboard = new PlayerKeyboard();
@@ -58,6 +60,10 @@ export class Marker {
     const y = this.y - cameraPerson.y - withGrid(CONFIG.OFFSET.y);
 
     this.sprite.position.set(x, y);
+  }
+
+  unmount() {
+    this.sprite.destroy({ children: true, texture: true, baseTexture: true });
   }
 
   makeInteractable() {

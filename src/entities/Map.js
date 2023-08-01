@@ -3,40 +3,41 @@ import { nextPosition, withGrid } from '../utils';
 import { Player } from './Player';
 import { CONFIG } from '../config';
 import { loadLayers, loadMaps, loadWalls } from '../lib/MapLoader';
-import { getCurrentLevel } from '../gameState';
+import { getCurrentLevel, setCurrentLevel } from '../gameState';
 import { Marker } from './Marker';
 import { Storage } from '../lib/Storage';
 import { TextMessage } from '../components/TextMessage';
 import { Translator } from '../lib/Translator';
 import { Character } from './Character';
+import { GameEvent } from '../components/GameEvent';
 
 export class Map {
-  constructor({ id, map, configObjects, markerObjects, walls, app }) {
-    this.id = id || `ID: ${new Date().getTime()}-${Math.random() * 1000}`;
-    this.walls = walls || {};
+  constructor({ level, map, app, layersContainer }) {
+    this.id = level.id || `ID: ${new Date().getTime()}-${Math.random() * 1000}`;
+    this.walls = level.walls || {};
 
     this.map = map;
 
-    this.configObjects = configObjects || {};
-    this.markerObjects = markerObjects || {};
+    this.configObjects = level.configObjects || {};
+    this.markerObjects = level.markerObjects || {};
     this.app = app;
     this.gameObjects = {};
     this.layers = [];
     this.isCutscenePlaying = false;
     this.cameraPerson = null;
+    this.layersContainer = layersContainer;
   }
 
-  initMap(layersContainer, cameraPerson) {
-    this.cameraPerson = cameraPerson;
+  initMap() {
     this.maps = loadMaps(getCurrentLevel().map.lowerImage, getCurrentLevel().map.upperImage);
-    this.walls = loadWalls(getCurrentLevel().map.config, cameraPerson).tiles;
+    this.walls = loadWalls(getCurrentLevel().map.config, this.gameObjects.hero).tiles;
     this.layers = loadLayers(getCurrentLevel().map.config).map((layer) => {
       const container = new Container();
 
       container.name = layer.name;
       container.zIndex = layer.zIndex;
 
-      layersContainer.addChild(container);
+      this.layersContainer.addChild(container);
       return container;
     });
 
@@ -46,10 +47,10 @@ export class Map {
     console.debug(this.layers);
   }
 
-  mountObjects(layersContainer) {
+  mountObjects() {
     console.groupCollapsed('Mounting objects');
-    const charactersContainer = layersContainer.children.find((layer) => layer.name === '######players######');
-    const objectsContainer = layersContainer.children.find((layer) => layer.name === 'objects');
+    const charactersContainer = this.layersContainer.children.find((layer) => layer.name === '######players######');
+    const objectsContainer = this.layersContainer.children.find((layer) => layer.name === 'objects');
 
     Object.keys(this.configObjects).forEach((key) => {
       const object = this.configObjects[key];
@@ -98,11 +99,12 @@ export class Map {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
     if (match) {
-      this.gameObjects.hero.y += 16;
+      this.gameObjects.hero.y += CONFIG.PIXEL_SIZE;
     }
   }
 
-  update(cameraPerson) {
+  update() {
+    const cameraPerson = this.gameObjects.hero;
     for (const layer of this.layers) {
       if (layer.name === 'ground' || layer.name === 'map (upper)') {
         layer.children[0].x = withGrid(0) - cameraPerson.x - withGrid(CONFIG.OFFSET.x);
@@ -111,9 +113,15 @@ export class Map {
     }
   }
 
+  unmount() {
+    this.layersContainer.children.forEach((child) =>
+      child.destroy({ children: true, texture: true, baseTexture: true })
+    );
+    this.layersContainer.children = [];
+  }
+
   isSpaceTaken(currentX, currentY, direction) {
     const { x, y } = nextPosition(currentX, currentY, direction);
-    console.log(x, y);
     if (this.walls[`${x},${y}`]) return true;
 
     // Check for game objects at this position
@@ -162,6 +170,21 @@ export class Map {
         text: `${Translator.translate(match.id)} betreten`,
         onCancel: () => {
           console.debug('canceled');
+        },
+        onAcceptText: 'Betreten',
+        onComplete: () => {
+          console.log(match);
+          new GameEvent({
+            map: this,
+            event: {
+              type: 'changeMap',
+              transitionToMap: match.transitionToMap,
+              x: '',
+              y: '',
+              direction: 'up'
+            }
+          }).init();
+          setCurrentLevel(CONFIG.levels[match.transitionToMap]);
         }
       }).init();
     }

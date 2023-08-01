@@ -1,5 +1,5 @@
 import { CONFIG } from './config';
-window._currentLevel = CONFIG.levels.dorf;
+window._currentLevel = CONFIG.levels['old-lady-home'];
 
 export const setCurrentLevel = (value) => {
   window._currentLevel = value;

@@ -214,6 +214,10 @@ export class Character {
     }
   }
 
+  unmount() {
+    this.sprite.destroy({ children: true, texture: true, baseTexture: true });
+  }
+
   updateAnimationState() {
     if (this.sprite.playing) return;
 

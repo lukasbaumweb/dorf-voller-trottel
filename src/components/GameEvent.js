@@ -1,3 +1,4 @@
+import { CONFIG } from '../config';
 import { Storage } from '../lib/Storage';
 import { oppositeDirection } from '../utils';
 import { SceneTransition } from './SceneTransition';
@@ -48,12 +49,17 @@ export class GameEvent {
   changeMap(resolve) {
     // Deactivate old objects
     Object.values(this.map.gameObjects).forEach((obj) => {
-      obj.isMounted = false;
+      if (obj.id !== 'hero') obj.unmount();
     });
 
+    Object.values(this.map.markerObjects).forEach((obj) => {
+      obj.unmount();
+    });
+    this.map.unmount();
+
     const sceneTransition = new SceneTransition();
-    sceneTransition.init(document.querySelector('.game-container'), () => {
-      this.map.overworld.startMap(window.OverworldMaps[this.event.map], {
+    sceneTransition.init(document.querySelector('.game-wrapper'), () => {
+      this.map.initMap(CONFIG.levels[this.event.transitionToMap], {
         x: this.event.x,
         y: this.event.y,
         direction: this.event.direction

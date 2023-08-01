@@ -67,13 +67,33 @@ export const CONFIG = {
         smallMarker: {
           type: 'Marker',
           x: 25 * PIXEL_SIZE,
-          y: 18 * PIXEL_SIZE
+          y: 18 * PIXEL_SIZE,
+          transitionToMap: 'old-lady-home'
         }
         // bridgeMarker: {
         //   type: 'Marker',
         //   x: 36 * PIXEL_SIZE,
         //   y: 7 * PIXEL_SIZE
         // }
+      }
+    },
+    'old-lady-home': {
+      id: 'old-lady-home',
+      width: 30,
+      height: 20,
+      map: {
+        config: 'public/maps/haus-alte-dame/haus-alte-dame.json',
+        lowerImage: 'public/maps/haus-alte-dame/haus-alte-dame.png',
+        upperImage: 'public/maps/haus-alte-dame/haus-alte-dame-upper.png'
+      },
+      configObjects: {
+        hero: {
+          type: 'Player',
+          isPlayerControlled: true,
+          x: 31 * PIXEL_SIZE,
+          y: 7 * PIXEL_SIZE,
+          index: 5
+        }
       }
     }
   },
