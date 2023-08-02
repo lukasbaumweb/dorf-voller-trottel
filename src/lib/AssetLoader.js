@@ -1,58 +1,47 @@
 import { Assets } from 'pixi.js';
 import { CONFIG } from '../config';
 
-export class AssetLoader {
-  relativePath = ''; // "../..";
+const RELATIVE_PATH = ''; // "../..";
 
-  getConfigs = () => {
-    return Object.values(CONFIG.textures)
-      .filter(({ config }) => !!config)
-      .map((obj) => {
-        if (obj.config) return this.getAsset(obj.config);
-        else {
-          console.debug(`No config for ${JSON.stringify(obj)}`);
-        }
-        return false;
-      })
-      .filter((a) => a !== false);
-  };
+const getAsset = (path) => `${window.location.origin}/${RELATIVE_PATH}${path}`;
 
-  getImages = () => {
-    return Object.values(CONFIG.textures)
-      .map((obj) => {
-        if (obj.texture) return this.getAsset(obj.texture);
-        else console.debug(`No img for ${JSON.stringify(obj)}`);
+const getGlobalTextures = () => {
+  const assets = [];
+  Object.values(CONFIG.textures).forEach((value) => {
+    if (value.texture) assets.push(getAsset(value.texture));
+    if (value.config) assets.push(getAsset(value.config));
 
-        return false;
-      })
-      .filter((a) => a !== false);
-  };
+    if (!value.texture && !value.config) console.debug(`No img for ${JSON.stringify(value)}`);
+  });
+  return assets.filter((a) => a !== false);
+};
 
-  getAsset = (path) => `${window.location.origin}/${this.relativePath}${path}`;
+const getMap = (level) => {
+  const lvl = CONFIG.levels[level].map;
+  return [lvl.config, lvl.lowerImagePath, lvl.upperImagePath].map((p) => getAsset(p));
+};
 
-  getMaps = () => {
-    const levelConfigs = Object.values(CONFIG.levels).map(({ map }) => map);
-    const maps = [];
-    levelConfigs.forEach((c) => {
-      Object.values(c).forEach((path) => maps.push(this.getAsset(path)));
-    });
+const getItems = (level) => {
+  const configObjects = CONFIG.levels[level].configObjects;
+  return Object.entries(configObjects)
+    .filter(([key, item]) => key !== 'hero')
+    .map(([key, item]) => getAsset(item.texture));
+};
 
-    return maps;
-  };
+const loadLevel = (level) => {
+  console.groupCollapsed('Assets');
 
-  load = () => {
-    console.groupCollapsed('Assets');
+  const globals = getGlobalTextures();
+  const maps = getMap(level);
+  const items = getItems(level);
 
-    const configs = this.getConfigs();
-    const images = this.getImages();
-    const maps = this.getMaps();
+  const assets = [...globals, ...maps, ...items];
 
-    const assets = [...configs, ...images, ...maps];
+  assets.forEach((a) => {
+    console.debug(`Loading asset: ${a}`);
+  });
+  console.groupEnd();
+  return Assets.load(assets);
+};
 
-    assets.forEach((a) => {
-      console.debug(`Loading asset: ${a}`);
-    });
-    console.groupEnd();
-    return Assets.load(assets);
-  };
-}
+export { loadLevel, getAsset };

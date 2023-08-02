@@ -15,20 +15,7 @@ export const CONFIG = {
       texture: 'public/textures/characters/hero.png',
       config: 'public/textures/characters/hero.json'
     },
-    'old-man': {
-      texture: 'public/textures/characters/old-man.png',
-      config: 'public/textures/characters/old-man.json'
-    },
-    marker: { config: 'public/textures/utils/marker.json' },
-    calendar: {
-      texture: 'public/textures/items/calendar.png'
-    }
-
-    //dog: {}
-    //   ,
-    //   computer: {},
-    //   'dog-bed': {}
-    //
+    marker: { config: 'public/textures/utils/marker.json' }
   },
   levels: {
     dorf: {
@@ -50,11 +37,12 @@ export const CONFIG = {
         },
         'old-man': {
           type: 'NPC',
-          texture: 'old-man',
           x: 23 * PIXEL_SIZE,
           y: 11 * PIXEL_SIZE,
           behaviorLoop: [],
-          index: 5
+          index: 5,
+          texture: 'public/textures/characters/old-man.png',
+          config: 'public/textures/characters/old-man.json'
         }
       },
       markerObjects: {
@@ -106,8 +94,9 @@ export const CONFIG = {
         calendar: {
           type: 'Item',
           x: 16 * PIXEL_SIZE,
-          y: 10 * PIXEL_SIZE,
-          index: 5
+          y: 8 * PIXEL_SIZE,
+          index: 5,
+          texture: 'public/textures/items/calendar.png'
         } //,
         // dog: {
         //   type: 'Item',
