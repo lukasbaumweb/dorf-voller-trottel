@@ -28,8 +28,8 @@ export const CONFIG = {
       height: 20,
       map: {
         config: 'public/maps/dorf/dorf.json',
-        lowerImage: 'public/maps/dorf/dorf.png',
-        upperImage: 'public/maps/dorf/dorf-upper.png'
+        lowerImagePath: 'public/maps/dorf/dorf.png',
+        upperImagePath: 'public/maps/dorf/dorf-upper.png'
       },
       configObjects: {
         hero: {
@@ -83,15 +83,15 @@ export const CONFIG = {
       height: 20,
       map: {
         config: 'public/maps/haus-alte-dame/haus-alte-dame.json',
-        lowerImage: 'public/maps/haus-alte-dame/haus-alte-dame.png',
-        upperImage: 'public/maps/haus-alte-dame/haus-alte-dame-upper.png'
+        lowerImagePath: 'public/maps/haus-alte-dame/haus-alte-dame.png',
+        upperImagePath: 'public/maps/haus-alte-dame/haus-alte-dame-upper.png'
       },
       configObjects: {
         hero: {
           type: 'Player',
           isPlayerControlled: true,
-          x: 31 * PIXEL_SIZE,
-          y: 7 * PIXEL_SIZE,
+          x: 15 * PIXEL_SIZE,
+          y: 18 * PIXEL_SIZE,
           index: 5
         }
       }

@@ -2,12 +2,12 @@ import { Container } from 'pixi.js';
 import { nextPosition, withGrid } from '../utils';
 import { Player } from './Player';
 import { CONFIG } from '../config';
-import { loadLayers, loadMaps, loadWalls } from '../lib/MapLoader';
+import { loadLayers, loadMapLayers, loadWalls } from '../lib/MapLoader';
 import { getCurrentLevel, setCurrentLevel } from '../gameState';
 import { Marker } from './Marker';
 import { Storage } from '../lib/Storage';
 import { TextMessage } from '../components/TextMessage';
-import { Translator } from '../lib/Translator';
+import { translate } from '../lib/Translator';
 import { Character } from './Character';
 import { GameEvent } from '../components/GameEvent';
 
@@ -29,9 +29,10 @@ export class Map {
   }
 
   initMap() {
-    this.maps = loadMaps(getCurrentLevel().map.lowerImage, getCurrentLevel().map.upperImage);
-    this.walls = loadWalls(getCurrentLevel().map.config, this.gameObjects.hero).tiles;
-    this.layers = loadLayers(getCurrentLevel().map.config).map((layer) => {
+    const map = getCurrentLevel().map;
+    this.maps = loadMapLayers(map);
+    this.walls = loadWalls(map.config, this.gameObjects.hero).tiles;
+    this.layers = loadLayers(map.config).map((layer) => {
       const container = new Container();
 
       container.name = layer.name;
@@ -107,17 +108,38 @@ export class Map {
     const cameraPerson = this.gameObjects.hero;
     for (const layer of this.layers) {
       if (layer.name === 'ground' || layer.name === 'map (upper)') {
-        layer.children[0].x = withGrid(0) - cameraPerson.x - withGrid(CONFIG.OFFSET.x);
-        layer.children[0].y = withGrid(0) - cameraPerson.y - withGrid(CONFIG.OFFSET.y);
+        if (layer.children.length > 0) {
+          layer.children[0].x = withGrid(0) - cameraPerson.x - withGrid(CONFIG.OFFSET.x);
+          layer.children[0].y = withGrid(0) - cameraPerson.y - withGrid(CONFIG.OFFSET.y);
+        }
       }
     }
   }
 
+  clearChildren(parent) {
+    if (parent.children.length === 0) return;
+    for (let i = 0; i < parent.children.length; i++) {
+      const child = parent.children[i];
+      this.clearChildren(child);
+      child.destroy({ children: true, texture: true, baseTexture: true });
+    }
+  }
+
   unmount() {
-    this.layersContainer.children.forEach((child) =>
-      child.destroy({ children: true, texture: true, baseTexture: true })
-    );
+    this.layers.forEach((c) => this.clearChildren(c));
+    this.layersContainer.children.forEach((c) => this.clearChildren(c));
+    Object.keys(this.gameObjects).forEach((obj) => {
+      this.gameObjects[obj].unmount();
+    });
+
+    this.layers = [];
     this.layersContainer.children = [];
+    this.walls = {};
+
+    this.configObjects = {};
+
+    this.markerObjects = {};
+    this.gameObjects = {};
   }
 
   isSpaceTaken(currentX, currentY, direction) {
@@ -167,7 +189,7 @@ export class Map {
 
     if (match) {
       new TextMessage({
-        text: `${Translator.translate(match.id)} betreten`,
+        text: `${translate(match.id)} betreten`,
         onCancel: () => {
           console.debug('canceled');
         },

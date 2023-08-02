@@ -1,5 +1,6 @@
 export class Storage {
   static STORAGE_KEYS = {
+    language: 'language',
     player: 'player',
     gameScale: 'gameScale',
     welcomeMessage: 'welcomeMessage',

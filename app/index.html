@@ -88,8 +88,8 @@
   <div class="game-menu-init" id="gameMenuWrapper">
     <div class="game-menu" id="gameMenu">
       <div class="terminal-card">
-        <header class="title">Dorf voller Trottel</header>
-        <div class="description">
+        <header class="title" data-translate="ui.title">Dorf voller Trottel</header>
+        <div class="description" data-translate="ui.description">
           Rette dein Dorf vor Hackern durch das Verbessern der IT-Sicherheitskenntnisse deiner Dorfkollegen. Du bist
           dabei der neu hinzugezogene IT-Sicherheitsexperte. Löse alle Aufgaben oder verlasse das Dorf voller Trottel!
         </div>
@@ -102,9 +102,8 @@
 
         <form id="createNewGameForm" class="create-new-game-form">
           <div class="form-group">
-            <label for="username">Nutzername:</label>
-            <input id="username" name="username" type="text" required minlength="3"
-              placeholder="Bitte Nutzername eingeben...">
+            <label for="username" data-translate="ui.username">Nutzername:</label>
+            <input id="username" name="username" type="text" minlength="3" required>
           </div>
           <div class="form-group">
             <button class="btn btn-primary" type="submit" role="button" name="submit" id="newGame">Neues Spiel</button>

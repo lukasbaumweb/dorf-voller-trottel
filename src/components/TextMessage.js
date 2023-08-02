@@ -107,7 +107,7 @@ export class TextMessage {
   done() {
     if (this.revealingText.isDone) {
       this.element.remove();
-      this.actionListener.unbind();
+      this.actionListener.dispose();
     } else {
       this.revealingText.warpToDone();
     }

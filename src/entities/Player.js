@@ -4,10 +4,11 @@ import { emitEvent, nextPosition, withGrid } from '../utils';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
 import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
-import { Translator } from '../lib/Translator';
+import { translate } from '../lib/Translator';
 import { Storage } from '../lib/Storage';
 
 export class Player {
+  keyboard;
   constructor(config) {
     this.assetLoader = new AssetLoader();
 
@@ -21,6 +22,7 @@ export class Player {
 
     this.keyboard = new PlayerKeyboard();
     this.keyboard.init();
+
     this.isStanding = true;
 
     const movementSpeed = 1;
@@ -68,6 +70,7 @@ export class Player {
   }
 
   mount(map) {
+    console.log(this.keyboard);
     console.debug(`Mounting ${this.id}`);
     this.map = map;
     this.sprite = this.animations[this.animationsMap[this.currentAnimation]];
@@ -75,12 +78,23 @@ export class Player {
     this.sprite.zIndex = 5;
 
     this.makeInteractable();
+
     this.sprite.animationSpeed = 1 / 4;
     this.sprite.loop = false;
     this.container.addChild(this.sprite);
 
     this.isMounted = true;
     this.sprite.play();
+  }
+
+  unmount() {
+    this.keyboard?.dispose();
+    try {
+      this.sprite.stop();
+      this.sprite.destroy();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   update(map, cameraPerson) {
@@ -113,7 +127,7 @@ export class Player {
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.5;
 
-      tooltip.showMessage(Translator.translate(this.id));
+      tooltip.showMessage(translate(this.id));
     });
 
     this.sprite.on('pointerleave', () => {

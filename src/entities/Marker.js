@@ -4,7 +4,7 @@ import { withGrid } from '../utils';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
 import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
-import { Translator } from '../lib/Translator';
+import { translate } from '../lib/Translator';
 
 export class Marker {
   constructor(config) {
@@ -76,7 +76,7 @@ export class Marker {
 
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.5;
-      tooltip.showMessage(Translator.translate(this.id));
+      tooltip.showMessage(translate(this.id));
     });
 
     this.sprite.on('pointerleave', () => {

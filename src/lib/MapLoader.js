@@ -8,10 +8,10 @@ const convertTo2D = (oneDimensionArr, length) => {
   return newArr;
 };
 
-const loadMaps = (lowerPath, upperPath) => {
+const loadMapLayers = ({ lowerImagePath, upperImagePath }) => {
   const assetLoader = new AssetLoader();
-  const cachedLower = Assets.get(assetLoader.getAsset(lowerPath));
-  const cachedUpper = Assets.get(assetLoader.getAsset(upperPath));
+  const cachedLower = Assets.get(assetLoader.getAsset(lowerImagePath));
+  const cachedUpper = Assets.get(assetLoader.getAsset(upperImagePath));
   const lower = new Sprite(cachedLower);
   const upper = new Sprite(cachedUpper);
   return { lower, upper };
@@ -51,4 +51,4 @@ const loadLayers = (pathToMap) => {
   return filtered;
 };
 
-export { loadLayers, loadMaps, loadWalls };
+export { loadLayers, loadMapLayers, loadWalls };

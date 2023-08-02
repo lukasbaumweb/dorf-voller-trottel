@@ -5,8 +5,9 @@ import { GameEvent } from '../components/GameEvent';
 
 import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
-import { Translator } from '../lib/Translator';
+import { translate } from '../lib/Translator';
 import { Storage } from '../lib/Storage';
+import { PlayerKeyboard } from '../components/PlayerKeyboard';
 
 export class Character {
   constructor(config) {
@@ -19,6 +20,9 @@ export class Character {
     this.y = config.y || 0;
     this.direction = config.direction || 'down';
     this.sprite = null;
+
+    this.keyboard = new PlayerKeyboard();
+    this.keyboard.init();
 
     this.isStanding = true;
 
@@ -85,6 +89,16 @@ export class Character {
     this.sprite.play();
   }
 
+  unmount() {
+    this.keyboard?.dispose();
+    try {
+      this.sprite.stop();
+      this.sprite.destroy();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   update(map, cameraPerson) {
     const x = this.x - cameraPerson.x - withGrid(CONFIG.OFFSET.x) + 8;
     const y = this.y - cameraPerson.y - withGrid(CONFIG.OFFSET.y) + 8;
@@ -114,7 +128,7 @@ export class Character {
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.8;
 
-      tooltip.showMessage(Translator.translate(this.id));
+      tooltip.showMessage(translate(this.id));
     });
 
     this.sprite.on('pointerleave', () => {
@@ -212,10 +226,6 @@ export class Character {
       };
       Storage.set(Storage.STORAGE_KEYS.npc, state);
     }
-  }
-
-  unmount() {
-    this.sprite.destroy({ children: true, texture: true, baseTexture: true });
   }
 
   updateAnimationState() {

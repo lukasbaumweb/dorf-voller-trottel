@@ -7,6 +7,7 @@ import { AssetLoader } from './lib/AssetLoader';
 import { DebugHud } from './lib/DebugHud';
 
 import { Storage } from './lib/Storage';
+import { translateTemplates } from './lib/Translator';
 import './style.css';
 
 const startGame = async () => {
@@ -50,6 +51,7 @@ menu.onLoadGame = async () => {
     });
   }
 };
+translateTemplates();
 
 menu.init();
 

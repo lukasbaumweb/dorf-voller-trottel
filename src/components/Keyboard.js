@@ -19,7 +19,7 @@ export class Keyboard {
     document.addEventListener('keyup', this.keyupFunction);
   }
 
-  unbind() {
+  dispose() {
     document.removeEventListener('keydown', this.keydownFunction);
     document.removeEventListener('keyup', this.keyupFunction);
   }

@@ -1,22 +1,75 @@
 import { Storage } from './Storage';
 
-const GLOBAL_KEY = '_language';
+/**
+ * Enum for Days of the Week
+ * @enum {string}
+ */
+const LanguageCode = {
+  de_DE: 'de_DE'
+};
 
-export class Translator {
-  static languages = {
-    de_DE: {
-      homeMarker: 'Büro',
-      townhallMarker: 'Rathaus',
-      bridgeMarker: 'Brücke',
-      hero: `Spieler ${Storage.get(Storage.STORAGE_KEYS.username, '')}`.trim(),
-      'old-man': 'Alter Mann'
-    }
-  };
-
-  static translate(key) {
-    if (!window[GLOBAL_KEY]) {
-      window[GLOBAL_KEY] = 'de_DE';
-    }
-    return this.languages[window[GLOBAL_KEY]][key] || key;
+const languages = {
+  de_DE: {
+    ui: {
+      title: 'Dorf voller Trottel',
+      description:
+        'Rette dein Dorf vor Hackern durch das Verbessern der IT-Sicherheitskenntnisse deiner Dorfkollegen. Du bist dabei der neu hinzugezogene IT-Sicherheitsexperte. Löse alle Aufgaben oder verlasse das Dorf voller Trottel!',
+      username: 'Nutzername'
+    },
+    homeMarker: 'Büro',
+    smallMarker: 'Haus der alten Dame',
+    townhallMarker: 'Rathaus',
+    bridgeMarker: 'Brücke',
+    hero: 'Spieler {var1}'.trim(),
+    'old-man': 'Alter Mann',
+    firstGreet: '',
+    greet: 'Hallo {var1}, willkommen zurück!'
   }
-}
+};
+
+/**
+ * Retrieves translation of given key
+ * @param {string} key of translation to be retrieved
+ * @returns translation of given key
+ */
+const translate = (key) => {
+  const currentLanguage = Storage.get(Storage.STORAGE_KEYS.language, LanguageCode.de_DE);
+  return languages[currentLanguage][key] || key;
+};
+
+/**
+ * Setting language of Translator globally
+ * @param {LanguageCode} langCode code of language
+ */
+const setLanguage = (langCode) => {
+  if (!languages[langCode]) throw Error('Language code is undefined');
+  Storage.set(Storage.STORAGE_KEYS.language, langCode);
+};
+
+/**
+ * Retrieves all translations for current selected language
+ * @returns current englisch object with every translation
+ */
+const getLanguage = () => {
+  return languages[Storage.get(Storage.STORAGE_KEYS.language, LanguageCode.de_DE)];
+};
+
+/**
+ * Translates every html node element which has a translate data attribute specified
+ */
+const translateTemplates = () => {
+  document.querySelectorAll('[data-translate]').forEach((node) => {
+    const keys = node.getAttribute('data-translate')?.split('.');
+    let value = getLanguage();
+    try {
+      keys.forEach((key) => {
+        value = value[key];
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    node.innerHTML = typeof value === 'string' ? value : node.getAttribute('data-translate');
+  });
+};
+
+export { translate, setLanguage, translateTemplates, getLanguage };

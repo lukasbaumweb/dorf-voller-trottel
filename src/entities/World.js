@@ -38,7 +38,7 @@ export class World {
 
     // TODO: Load game state from database (local or server?)
 
-    //TODO: Load Level from storage
+    // TODO: Load Level from storage
     const level = getCurrentLevel();
     this.start(level);
   }
@@ -86,6 +86,10 @@ export class World {
     new Keyboard('KeyP', () => {
       console.debug('Game stopped completly!');
       this.app.ticker.remove(this.gameLoopReference);
+    });
+
+    new Keyboard('KeyC', () => {
+      this.map.unmount();
     });
   }
 
