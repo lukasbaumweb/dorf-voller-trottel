@@ -58,6 +58,9 @@ export class GameEvent {
     this.map.unmount();
 
     const sceneTransition = new SceneTransition();
+
+    setStoredValue(STORAGE_KEYS.level, this.event.transitionToMap);
+
     sceneTransition.init(document.querySelector('.game-wrapper'), () => {
       this.map.initMap(CONFIG.levels[this.event.transitionToMap], {
         x: this.event.x,
@@ -65,7 +68,6 @@ export class GameEvent {
         direction: this.event.direction
       });
       resolve();
-      setStoredValue(STORAGE_KEYS.level, this.event.transitionToMap);
       sceneTransition.fadeOut();
     });
   }

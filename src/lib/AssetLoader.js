@@ -20,10 +20,9 @@ export class AssetLoader {
   getImages = () => {
     return Object.values(CONFIG.textures)
       .map((obj) => {
-        if (obj.img) return this.getAsset(obj.img);
-        else {
-          console.debug(`No img for ${JSON.stringify(obj)}`);
-        }
+        if (obj.texture) return this.getAsset(obj.texture);
+        else console.debug(`No img for ${JSON.stringify(obj)}`);
+
         return false;
       })
       .filter((a) => a !== false);

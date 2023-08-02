@@ -70,7 +70,6 @@ export class Player {
   }
 
   mount(map) {
-    console.log(this.keyboard);
     console.debug(`Mounting ${this.id}`);
     this.map = map;
     this.sprite = this.animations[this.animationsMap[this.currentAnimation]];
@@ -127,7 +126,7 @@ export class Player {
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.5;
 
-      tooltip.showMessage(translate(this.id).replace('{var1}', getStoredValue(STORAGE_KEYS.username), '').trim());
+      tooltip.showMessage(translate(this.id).replace('{0}', getStoredValue(STORAGE_KEYS.username), '').trim());
     });
 
     this.sprite.on('pointerleave', () => {

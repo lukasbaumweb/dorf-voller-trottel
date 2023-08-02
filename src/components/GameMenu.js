@@ -52,7 +52,7 @@ export class GameMenu {
   }
 
   savedGameExists() {
-    return getStoredValue(STORAGE_KEYS.updatedOn, false) !== false;
+    return getStoredValue(STORAGE_KEYS.username, false) !== false;
   }
 
   hide() {

@@ -10,6 +10,7 @@ import { TextMessage } from '../components/TextMessage';
 import { translate } from '../lib/Translator';
 import { Character } from './Character';
 import { GameEvent } from '../components/GameEvent';
+import { Item } from './Item';
 
 export class Map {
   constructor({ map, app, layersContainer }) {
@@ -79,6 +80,10 @@ export class Map {
 
         const combined = Object.assign(object, saved);
         instance = new Character(combined);
+      } else if (object.type === 'Item') {
+        object.container = objectsContainer;
+        console.log(object);
+        instance = new Item(object);
       }
 
       this.gameObjects[key] = instance;
@@ -170,7 +175,6 @@ export class Map {
   startCutscene() {}
 
   checkForActionCutscene() {
-    console.log(window._game.isBlocked);
     if (window._game.isBlocked) return;
 
     const hero = this.gameObjects.hero;
@@ -204,7 +208,6 @@ export class Map {
         },
         onAcceptText: 'Betreten',
         onComplete: () => {
-          console.log(match);
           new GameEvent({
             map: this,
             event: {

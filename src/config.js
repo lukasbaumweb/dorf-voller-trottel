@@ -12,14 +12,23 @@ export const CONFIG = {
   },
   textures: {
     hero: {
-      img: 'public/textures/characters/hero.png',
+      texture: 'public/textures/characters/hero.png',
       config: 'public/textures/characters/hero.json'
     },
     'old-man': {
-      img: 'public/textures/characters/old-man.png',
+      texture: 'public/textures/characters/old-man.png',
       config: 'public/textures/characters/old-man.json'
     },
-    marker: { config: 'public/textures/utils/marker.json' }
+    marker: { config: 'public/textures/utils/marker.json' },
+    calendar: {
+      texture: 'public/textures/items/calendar.png'
+    }
+
+    //dog: {}
+    //   ,
+    //   computer: {},
+    //   'dog-bed': {}
+    //
   },
   levels: {
     dorf: {
@@ -93,7 +102,21 @@ export const CONFIG = {
           x: 15 * PIXEL_SIZE,
           y: 18 * PIXEL_SIZE,
           index: 5
-        }
+        },
+        calendar: {
+          type: 'Item',
+          x: 16 * PIXEL_SIZE,
+          y: 10 * PIXEL_SIZE,
+          index: 5
+        } //,
+        // dog: {
+        //   type: 'Item',
+        //   x: 15 * PIXEL_SIZE,
+        //   y: 18 * PIXEL_SIZE,
+        //   index: 5
+        // },
+        // computer: { type: 'Item', x: 15 * PIXEL_SIZE, y: 18 * PIXEL_SIZE, index: 5 },
+        // 'dog-bed': { type: 'Item', x: 15 * PIXEL_SIZE, y: 18 * PIXEL_SIZE, index: 5 }
       }
     }
   },

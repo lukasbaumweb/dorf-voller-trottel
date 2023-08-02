@@ -40,15 +40,18 @@ menu.onLoadGame = async () => {
   await startGame();
   const savedUpdateOn = getStoredValue(STORAGE_KEYS.updatedOn, false);
 
-  if (savedUpdateOn || new Date().getTime() - new Date(savedUpdateOn).getTime() > ONE_MINUTE) {
+  if (savedUpdateOn && new Date().getTime() - new Date(savedUpdateOn).getTime() > ONE_MINUTE) {
+    const message = getStoredValue(
+      STORAGE_KEYS.welcomeMessage,
+      formatString(translate('firstGreet'), getStoredValue(STORAGE_KEYS.username, 'Spieler'))
+    );
     new TextMessage({
-      text: getStoredValue(STORAGE_KEYS.welcomeMessage, {
-        message: formatString(translate('firstGreet'), getStoredValue(STORAGE_KEYS.username, 'Spieler'))
-      }).message
+      text: message
     }).init();
-    setStoredValue(STORAGE_KEYS.welcomeMessage, {
-      message: formatString(translate('greet'), getStoredValue(STORAGE_KEYS.username, 'Spieler'))
-    });
+    setStoredValue(
+      STORAGE_KEYS.welcomeMessage,
+      formatString(translate('greet'), getStoredValue(STORAGE_KEYS.username, 'Spieler'))
+    );
   }
 };
 translateTemplates();

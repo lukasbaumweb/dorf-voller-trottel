@@ -39,6 +39,7 @@ const getStoredValue = (key, defaultValue) => {
  * @returns value of stored object
  */
 const setStoredValue = (key, value) => {
+  console.debug(`Saving value: ${JSON.stringify(value)} at ${key}}`);
   if (!('localStorage' in window)) {
     console.warn('No localstorage found, Cannot save data');
     return;
