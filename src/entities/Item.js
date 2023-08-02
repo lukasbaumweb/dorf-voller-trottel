@@ -25,8 +25,9 @@ export class Item {
   mount(map) {
     console.debug(`Mounting ${this.id}`);
     this.map = map;
-    this.sprite = new Sprite(this.texture);
-    console.log(this.sprite, this.texture);
+    this.sprite = Sprite.from(this.texture);
+    this.sprite.height = CONFIG.PIXEL_SIZE;
+    this.sprite.width = CONFIG.PIXEL_SIZE;
     this.sprite.anchor.set(0.5);
     this.sprite.zIndex = 5;
 

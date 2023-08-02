@@ -1,6 +1,6 @@
 import { Assets, Sprite } from 'pixi.js';
 import { asGridCoord } from '../utils';
-import { AssetLoader } from './AssetLoader';
+import { getAsset } from './AssetLoader';
 
 const convertTo2D = (oneDimensionArr, length) => {
   const newArr = [];
@@ -9,18 +9,15 @@ const convertTo2D = (oneDimensionArr, length) => {
 };
 
 const loadMapLayers = ({ lowerImagePath, upperImagePath }) => {
-  const assetLoader = new AssetLoader();
-  const cachedLower = Assets.get(assetLoader.getAsset(lowerImagePath));
-  const cachedUpper = Assets.get(assetLoader.getAsset(upperImagePath));
+  const cachedLower = Assets.get(getAsset(lowerImagePath));
+  const cachedUpper = Assets.get(getAsset(upperImagePath));
   const lower = new Sprite(cachedLower);
   const upper = new Sprite(cachedUpper);
   return { lower, upper };
 };
 
 const loadWalls = (pathToMap) => {
-  const assetLoader = new AssetLoader();
-
-  const cached = Assets.get(assetLoader.getAsset(pathToMap));
+  const cached = Assets.get(getAsset(pathToMap));
   const layerIndex = cached.layers.findIndex((l) => l.name === 'accessible');
 
   const accessibleNumber = cached.layers[layerIndex].data[0];
@@ -45,8 +42,7 @@ const loadWalls = (pathToMap) => {
 };
 
 const loadLayers = (pathToMap) => {
-  const assetLoader = new AssetLoader();
-  const cached = Assets.get(assetLoader.getAsset(pathToMap));
+  const cached = Assets.get(getAsset(pathToMap));
   const filtered = cached.layers.splice(0, cached.layers.length - 1).map((l, i) => ({ zIndex: i, ...l }));
   return filtered;
 };

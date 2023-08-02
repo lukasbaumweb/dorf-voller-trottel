@@ -59,11 +59,11 @@ export class World {
       DebugHud.shared.show();
     }
     Object.values(this.map.gameObjects).forEach((object) => {
-      object.update(this.map, cameraPerson);
+      object.update(cameraPerson);
     });
 
     Object.values(this.map.markerObjects).forEach((object) => {
-      object.update(this.map, cameraPerson);
+      object.update(cameraPerson);
     });
   }
 

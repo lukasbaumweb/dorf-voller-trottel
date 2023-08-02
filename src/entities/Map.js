@@ -30,7 +30,7 @@ export class Map {
   }
 
   initMap() {
-    const level = getCurrentLevel();
+    const level = CONFIG.levels[getCurrentLevel()];
 
     const map = level.map;
 
@@ -55,7 +55,7 @@ export class Map {
 
   mountObjects() {
     console.groupCollapsed('Mounting objects');
-    const level = getCurrentLevel();
+    const level = CONFIG.levels[getCurrentLevel()];
 
     const charactersContainer = this.layersContainer.children.find((layer) => layer.name === '######players######');
     const objectsContainer = this.layersContainer.children.find((layer) => layer.name === 'objects');
@@ -82,7 +82,6 @@ export class Map {
         instance = new Character(combined);
       } else if (object.type === 'Item') {
         object.container = objectsContainer;
-        console.log(object);
         instance = new Item(object);
       }
 

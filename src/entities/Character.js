@@ -3,7 +3,7 @@ import { CONFIG } from '../config';
 import { emitEvent, nextPosition, withGrid } from '../utils';
 import { GameEvent } from '../components/GameEvent';
 
-import { AssetLoader } from '../lib/AssetLoader';
+import { getAsset } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
 import { STORAGE_KEYS, setStoredValue } from '../lib/Storage';
@@ -11,8 +11,6 @@ import { PlayerKeyboard } from '../components/PlayerKeyboard';
 
 export class Character {
   constructor(config) {
-    this.assetLoader = new AssetLoader();
-
     this.id = config.id;
     this.movingProgressRemaining = 0;
     this.intentPosition = null; // [x,y]
@@ -49,9 +47,7 @@ export class Character {
       'walk-left'
     ];
 
-    this.animationsResources = Assets.cache.get(
-      this.assetLoader.getAsset(CONFIG.textures[config.texture].config)
-    )?.data.animations;
+    this.animationsResources = Assets.cache.get(getAsset(CONFIG.textures[config.texture].config))?.data.animations;
     this.animations = {};
     this.currentAnimation = config.currentAnimation || `idle-${this.direction}`;
     this.possibleAnimations.forEach((animation) => {
@@ -99,7 +95,7 @@ export class Character {
     }
   }
 
-  update(map, cameraPerson) {
+  update(cameraPerson) {
     const x = this.x - cameraPerson.x - withGrid(CONFIG.OFFSET.x) + 8;
     const y = this.y - cameraPerson.y - withGrid(CONFIG.OFFSET.y) + 8;
 
@@ -108,8 +104,8 @@ export class Character {
     if (this.movingProgressRemaining > 0) {
       this.updatePosition(cameraPerson);
     } else {
-      if (!map.isCutscenePlaying) {
-        // this.startBehavior(map, {
+      if (!this.map.isCutscenePlaying) {
+        // this.startBehavior(this.map, {
         //   type: 'walk',
         //   direction: this.keyboard.direction
         // });

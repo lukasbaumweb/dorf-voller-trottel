@@ -1,12 +1,9 @@
-import { CONFIG } from './config';
-import { STORAGE_KEYS, getStoredValue } from './lib/Storage';
-
-// TODO: Load Level from storage
-window._currentLevel = CONFIG.levels[getStoredValue(STORAGE_KEYS.level, 'dorf')];
+import { STORAGE_KEYS, getStoredValue, setStoredValue } from './lib/Storage';
 
 export const setCurrentLevel = (value) => {
-  window._currentLevel = value;
+  setStoredValue(STORAGE_KEYS.level, value);
 };
+
 export const getCurrentLevel = () => {
-  return window._currentLevel;
+  return getStoredValue(STORAGE_KEYS.level, 'dorf');
 };

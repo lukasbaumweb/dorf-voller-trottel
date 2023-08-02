@@ -2,14 +2,13 @@ import { AnimatedSprite, Assets } from 'pixi.js';
 import { CONFIG } from '../config';
 import { withGrid } from '../utils';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
-import { AssetLoader } from '../lib/AssetLoader';
+
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
+import { getAsset } from '../lib/AssetLoader';
 
 export class Marker {
   constructor(config) {
-    this.assetLoader = new AssetLoader();
-
     this.id = config.id;
     this.x = config.x || 0;
     this.y = config.y || 0;
@@ -21,7 +20,7 @@ export class Marker {
     this.keyboard.init();
     this.isStanding = true;
 
-    this.resource = Assets.cache.get(this.assetLoader.getAsset(CONFIG.textures.marker.config));
+    this.resource = Assets.cache.get(getAsset(CONFIG.textures.marker.config));
 
     this.animationsResources = this.resource?.data.animations;
     this.animation = AnimatedSprite.fromFrames(this.resource._frameKeys);
@@ -55,7 +54,7 @@ export class Marker {
     this.sprite.play();
   }
 
-  update(map, cameraPerson) {
+  update(cameraPerson) {
     const x = this.x - cameraPerson.x - withGrid(CONFIG.OFFSET.x);
     const y = this.y - cameraPerson.y - withGrid(CONFIG.OFFSET.y);
 

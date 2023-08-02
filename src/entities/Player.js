@@ -2,16 +2,14 @@ import { AnimatedSprite, Assets } from 'pixi.js';
 import { CONFIG } from '../config';
 import { emitEvent, nextPosition, withGrid } from '../utils';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
-import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
 import { STORAGE_KEYS, getStoredValue, setStoredValue } from '../lib/Storage';
+import { getAsset } from '../lib/AssetLoader';
 
 export class Player {
   keyboard;
   constructor(config) {
-    this.assetLoader = new AssetLoader();
-
     this.id = config.id;
     this.movingProgressRemaining = 0;
     this.intentPosition = null; // [x,y]
@@ -48,9 +46,7 @@ export class Player {
       'walk-left': 'hero-walk-left'
     };
 
-    this.animationsResources = Assets.cache.get(
-      this.assetLoader.getAsset(CONFIG.textures.hero.config)
-    )?.data.animations;
+    this.animationsResources = Assets.cache.get(getAsset(CONFIG.textures.hero.config))?.data.animations;
     this.animations = {};
     this.currentAnimation = config.currentAnimation || `idle-${this.direction}`;
     Object.values(this.animationsMap).forEach((animation) => {
@@ -96,7 +92,7 @@ export class Player {
     // }
   }
 
-  update(map, cameraPerson) {
+  update(cameraPerson) {
     const x = this.x - cameraPerson.x - withGrid(CONFIG.OFFSET.x) + 8;
     const y = this.y - cameraPerson.y - withGrid(CONFIG.OFFSET.y) + 8;
 
@@ -105,8 +101,8 @@ export class Player {
     if (this.movingProgressRemaining > 0) {
       this.updatePosition();
     } else {
-      if (!map.isCutscenePlaying && this.keyboard.direction) {
-        this.startBehavior(map, {
+      if (!this.map.isCutscenePlaying && this.keyboard.direction) {
+        this.startBehavior(this.map, {
           type: 'walk',
           direction: this.keyboard.direction
         });
