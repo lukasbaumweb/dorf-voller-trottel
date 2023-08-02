@@ -20,9 +20,9 @@ const languages = {
     smallMarker: 'Haus der alten Dame',
     townhallMarker: 'Rathaus',
     bridgeMarker: 'Brücke',
-    hero: 'Spieler {var1}'.trim(),
+    hero: 'Spieler {var1}',
     'old-man': 'Alter Mann',
-    firstGreet: '',
+    firstGreet: 'Hallo {var1}, willkommen im Dorf voller Drottel!',
     greet: 'Hallo {var1}, willkommen zurück!'
   }
 };
@@ -72,4 +72,11 @@ const translateTemplates = () => {
   });
 };
 
-export { translate, setLanguage, translateTemplates, getLanguage };
+const formatString = function (target) {
+  const args = [...arguments].slice(1);
+  return target.replace(/{(\d+)}/g, function (match, number) {
+    return typeof args[number] !== 'undefined' ? args[number] : match;
+  });
+};
+
+export { translate, setLanguage, translateTemplates, getLanguage, formatString };

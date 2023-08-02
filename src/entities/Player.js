@@ -127,7 +127,7 @@ export class Player {
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.5;
 
-      tooltip.showMessage(translate(this.id));
+      tooltip.showMessage(translate(this.id).replace('{var1}', Storage.get(Storage.STORAGE_KEYS.username), '').trim());
     });
 
     this.sprite.on('pointerleave', () => {

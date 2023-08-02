@@ -7,7 +7,7 @@ import { AssetLoader } from './lib/AssetLoader';
 import { DebugHud } from './lib/DebugHud';
 
 import { Storage } from './lib/Storage';
-import { translateTemplates } from './lib/Translator';
+import { formatString, translate, translateTemplates } from './lib/Translator';
 import './style.css';
 
 const startGame = async () => {
@@ -43,11 +43,11 @@ menu.onLoadGame = async () => {
   if (savedUpdateOn || new Date().getTime() - new Date(savedUpdateOn).getTime() > ONE_MINUTE) {
     new TextMessage({
       text: Storage.get(Storage.STORAGE_KEYS.welcomeMessage, {
-        message: `Hallo ${Storage.get(Storage.STORAGE_KEYS.username, 'Spieler')}, willkommen im Dorf voller Drottel! `
+        message: formatString(translate('ui.firstGreet'), Storage.get(Storage.STORAGE_KEYS.username, 'Spieler'))
       }).message
     }).init();
     Storage.set(Storage.STORAGE_KEYS.welcomeMessage, {
-      message: `Hallo ${Storage.get(Storage.STORAGE_KEYS.username, 'Spieler')}, willkommen zurück!`
+      message: formatString(translate('ui.greet'), Storage.get(Storage.STORAGE_KEYS.username, 'Spieler'))
     });
   }
 };
