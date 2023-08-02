@@ -5,21 +5,21 @@ import { CONFIG } from '../config';
 import { loadLayers, loadMapLayers, loadWalls } from '../lib/MapLoader';
 import { getCurrentLevel, setCurrentLevel } from '../gameState';
 import { Marker } from './Marker';
-import { Storage } from '../lib/Storage';
+import { STORAGE_KEYS, getStoredValue } from '../lib/Storage';
 import { TextMessage } from '../components/TextMessage';
 import { translate } from '../lib/Translator';
 import { Character } from './Character';
 import { GameEvent } from '../components/GameEvent';
 
 export class Map {
-  constructor({ level, map, app, layersContainer }) {
+  constructor({ map, app, layersContainer }) {
+    const level = getCurrentLevel();
+
     this.id = level.id || `ID: ${new Date().getTime()}-${Math.random() * 1000}`;
     this.walls = level.walls || {};
 
     this.map = map;
 
-    this.configObjects = level.configObjects || {};
-    this.markerObjects = level.markerObjects || {};
     this.app = app;
     this.gameObjects = {};
     this.layers = [];
@@ -29,9 +29,12 @@ export class Map {
   }
 
   initMap() {
-    const map = getCurrentLevel().map;
+    const level = getCurrentLevel();
+
+    const map = level.map;
+
     this.maps = loadMapLayers(map);
-    this.walls = loadWalls(map.config, this.gameObjects.hero).tiles;
+    this.walls = loadWalls(map.config, level.configObjects.hero).tiles;
     this.layers = loadLayers(map.config).map((layer) => {
       const container = new Container();
 
@@ -44,14 +47,20 @@ export class Map {
 
     this.layers.find((l) => l.name === 'ground').addChild(this.maps.lower);
     this.layers.find((l) => l.name === 'map (upper)').addChild(this.maps.upper);
+    this.mountObjects();
 
     console.debug(this.layers);
   }
 
   mountObjects() {
     console.groupCollapsed('Mounting objects');
+    const level = getCurrentLevel();
+
     const charactersContainer = this.layersContainer.children.find((layer) => layer.name === '######players######');
     const objectsContainer = this.layersContainer.children.find((layer) => layer.name === 'objects');
+
+    this.configObjects = level.configObjects || {};
+    this.markerObjects = level.markerObjects || {};
 
     Object.keys(this.configObjects).forEach((key) => {
       const object = this.configObjects[key];
@@ -60,13 +69,13 @@ export class Map {
       let instance;
       if (object.type === 'Player') {
         object.container = charactersContainer;
-        const savedPlayer = Storage.get(Storage.STORAGE_KEYS.player);
+        const savedPlayer = getStoredValue(STORAGE_KEYS.player);
 
         const combined = Object.assign(object, savedPlayer);
         instance = new Player(combined);
       } else if (object.type === 'NPC') {
         object.container = charactersContainer;
-        const saved = Storage.get(Storage.STORAGE_KEYS.npc, {});
+        const saved = getStoredValue(STORAGE_KEYS.npc, {});
 
         const combined = Object.assign(object, saved);
         instance = new Character(combined);

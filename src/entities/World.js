@@ -4,7 +4,6 @@ import { Map } from './Map';
 import { Keyboard } from '../components/Keyboard';
 
 import { DebugHud } from '../lib/DebugHud';
-import { getCurrentLevel } from '../gameState';
 
 export class World {
   DOMGameContainer = null;
@@ -37,18 +36,13 @@ export class World {
     this.mount(appInstance);
 
     // TODO: Load game state from database (local or server?)
-
-    // TODO: Load Level from storage
-    const level = getCurrentLevel();
-    this.start(level);
+    this.start();
   }
 
-  start(level) {
-    this.map = new Map({ level, world: this, layersContainer: this.layersContainer });
+  start() {
+    this.map = new Map({ world: this, layersContainer: this.layersContainer });
 
     this.map.initMap(this.layersContainer);
-
-    this.map.mountObjects(this.layersContainer);
 
     // init gameloop
     this.app.ticker.add(this.gameLoopReference);

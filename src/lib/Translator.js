@@ -1,4 +1,4 @@
-import { Storage } from './Storage';
+import { STORAGE_KEYS, getStoredValue, setStoredValue } from './Storage';
 
 /**
  * Enum for Days of the Week
@@ -20,10 +20,10 @@ const languages = {
     smallMarker: 'Haus der alten Dame',
     townhallMarker: 'Rathaus',
     bridgeMarker: 'Brücke',
-    hero: 'Spieler {var1}',
+    hero: 'Spieler {0}',
     'old-man': 'Alter Mann',
-    firstGreet: 'Hallo {var1}, willkommen im Dorf voller Drottel!',
-    greet: 'Hallo {var1}, willkommen zurück!'
+    firstGreet: 'Hallo {0}, willkommen im Dorf voller Drottel!',
+    greet: 'Hallo {0}, willkommen zurück!'
   }
 };
 
@@ -33,7 +33,7 @@ const languages = {
  * @returns translation of given key
  */
 const translate = (key) => {
-  const currentLanguage = Storage.get(Storage.STORAGE_KEYS.language, LanguageCode.de_DE);
+  const currentLanguage = getStoredValue(STORAGE_KEYS.language, LanguageCode.de_DE);
   return languages[currentLanguage][key] || key;
 };
 
@@ -43,7 +43,7 @@ const translate = (key) => {
  */
 const setLanguage = (langCode) => {
   if (!languages[langCode]) throw Error('Language code is undefined');
-  Storage.set(Storage.STORAGE_KEYS.language, langCode);
+  setStoredValue(STORAGE_KEYS.language, langCode);
 };
 
 /**
@@ -51,7 +51,7 @@ const setLanguage = (langCode) => {
  * @returns current englisch object with every translation
  */
 const getLanguage = () => {
-  return languages[Storage.get(Storage.STORAGE_KEYS.language, LanguageCode.de_DE)];
+  return languages[getStoredValue(STORAGE_KEYS.language, LanguageCode.de_DE)];
 };
 
 /**

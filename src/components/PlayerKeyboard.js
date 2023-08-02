@@ -34,7 +34,6 @@ export class PlayerKeyboard {
   };
 
   onKeyDown = (e) => {
-    console.log(this.heldDirections);
     if (window._game?.isBlocked) return;
 
     const dir = this.map[e.code];

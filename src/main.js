@@ -6,7 +6,7 @@ import { World } from './entities/World';
 import { AssetLoader } from './lib/AssetLoader';
 import { DebugHud } from './lib/DebugHud';
 
-import { Storage } from './lib/Storage';
+import { clearStoredValue, setStoredValue, STORAGE_KEYS, getStoredValue } from './lib/Storage';
 import { formatString, translate, translateTemplates } from './lib/Translator';
 import './style.css';
 
@@ -32,22 +32,22 @@ const startGame = async () => {
 
 const menu = new GameMenu();
 menu.onStartNewGame = async () => {
-  Storage.clearData();
-  Storage.set(Storage.STORAGE_KEYS.username, document.getElementById('username').value);
+  clearStoredValue();
+  setStoredValue(STORAGE_KEYS.username, document.getElementById('username').value);
   await startGame();
 };
 menu.onLoadGame = async () => {
   await startGame();
-  const savedUpdateOn = Storage.get(Storage.STORAGE_KEYS.updatedOn, false);
+  const savedUpdateOn = getStoredValue(STORAGE_KEYS.updatedOn, false);
 
   if (savedUpdateOn || new Date().getTime() - new Date(savedUpdateOn).getTime() > ONE_MINUTE) {
     new TextMessage({
-      text: Storage.get(Storage.STORAGE_KEYS.welcomeMessage, {
-        message: formatString(translate('ui.firstGreet'), Storage.get(Storage.STORAGE_KEYS.username, 'Spieler'))
+      text: getStoredValue(STORAGE_KEYS.welcomeMessage, {
+        message: formatString(translate('firstGreet'), getStoredValue(STORAGE_KEYS.username, 'Spieler'))
       }).message
     }).init();
-    Storage.set(Storage.STORAGE_KEYS.welcomeMessage, {
-      message: formatString(translate('ui.greet'), Storage.get(Storage.STORAGE_KEYS.username, 'Spieler'))
+    setStoredValue(STORAGE_KEYS.welcomeMessage, {
+      message: formatString(translate('greet'), getStoredValue(STORAGE_KEYS.username, 'Spieler'))
     });
   }
 };

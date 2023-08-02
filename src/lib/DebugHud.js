@@ -1,7 +1,7 @@
+import { get } from 'lodash';
 import { AppHelper } from '../components/App';
 import { CONFIG } from '../config';
-
-import { Storage } from './Storage';
+import { STORAGE_KEYS, clearStoredValue, setStoredValue } from './Storage';
 
 class HudElement {
   htmlElement = null;
@@ -56,7 +56,7 @@ export class DebugHud {
       this.hudContainer.classList.add('hudContainer');
       this.hudContainer.classList.add('terminal-card');
 
-      const currentValue = parseFloat(Storage.get(Storage.STORAGE_KEYS.gameScale)?.scale) || CONFIG.GAME_CONFIG.scale;
+      const currentValue = parseFloat(get(STORAGE_KEYS.gameScale)?.scale) || CONFIG.GAME_CONFIG.scale;
       const values = scaleOptions.reduce(
         (acc, cur) => (acc += `<option value="${cur}" ${cur === currentValue ? 'selected' : ''}>${cur}</option>`),
         ''
@@ -79,13 +79,13 @@ export class DebugHud {
 
       document.getElementById('game-scale').onchange = (e) => {
         AppHelper.getDOMGamecontainer().style.transform = `scale(${e.target.value})`;
-        Storage.set(Storage.STORAGE_KEYS.gameScale, { scale: e.target.value });
+        setStoredValue(STORAGE_KEYS.gameScale, { scale: e.target.value });
       };
       AppHelper.getDOMGamecontainer().style.transform = `scale(${currentValue})`;
 
       document.getElementById('clear-data').addEventListener('click', () => {
         if (window.confirm('Alle gespeicherten Daten löschen?')) {
-          Storage.clearData();
+          clearStoredValue();
           window.location.reload();
         }
       });

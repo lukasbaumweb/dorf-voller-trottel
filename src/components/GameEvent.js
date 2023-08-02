@@ -1,5 +1,5 @@
 import { CONFIG } from '../config';
-import { Storage } from '../lib/Storage';
+import { STORAGE_KEYS, setStoredValue, updateStoredValue } from '../lib/Storage';
 import { oppositeDirection } from '../utils';
 import { SceneTransition } from './SceneTransition';
 import { TextMessage } from './TextMessage';
@@ -65,6 +65,7 @@ export class GameEvent {
         direction: this.event.direction
       });
       resolve();
+      setStoredValue(STORAGE_KEYS.level, this.event.transitionToMap);
       sceneTransition.fadeOut();
     });
   }
@@ -74,7 +75,7 @@ export class GameEvent {
   }
 
   addStoryFlag(resolve) {
-    Storage.update(Storage.STORAGE_KEYS.playerStoryProgress, { [this.event.flag]: true });
+    updateStoredValue(STORAGE_KEYS.playerStoryProgress, { [this.event.flag]: true });
     resolve();
   }
 

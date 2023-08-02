@@ -1,5 +1,5 @@
 import { ONE_HOUR } from '../entities/Helper';
-import { Storage } from '../lib/Storage';
+import { STORAGE_KEYS, getStoredValue } from '../lib/Storage';
 
 const defaultFunc = () => {
   window.alert('Not Implemented');
@@ -40,7 +40,7 @@ export class GameMenu {
     });
 
     if (this.savedGameExists()) {
-      const timestampLastGame = new Date(parseInt(Storage.get(Storage.STORAGE_KEYS.updatedOn)));
+      const timestampLastGame = new Date(parseInt(getStoredValue(STORAGE_KEYS.updatedOn)));
       document.getElementById('lastGame').style.display = 'flex';
       document.getElementById('lastGameTimestamp').innerText =
         'Letztes Spiel am: ' + timestampLastGame.toLocaleString();
@@ -52,7 +52,7 @@ export class GameMenu {
   }
 
   savedGameExists() {
-    return Storage.get(Storage.STORAGE_KEYS.updatedOn, false) !== false;
+    return getStoredValue(STORAGE_KEYS.updatedOn, false) !== false;
   }
 
   hide() {

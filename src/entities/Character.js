@@ -6,7 +6,7 @@ import { GameEvent } from '../components/GameEvent';
 import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
-import { Storage } from '../lib/Storage';
+import { STORAGE_KEYS, setStoredValue } from '../lib/Storage';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
 
 export class Character {
@@ -224,7 +224,7 @@ export class Character {
         y: this.y,
         direction: this.direction
       };
-      Storage.set(Storage.STORAGE_KEYS.npc, state);
+      setStoredValue(STORAGE_KEYS.npc, state);
     }
   }
 

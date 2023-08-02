@@ -5,7 +5,7 @@ import { PlayerKeyboard } from '../components/PlayerKeyboard';
 import { AssetLoader } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
-import { Storage } from '../lib/Storage';
+import { STORAGE_KEYS, getStoredValue, setStoredValue } from '../lib/Storage';
 
 export class Player {
   keyboard;
@@ -88,13 +88,13 @@ export class Player {
   }
 
   unmount() {
-    this.keyboard?.dispose();
-    try {
-      this.sprite.stop();
-      this.sprite.destroy();
-    } catch (error) {
-      console.error(error);
-    }
+    // this.keyboard?.dispose();
+    // try {
+    //   this.sprite.stop();
+    //   this.sprite.destroy();
+    // } catch (error) {
+    //   console.error(error);
+    // }
   }
 
   update(map, cameraPerson) {
@@ -127,7 +127,7 @@ export class Player {
     this.sprite.on('pointerenter', (e) => {
       this.sprite.alpha = 0.5;
 
-      tooltip.showMessage(translate(this.id).replace('{var1}', Storage.get(Storage.STORAGE_KEYS.username), '').trim());
+      tooltip.showMessage(translate(this.id).replace('{var1}', getStoredValue(STORAGE_KEYS.username), '').trim());
     });
 
     this.sprite.on('pointerleave', () => {
@@ -184,12 +184,12 @@ export class Player {
         ...state
       });
 
-      Storage.set(Storage.STORAGE_KEYS.player, state);
+      setStoredValue(STORAGE_KEYS.player, state);
     }
   }
 
   updateAnimationState() {
-    if (this.sprite.playing) return;
+    if (this.sprite.playing || this.sprite.destroyed) return;
     const nextAnimation = this.animationsMap[this.currentAnimation];
     this.sprite.textures = this.animations[nextAnimation].textures;
 

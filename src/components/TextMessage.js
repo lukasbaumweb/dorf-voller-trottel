@@ -93,19 +93,17 @@ export class TextMessage {
       });
     }
 
-    this.element.querySelector('#btnEnter').addEventListener('click', () => {
-      this.done();
+    const onAcceptFunction = () => {
+      this.done(true);
       this.onComplete && this.onComplete();
-    });
+    };
 
-    this.actionListener = new Keyboard('Enter', () => {
-      this.done();
-      this.onComplete && this.onComplete();
-    });
+    this.element.querySelector('#btnEnter').addEventListener('click', onAcceptFunction);
+    this.actionListener = new Keyboard('Enter', onAcceptFunction);
   }
 
-  done() {
-    if (this.revealingText.isDone) {
+  done(dispose) {
+    if (this.revealingText.isDone || dispose) {
       this.element.remove();
       this.actionListener.dispose();
     } else {
