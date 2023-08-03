@@ -4,7 +4,7 @@ import { emitEvent, nextPosition, withGrid } from '../utils';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
-import { STORAGE_KEYS, getStoredValue, setStoredValue } from '../lib/Storage';
+import { STORAGE_KEYS, getStoredValue } from '../lib/Storage';
 import { getAsset } from '../lib/AssetLoader';
 
 export class Player {
@@ -12,16 +12,17 @@ export class Player {
   constructor(config) {
     this.id = config.id;
     this.movingProgressRemaining = 0;
-    this.intentPosition = null; // [x,y]
+    this.intentPosition = null;
     this.x = config.x || 0;
     this.y = config.y || 0;
     this.direction = config.direction || 'down';
     this.sprite = null;
+    this.isStanding = false;
+    this.isMounted = false;
+    this.container = config.container;
 
     this.keyboard = new PlayerKeyboard();
     this.keyboard.init();
-
-    this.isStanding = true;
 
     const movementSpeed = 1;
 
@@ -49,14 +50,11 @@ export class Player {
     this.animationsResources = Assets.cache.get(getAsset(CONFIG.textures.hero.config))?.data.animations;
     this.animations = {};
     this.currentAnimation = config.currentAnimation || `idle-${this.direction}`;
-    Object.values(this.animationsMap).forEach((animation) => {
-      this.animations[animation] = AnimatedSprite.fromFrames(this.animationsResources[animation]);
+    Object.values(this.animationsMap).forEach((anim) => {
+      this.animations[anim] = AnimatedSprite.fromFrames(this.animationsResources[anim]);
     });
 
     this.animationFrameLimit = config.animationFrameLimit || CONFIG.animationFrameLimit;
-
-    this.isMounted = false;
-    this.container = config.container;
 
     // These happen once on map startup.
     this.behaviorLoop = config.behaviorLoop || [];
@@ -106,8 +104,8 @@ export class Player {
           type: 'walk',
           direction: this.keyboard.direction
         });
+        console.log(this.animationsMap);
       }
-      this.updateAnimationState();
     }
   }
 
@@ -156,6 +154,23 @@ export class Player {
       // Add next position intent
       const intentPosition = nextPosition(this.x, this.y, this.direction);
       this.intentPosition = [intentPosition.x, intentPosition.y];
+      this.updateAnimationState();
+    }
+
+    if (behavior.type === 'stand') {
+      this.isStanding = true;
+
+      if (this.standBehaviorTimeout) {
+        clearTimeout(this.standBehaviorTimeout);
+        console.log('xlear');
+      }
+      this.standBehaviorTimeout = setTimeout(() => {
+        emitEvent('PersonStandComplete', {
+          whoId: this.id
+        });
+        this.isStanding = false;
+      }, behavior.time);
+      this.updateAnimationState();
     }
   }
 
@@ -178,18 +193,17 @@ export class Player {
         whoId: this.id,
         ...state
       });
-
-      setStoredValue(STORAGE_KEYS.player, state);
     }
   }
 
   updateAnimationState() {
     if (this.sprite.playing || this.sprite.destroyed) return;
+
+    if (this.movingProgressRemaining === 0) this.currentAnimation = 'idle-' + this.direction;
+
     const nextAnimation = this.animationsMap[this.currentAnimation];
     this.sprite.textures = this.animations[nextAnimation].textures;
 
-    if (this.movingProgressRemaining > 0) {
-      this.sprite.play();
-    }
+    if (this.movingProgressRemaining > 0) this.sprite.play();
   }
 }

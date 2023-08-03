@@ -1,6 +1,9 @@
 import { Sprite } from 'pixi.js';
 import { CONFIG } from '../config';
 import { withGrid } from '../utils';
+import { Tooltip } from '../lib/Tooltip';
+import { translate } from '../lib/Translator';
+import { Modal } from '../lib/Modal';
 
 export class Item {
   constructor(config) {
@@ -14,6 +17,8 @@ export class Item {
     this.json = config.json;
     this.container = config.container;
     this.interactable = !!config.interactable;
+    this.showModalOnClick = !!config.showModalOnClick;
+    this.modalContent = config.modalContent || null;
 
     // These happen once on map startup.
     this.behaviorLoop = config.behaviorLoop || [];
@@ -31,7 +36,7 @@ export class Item {
     this.sprite.anchor.set(0.5);
     this.sprite.zIndex = 5;
 
-    this.makeInteractable();
+    this.interactable && this.makeInteractable(true, this.showModalOnClick);
     this.container.addChild(this.sprite);
 
     this.isMounted = true;
@@ -44,14 +49,31 @@ export class Item {
     this.sprite.position.set(x, y);
   }
 
-  makeInteractable() {
+  makeInteractable(showTooltip, clickable) {
     // Shows hand cursor
     this.sprite.buttonMode = true;
     this.sprite.eventMode = 'static';
 
-    this.sprite.on('pointerenter', (e) => {
+    let tooltip;
+    if (showTooltip) {
+      tooltip = new Tooltip();
+      tooltip.init();
+    }
+
+    this.sprite.on('pointerenter', () => {
       this.sprite.alpha = 0.5;
+      showTooltip && tooltip.showMessage(translate(this.id));
     });
+
+    if (clickable) {
+      const modal = new Modal({
+        modalContent: this.modalContent
+      });
+      modal.init();
+      this.sprite.on('click', () => {
+        modal.show();
+      });
+    }
 
     this.sprite.on('pointerleave', (e) => {
       this.sprite.alpha = 1;

@@ -37,41 +37,47 @@ export const CONFIG = {
         },
         'old-man': {
           type: 'NPC',
-          x: 23 * PIXEL_SIZE,
-          y: 11 * PIXEL_SIZE,
-          behaviorLoop: [],
+          x: 24 * PIXEL_SIZE,
+          y: 10 * PIXEL_SIZE,
           index: 5,
           texture: 'public/textures/characters/old-man.png',
-          config: 'public/textures/characters/old-man.json'
+          config: 'public/textures/characters/old-man.json',
+          talking: [
+            {
+              events: [{ type: 'textMessage', text: 'Hello World', faceHero: 'old-man' }]
+            }
+          ],
+          behaviorLoop: [
+            { type: 'stand', direction: 'down', time: 5000 },
+            { type: 'walk', direction: 'down' },
+            { type: 'walk', direction: 'down' },
+            { type: 'walk', direction: 'down' },
+            { type: 'stand', direction: 'down', time: 2000 },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'stand', direction: 'left', time: 2000 },
+            { type: 'walk', direction: 'up' },
+            { type: 'walk', direction: 'up' },
+            { type: 'walk', direction: 'up' },
+            { type: 'stand', direction: 'right', time: 5000 },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' }
+          ]
         }
       },
-      markerObjects: {
-        homeMarker: {
-          type: 'Marker',
-          x: 6 * PIXEL_SIZE,
-          y: 23 * PIXEL_SIZE
-        },
-        largehouseMarker: {
-          type: 'Marker',
-          x: 12 * PIXEL_SIZE,
-          y: 9 * PIXEL_SIZE
-        },
-        townhallMarker: {
-          type: 'Marker',
-          x: 20 * PIXEL_SIZE,
-          y: 6 * PIXEL_SIZE
-        },
-        smallMarker: {
-          type: 'Marker',
-          x: 25 * PIXEL_SIZE,
-          y: 18 * PIXEL_SIZE,
+      portals: {
+        home: {},
+        largehouse: {},
+        townhall: {},
+        smallHouse: {
           transitionToMap: 'old-lady-home'
         }
-        // bridgeMarker: {
-        //   type: 'Marker',
-        //   x: 36 * PIXEL_SIZE,
-        //   y: 7 * PIXEL_SIZE
-        // }
       }
     },
     'old-lady-home': {
@@ -96,7 +102,10 @@ export const CONFIG = {
           x: 16 * PIXEL_SIZE,
           y: 8 * PIXEL_SIZE,
           index: 5,
-          texture: 'public/textures/items/calendar.png'
+          texture: 'public/textures/items/calendar.png',
+          interactable: true,
+          showModalOnClick: true,
+          modalContent: 'public/images/calendar.png'
         } //,
         // dog: {
         //   type: 'Item',

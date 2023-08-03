@@ -291,11 +291,11 @@
                 {
                  "height":16,
                  "id":22,
-                 "name":"church",
+                 "name":"townhall",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32,
+                 "width":16,
                  "x":320,
                  "y":96
                 }, 

@@ -239,7 +239,7 @@
  <objectgroup id="20" name="objects" visible="0" locked="1">
   <object id="19" name="home" x="96" y="368" width="16" height="16"/>
   <object id="20" name="small house" x="400" y="288" width="16" height="16"/>
-  <object id="22" name="church" x="320" y="96" width="32" height="16"/>
+  <object id="22" name="townhall" x="320" y="96" width="16" height="16"/>
   <object id="23" name="large house" x="192" y="144" width="16" height="16"/>
  </objectgroup>
  <layer id="15" name="######players######" width="64" height="32" visible="0" locked="1">

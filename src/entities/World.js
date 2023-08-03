@@ -4,6 +4,8 @@ import { Map } from './Map';
 import { Keyboard } from '../components/Keyboard';
 
 import { DebugHud } from '../lib/DebugHud';
+import { STORAGE_KEYS, setStoredValue } from '../lib/Storage';
+import { CONFIG } from '../config';
 
 export class World {
   DOMGameContainer = null;
@@ -65,6 +67,10 @@ export class World {
     Object.values(this.map.markerObjects).forEach((object) => {
       object.update(cameraPerson);
     });
+
+    Object.values(this.map.portals).forEach((object) => {
+      object.update(cameraPerson);
+    });
   }
 
   bindActionInput() {
@@ -85,13 +91,23 @@ export class World {
     new Keyboard('KeyC', () => {
       this.map.unmount();
     });
+
+    setInterval(() => {
+      const hero = this.map.gameObjects.hero;
+      const playerState = {
+        x: hero.x - (hero.x % CONFIG.PIXEL_SIZE),
+        y: hero.y - (hero.y % CONFIG.PIXEL_SIZE),
+        direction: hero.direction
+      };
+      setStoredValue(STORAGE_KEYS.player, playerState);
+    }, 5000);
   }
 
   bindHeroPositionCheck() {
     document.addEventListener('PersonWalkingComplete', (e) => {
       // Hero's position has changed
       if (e.detail.whoId === 'hero') {
-        this.debounce(() => this.map.checkForMarkers(), 300);
+        this.debounce(() => this.map.checkForPortals(), 300);
       }
     });
   }

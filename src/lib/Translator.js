@@ -16,14 +16,15 @@ const languages = {
         'Rette dein Dorf vor Hackern durch das Verbessern der IT-Sicherheitskenntnisse deiner Dorfkollegen. Du bist dabei der neu hinzugezogene IT-Sicherheitsexperte. Löse alle Aufgaben oder verlasse das Dorf voller Trottel!',
       username: 'Nutzername'
     },
-    homeMarker: 'Büro',
-    smallMarker: 'Haus der alten Dame',
-    townhallMarker: 'Rathaus',
-    bridgeMarker: 'Brücke',
-    hero: 'Spieler {0}',
-    'old-man': 'Alter Mann',
+    home: 'Büro',
+    'small house': 'Haus der alten Dame',
+    'large house': 'Haus des Bürgermeisters',
+    townhall: 'Rathaus',
+    hero: 'IT-Sicherheitsberater {0}',
+    'old-man': 'Bürgermeister Fred',
     firstGreet: 'Hallo {0}, willkommen im Dorf voller Drottel!',
-    greet: 'Hallo {0}, willkommen zurück!'
+    greet: 'Hallo {0}, willkommen zurück!',
+    calendar: 'Kalender'
   }
 };
 

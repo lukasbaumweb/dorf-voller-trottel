@@ -1,3 +1,5 @@
+import { isNullOrUndefined } from '../utils';
+
 /**
  * @enum {string} Storage Keys
  */
@@ -28,7 +30,7 @@ const getStoredValue = (key, defaultValue) => {
     const value = window.localStorage.getItem(key);
     const isObj = value?.charAt(0) === '{';
 
-    return value === null ? defaultValue : isObj ? JSON.parse(value) : value;
+    return isNullOrUndefined(value) ? defaultValue : isObj ? JSON.parse(value) : value;
   } else throw new Error(`Storage key is not valid: ${key}`);
 };
 
@@ -39,11 +41,11 @@ const getStoredValue = (key, defaultValue) => {
  * @returns value of stored object
  */
 const setStoredValue = (key, value) => {
-  console.debug(`Saving value: ${JSON.stringify(value)} at ${key}}`);
   if (!('localStorage' in window)) {
     console.warn('No localstorage found, Cannot save data');
     return;
   }
+  console.debug(`Saving value: ${JSON.stringify(value)} at ${key}`);
   const isObj = typeof value === 'object' && !Array.isArray(value) && value !== null;
 
   if (isObj) {

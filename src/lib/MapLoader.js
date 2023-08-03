@@ -47,4 +47,10 @@ const loadLayers = (pathToMap) => {
   return filtered;
 };
 
-export { loadLayers, loadMapLayers, loadWalls };
+const loadObjects = (pathToMap) => {
+  const cached = Assets.get(getAsset(pathToMap));
+  const layerIndex = cached.layers.findIndex((l) => l.name === 'objects');
+  return cached.layers[layerIndex].objects;
+};
+
+export { loadLayers, loadMapLayers, loadWalls, loadObjects };

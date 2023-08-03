@@ -2,15 +2,16 @@ import { Container } from 'pixi.js';
 import { nextPosition, withGrid } from '../utils';
 import { Player } from './Player';
 import { CONFIG } from '../config';
-import { loadLayers, loadMapLayers, loadWalls } from '../lib/MapLoader';
-import { getCurrentLevel, setCurrentLevel } from '../gameState';
-import { Marker } from './Marker';
+import { loadLayers, loadMapLayers, loadWalls, loadObjects } from '../lib/MapLoader';
+import { getCurrentLevel } from '../gameState';
+import { Portal } from './Portal';
 import { STORAGE_KEYS, getStoredValue } from '../lib/Storage';
 import { TextMessage } from '../components/TextMessage';
 import { translate } from '../lib/Translator';
 import { Character } from './Character';
 import { GameEvent } from '../components/GameEvent';
 import { Item } from './Item';
+import { Marker } from './Marker';
 
 export class Map {
   constructor({ map, app, layersContainer }) {
@@ -36,6 +37,7 @@ export class Map {
 
     this.maps = loadMapLayers(map);
     this.walls = loadWalls(map.config, level.configObjects.hero).tiles;
+    this.objects = loadObjects(map.config);
     this.layers = loadLayers(map.config).map((layer) => {
       const container = new Container();
 
@@ -62,6 +64,7 @@ export class Map {
 
     this.configObjects = level.configObjects || {};
     this.markerObjects = level.markerObjects || {};
+    this.portals = {};
 
     Object.keys(this.configObjects).forEach((key) => {
       const object = this.configObjects[key];
@@ -90,17 +93,40 @@ export class Map {
       instance.mount(this);
     });
 
-    Object.keys(this.markerObjects).forEach((key) => {
-      const object = this.markerObjects[key];
-      object.id = key;
+    this.objects.forEach((obj) => {
+      let config = {
+        container: objectsContainer,
+        id: obj.name,
+        x: obj.x,
+        y: obj.y
+      };
+      if (level[obj.name]) {
+        config = { ...config, ...level[obj.name] };
+      }
 
-      object.container = objectsContainer;
-      const instance = new Marker(object);
+      const instance = new Portal(config);
 
-      this.markerObjects[key] = instance;
-      this.markerObjects[key].id = key;
+      this.portals[obj.name] = instance;
       instance.mount(this);
     });
+
+    this.objects.forEach((obj) => {
+      let config = {
+        container: objectsContainer,
+        id: obj.name,
+        x: obj.x,
+        y: obj.y
+      };
+      if (level[obj.name]) {
+        config = { ...config, ...level[obj.name] };
+      }
+
+      const instance = config.type === 'Portal' ? new Portal(config) : new Marker(config);
+
+      this.markerObjects[obj.name] = instance;
+      instance.mount(this);
+    });
+
     this.movePlayerIfOnMarker();
 
     console.groupEnd();
@@ -171,7 +197,21 @@ export class Map {
     });
   }
 
-  startCutscene() {}
+  async startCutscene(events) {
+    this.isCutscenePlaying = true;
+
+    for (let i = 0; i < events.length; i++) {
+      const eventHandler = new GameEvent({
+        event: events[i],
+        map: this
+      });
+      const result = await eventHandler.init();
+      if (result === 'ERROR') {
+        break;
+      }
+    }
+    this.isCutscenePlaying = false;
+  }
 
   checkForActionCutscene() {
     if (window._game.isBlocked) return;
@@ -181,25 +221,26 @@ export class Map {
     const match = Object.values(this.gameObjects).find((object) => {
       return `${object.x},${object.y}` === `${nextCoords.x},${nextCoords.y}`;
     });
+    console.log(match);
 
     if (!this.isCutscenePlaying && match && match.talking.length) {
-      // const relevantScenario = match.talking.find((scenario) => {
-      //   return (scenario.required || []).every((sf) => {
-      //     return playerState.storyFlags[sf];
-      //   });
-      // });
-      // relevantScenario && this.startCutscene(relevantScenario.events);
+      const relevantScenario = match.talking.find((scenario) => {
+        return (scenario.required || []).every((sf) => {
+          return getStoredValue(STORAGE_KEYS.playerStoryProgress).storyFlags[sf];
+        });
+      });
+      relevantScenario && this.startCutscene(relevantScenario.events);
     }
   }
 
-  checkForMarkers() {
+  checkForPortals() {
     const hero = this.gameObjects.hero;
 
     const match = Object.values(this.markerObjects).find((object) => {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
 
-    if (match) {
+    if (match && match.transitionToMap) {
       new TextMessage({
         text: `${translate(match.id)} betreten`,
         onCancel: () => {
@@ -217,7 +258,6 @@ export class Map {
               direction: 'up'
             }
           }).init();
-          setCurrentLevel(CONFIG.levels[match.transitionToMap]);
         }
       }).init();
     }

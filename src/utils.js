@@ -53,4 +53,13 @@ const emitEvent = (name, detail) => {
   document.dispatchEvent(event);
 };
 
-export { withGrid, asGridCoord, emitEvent, nextPosition, oppositeDirection, randomFromArray, wait };
+const isNullOrUndefined = (value) => {
+  const isNull = value === null;
+  const isNullString = value === 'null';
+  const isUndefined = value === undefined;
+  const isUndefinedString = value === 'undefined';
+
+  return isNull || isNullString || isUndefined || isUndefinedString;
+};
+
+export { withGrid, asGridCoord, emitEvent, nextPosition, oppositeDirection, randomFromArray, wait, isNullOrUndefined };

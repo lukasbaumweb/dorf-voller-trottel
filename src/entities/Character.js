@@ -6,22 +6,17 @@ import { GameEvent } from '../components/GameEvent';
 import { getAsset } from '../lib/AssetLoader';
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
-import { STORAGE_KEYS, setStoredValue } from '../lib/Storage';
-import { PlayerKeyboard } from '../components/PlayerKeyboard';
 
 export class Character {
   constructor(config) {
     this.id = config.id;
     this.movingProgressRemaining = 0;
-    this.intentPosition = null; // [x,y]
+    this.intentPosition = null;
     this.x = config.x || 0;
     this.y = config.y || 0;
     this.direction = config.direction || 'down';
+    this.isMounted = false;
     this.sprite = null;
-
-    this.keyboard = new PlayerKeyboard();
-    this.keyboard.init();
-
     this.isStanding = true;
 
     const movementSpeed = 1;
@@ -47,22 +42,22 @@ export class Character {
       'walk-left'
     ];
 
-    this.animationsResources = Assets.cache.get(getAsset(CONFIG.textures[config.texture].config))?.data.animations;
+    this.animationsResources = Assets.cache.get(getAsset(config.config))?.data.animations;
+
     this.animations = {};
     this.currentAnimation = config.currentAnimation || `idle-${this.direction}`;
-    this.possibleAnimations.forEach((animation) => {
-      this.animations[animation] = AnimatedSprite.fromFrames(this.animationsResources[animation]);
+    this.possibleAnimations.forEach((anim) => {
+      this.animations[anim] = AnimatedSprite.fromFrames(this.animationsResources[anim]);
     });
 
     this.animationFrameLimit = config.animationFrameLimit || CONFIG.animationFrameLimit;
 
-    this.isMounted = false;
-    this.sprite = null;
     this.container = config.container;
 
     // These happen once on map startup.
     this.behaviorLoop = config.behaviorLoop || [];
     this.behaviorLoopIndex = 0;
+    this.isDoingBehavior = false;
     this.talking = config.talking || [];
     this.retryTimeout = null;
   }
@@ -105,10 +100,7 @@ export class Character {
       this.updatePosition(cameraPerson);
     } else {
       if (!this.map.isCutscenePlaying) {
-        // this.startBehavior(this.map, {
-        //   type: 'walk',
-        //   direction: this.keyboard.direction
-        // });
+        this.doBehaviorEvent(this.map, this.behaviorLoop[this.behaviorLoopIndex]);
       }
       this.updateAnimationState();
     }
@@ -139,8 +131,7 @@ export class Character {
       return;
     }
 
-    if (map.isCutscenePlaying) {
-      console.log('will retry', this.id);
+    if (map.isCutscenePlaying || this.isDoingBehavior) {
       if (this.retryTimeout) {
         clearTimeout(this.retryTimeout);
       }
@@ -156,6 +147,7 @@ export class Character {
 
     // Create an event instance out of our next event config
     const eventHandler = new GameEvent({ map, event: eventConfig });
+    this.isDoingBehavior = true;
     await eventHandler.init();
 
     // Setting the next event to fire
@@ -164,73 +156,81 @@ export class Character {
       this.behaviorLoopIndex = 0;
     }
 
+    this.isDoingBehavior = false;
     // Do it again!
     this.doBehaviorEvent(map);
   }
 
-  startBehavior(map, behavior) {
+  startBehavior(state, behavior) {
     if (!this.isMounted) {
       return;
     }
 
-    // Set character direction to whatever behavior has
     this.direction = behavior.direction;
-    if (behavior.type === 'walk') {
-      // Stop here if space is not free
 
-      const isSpaceTaken = map.isSpaceTaken(this.x, this.y, this.direction);
+    if (behavior.type === 'walk') {
+      const isSpaceTaken = state.map.isSpaceTaken(this.x, this.y, this.direction);
       this.currentAnimation = 'walk-' + this.direction;
 
       if (isSpaceTaken) {
         behavior.retry &&
           setTimeout(() => {
-            this.startBehavior(map, behavior);
+            this.startBehavior(state, behavior);
           }, 100);
         return;
       }
 
-      // Ready to walk!
       this.movingProgressRemaining = CONFIG.PIXEL_SIZE;
-      this.isStanding = false;
 
-      // Add next position intent
       const intentPosition = nextPosition(this.x, this.y, this.direction);
       this.intentPosition = [intentPosition.x, intentPosition.y];
     }
+
+    if (behavior.type === 'stand') {
+      this.isStanding = true;
+
+      if (this.standBehaviorTimeout) {
+        clearTimeout(this.standBehaviorTimeout);
+      }
+      this.standBehaviorTimeout = setTimeout(() => {
+        emitEvent('PersonStandComplete', {
+          whoId: this.id
+        });
+        this.isStanding = false;
+      }, behavior.time);
+    }
+    this.updateAnimationState();
   }
 
-  updatePosition(cameraPerson) {
+  updatePosition() {
     const [property, change] = this.directionUpdate[this.direction];
     this[property] += change;
     this.movingProgressRemaining -= 1;
 
     if (this.movingProgressRemaining <= 0) {
-      // We finished the walk!
       this.intentPosition = null;
-      // this.sprite.playing = false;
 
       this.currentAnimation = 'idle-' + this.direction;
-
-      emitEvent('PersonWalkingComplete', {
-        whoId: this.id
-      });
-
+      this.updateAnimationState();
       const state = {
         x: this.x,
         y: this.y,
         direction: this.direction
       };
-      setStoredValue(STORAGE_KEYS.npc, state);
+      emitEvent('PersonWalkingComplete', {
+        whoId: this.id,
+        ...state
+      });
     }
   }
 
   updateAnimationState() {
-    if (this.sprite.playing) return;
+    if (this.sprite.playing || this.sprite.destroyed) return;
 
-    if (this.movingProgressRemaining > 0) {
-      const nextAnimation = this.animationsMap[this.currentAnimation];
-      this.sprite.textures = this.animations[nextAnimation].textures;
-      this.sprite.play();
-    }
+    if (this.movingProgressRemaining === 0) this.currentAnimation = 'idle-' + this.direction;
+
+    this.sprite.textures = this.animations[this.currentAnimation].textures;
+
+    if (this.movingProgressRemaining > 0) this.sprite.play();
   }
 }

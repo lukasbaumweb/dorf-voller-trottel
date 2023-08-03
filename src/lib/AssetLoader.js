@@ -23,9 +23,15 @@ const getMap = (level) => {
 
 const getItems = (level) => {
   const configObjects = CONFIG.levels[level].configObjects;
-  return Object.entries(configObjects)
+  const results = [];
+  Object.entries(configObjects)
     .filter(([key, item]) => key !== 'hero')
-    .map(([key, item]) => getAsset(item.texture));
+    .forEach(([key, item]) => {
+      if (item.texture) results.push(getAsset(item.texture));
+      if (item.config) results.push(getAsset(item.config));
+    });
+
+  return results;
 };
 
 const loadLevel = (level) => {

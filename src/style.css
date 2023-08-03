@@ -1,3 +1,9 @@
+/* Z-Index:
+* Tooltip: 200
+* Message: 200
+* Modal-wrapper: 200
+*/
+
 :root {
   --game-width: 352px;
   --game-height: 198px;
@@ -157,4 +163,77 @@ canvas {
 
 button:focus {
   outline: 3px var(--error-color);
+}
+
+/*
+* Modal
+*/
+
+.modal-wrapper {
+  z-index: 250;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  animation: scene-transition-fade-in 1.2s forwards;
+  display: flex;
+  display: none;
+}
+.scene-transition.fade-out {
+  animation: scene-transition-fade-out 1.2s forwards;
+}
+
+.modal {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  max-width: 90vw;
+  max-height: 80vh;
+  background-color: var(--code-bg-color);
+  display: flex;
+  flex-direction: column;
+}
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-close-btn {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 1rem;
+  transition: 0.3s ease all;
+}
+.modal-close-btn:hover {
+  background-color: var(--secondary-color);
+  color: var(--invert-font-color);
+}
+
+.modal-close-btn:active {
+  background-color: var(#565a63);
+  color: var(--invert-font-color);
+}
+
+.modal-close-btn:focus {
+  outline: 3px var(--error-color);
+}
+
+.modal-content {
+  position: relative;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex: 1;
+}
+.modal-content > img {
+  width: inherit;
+  object-fit: contain;
+  max-width: 75%;
+  max-height: 75%;
 }

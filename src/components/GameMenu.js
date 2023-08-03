@@ -1,5 +1,5 @@
 import { ONE_HOUR } from '../entities/Helper';
-import { STORAGE_KEYS, getStoredValue } from '../lib/Storage';
+import { STORAGE_KEYS, getStoredValue, setStoredValue } from '../lib/Storage';
 
 const defaultFunc = () => {
   window.alert('Not Implemented');
@@ -14,6 +14,7 @@ export class GameMenu {
    */
   set onLoadGame(value) {
     this.#onLoadGameFunc = value;
+    setStoredValue(STORAGE_KEYS.updatedOn, new Date().getTime());
   }
 
   get onLoadGame() {}
