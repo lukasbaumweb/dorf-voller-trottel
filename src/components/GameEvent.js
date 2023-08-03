@@ -13,6 +13,10 @@ export class GameEvent {
 
   stand(resolve) {
     const who = this.map.gameObjects[this.event.who];
+    if (!who) {
+      reject();
+      return;
+    }
     who.startBehavior(
       {
         map: this.map
@@ -32,6 +36,32 @@ export class GameEvent {
       }
     };
     document.addEventListener('PersonStandComplete', completeHandler);
+  }
+
+  walk(resolve) {
+    const who = this.map.gameObjects[this.event.who];
+    if (!who) {
+      reject();
+      return;
+    }
+    who.startBehavior(
+      {
+        map: this.map
+      },
+      {
+        type: 'walk',
+        direction: this.event.direction,
+        retry: true
+      }
+    );
+
+    const completeHandler = (e) => {
+      if (e.detail.whoId === this.event.who) {
+        document.removeEventListener('PersonWalkingComplete', completeHandler);
+        resolve();
+      }
+    };
+    document.addEventListener('PersonWalkingComplete', completeHandler);
   }
 
   textMessage(resolve) {
@@ -57,25 +87,18 @@ export class GameEvent {
     }
 
     // Deactivate old objects
-    Object.values(this.map.gameObjects).forEach((obj) => {
-      if (obj.id !== 'hero') obj.unmount();
-    });
-
-    Object.values(this.map.markerObjects).forEach((obj) => {
-      obj.unmount();
-    });
     this.map.unmount();
 
     const sceneTransition = new SceneTransition();
 
     setStoredValue(STORAGE_KEYS.level, this.event.transitionToMap);
-
-    sceneTransition.init(document.querySelector('.game-wrapper'), () => {
-      this.map.initMap(CONFIG.levels[this.event.transitionToMap], {
-        x: this.event.x,
-        y: this.event.y,
-        direction: this.event.direction
-      });
+    setStoredValue(STORAGE_KEYS.player, {
+      x: this.event.x,
+      y: this.event.y,
+      direction: this.event.direction
+    });
+    sceneTransition.init(document.querySelector('.game-wrapper'), async () => {
+      await this.map.initMap(CONFIG.levels[this.event.transitionToMap]);
       resolve();
       sceneTransition.fadeOut();
     });
@@ -89,37 +112,6 @@ export class GameEvent {
     updateStoredValue(STORAGE_KEYS.playerStoryProgress, { [this.event.flag]: true });
     resolve();
   }
-
-  walk(resolve) {
-    const who = this.map.gameObjects[this.event.who];
-    who.startBehavior(
-      {
-        map: this.map
-      },
-      {
-        type: 'walk',
-        direction: this.event.direction,
-        retry: true
-      }
-    );
-
-    const completeHandler = (e) => {
-      if (e.detail.whoId === this.event.who) {
-        document.removeEventListener('PersonWalkingComplete', completeHandler);
-        resolve();
-      }
-    };
-    document.addEventListener('PersonWalkingComplete', completeHandler);
-  }
-
-  // inventory(resolve) {
-  //   const menu = new Inventory({
-  //     onComplete: () => {
-  //       resolve();
-  //     }
-  //   });
-  //   menu.init(document.querySelector('.game-container'));
-  // }
 
   init() {
     return new Promise((resolve) => {

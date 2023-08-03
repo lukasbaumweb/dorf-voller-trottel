@@ -43,7 +43,7 @@ const loadWalls = (pathToMap) => {
 
 const loadLayers = (pathToMap) => {
   const cached = Assets.get(getAsset(pathToMap));
-  const filtered = cached.layers.splice(0, cached.layers.length - 1).map((l, i) => ({ zIndex: i, ...l }));
+  const filtered = [...cached.layers].splice(0, cached.layers.length - 1).map((l, i) => ({ zIndex: i, ...l }));
   return filtered;
 };
 

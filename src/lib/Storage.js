@@ -80,6 +80,20 @@ const updateStoredValue = (key, value) => {
 };
 
 /**
+ * Removes value from local storage (localStorage)
+ * @param {string} key key where value is stored
+ */
+const removeStoredValue = (key) => {
+  if (!('localStorage' in window)) {
+    console.warn('No localstorage found, Cannot save data');
+    return;
+  }
+  console.debug(`Removing value at ${key}`);
+
+  window.localStorage.removeItem(key);
+};
+
+/**
  * Removes every key and its correspondig value from local storage (localStorage)
  */
 const clearStoredValue = () => {
@@ -93,4 +107,4 @@ const clearStoredValue = () => {
   });
 };
 
-export { getStoredValue, setStoredValue, updateStoredValue, clearStoredValue, STORAGE_KEYS };
+export { getStoredValue, setStoredValue, updateStoredValue, clearStoredValue, removeStoredValue, STORAGE_KEYS };

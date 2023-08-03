@@ -28,7 +28,7 @@ export class Item {
   }
 
   mount(map) {
-    console.debug(`Mounting ${this.id}`);
+    console.debug(`Mounting Item: ${this.id}`);
     this.map = map;
     this.sprite = Sprite.from(this.texture);
     this.sprite.height = CONFIG.PIXEL_SIZE;
@@ -40,6 +40,11 @@ export class Item {
     this.container.addChild(this.sprite);
 
     this.isMounted = true;
+  }
+
+  unmount() {
+    this.isMounted = false;
+    this.sprite.parent.removeChild(this.sprite);
   }
 
   update(cameraPerson) {

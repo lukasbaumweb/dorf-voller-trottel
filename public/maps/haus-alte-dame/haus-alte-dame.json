@@ -253,6 +253,17 @@
                  "width":16,
                  "x":352,
                  "y":224
+                }, 
+                {
+                 "height":16,
+                 "id":7,
+                 "name":"sniffing blanket",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":128,
+                 "y":288
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -351,13 +362,13 @@
          "name":"accessible",
          "opacity":0.48,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":32,
          "x":0,
          "y":0
         }],
  "nextlayerid":16,
- "nextobjectid":7,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

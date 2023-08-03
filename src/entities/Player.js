@@ -4,7 +4,7 @@ import { emitEvent, nextPosition, withGrid } from '../utils';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
-import { STORAGE_KEYS, getStoredValue } from '../lib/Storage';
+import { STORAGE_KEYS, getStoredValue, setStoredValue } from '../lib/Storage';
 import { getAsset } from '../lib/AssetLoader';
 
 export class Player {
@@ -76,18 +76,26 @@ export class Player {
     this.sprite.loop = false;
     this.container.addChild(this.sprite);
 
+    this.saveInterval = setInterval(() => {
+      const hero = this.map.gameObjects.hero;
+      const playerState = {
+        x: hero.x - (hero.x % CONFIG.PIXEL_SIZE),
+        y: hero.y - (hero.y % CONFIG.PIXEL_SIZE),
+        direction: hero.direction
+      };
+      setStoredValue(STORAGE_KEYS.player, playerState);
+    }, 5000);
+
     this.isMounted = true;
     this.sprite.play();
   }
 
   unmount() {
-    // this.keyboard?.dispose();
-    // try {
-    //   this.sprite.stop();
-    //   this.sprite.destroy();
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    clearTimeout(this.saveInterval);
+    this.keyboard?.dispose();
+    this.isMounted = false;
+    this.sprite.stop();
+    this.sprite.parent.removeChild(this.sprite);
   }
 
   update(cameraPerson) {
@@ -104,7 +112,6 @@ export class Player {
           type: 'walk',
           direction: this.keyboard.direction
         });
-        console.log(this.animationsMap);
       }
     }
   }

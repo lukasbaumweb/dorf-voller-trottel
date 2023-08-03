@@ -38,7 +38,7 @@ export class Marker {
 
   mount(map) {
     if (this.isMounted) return;
-    console.debug(`Mounting ${this.id} ...`);
+    console.debug(`Mounting Marker: ${this.id} ...`);
     this.map = map;
     this.sprite = this.animation;
     this.sprite.zIndex = 5;
@@ -62,7 +62,9 @@ export class Marker {
   }
 
   unmount() {
-    this.sprite.destroy({ children: true, texture: true, baseTexture: true });
+    this.isMounted = false;
+    this.sprite.stop();
+    this.sprite.parent.removeChild(this.sprite);
   }
 
   makeInteractable() {

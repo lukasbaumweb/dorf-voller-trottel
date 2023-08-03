@@ -30,7 +30,6 @@ export const CONFIG = {
       configObjects: {
         hero: {
           type: 'Player',
-          isPlayerControlled: true,
           x: 31 * PIXEL_SIZE,
           y: 7 * PIXEL_SIZE,
           index: 5
@@ -44,7 +43,13 @@ export const CONFIG = {
           config: 'public/textures/characters/old-man.json',
           talking: [
             {
-              events: [{ type: 'textMessage', text: 'Hello World', faceHero: 'old-man' }]
+              events: [
+                {
+                  type: 'textMessage',
+                  text: 'Wie geht Ihnen? Bestimmt gut.😊 Sie sehen ja gesund aus.',
+                  faceHero: 'old-man'
+                }
+              ]
             }
           ],
           behaviorLoop: [
@@ -69,13 +74,23 @@ export const CONFIG = {
             { type: 'walk', direction: 'right' },
             { type: 'walk', direction: 'right' }
           ]
+        },
+        calendar: {
+          type: 'Item',
+          x: 6 * PIXEL_SIZE,
+          y: 23 * PIXEL_SIZE,
+          index: 5,
+          texture: 'public/images/suchbild.png',
+          interactable: true,
+          showModalOnClick: true,
+          modalContent: 'public/images/suchbild.png'
         }
       },
       portals: {
         home: {},
-        largehouse: {},
+        'large house': {},
         townhall: {},
-        smallHouse: {
+        'small house': {
           transitionToMap: 'old-lady-home'
         }
       }
@@ -92,7 +107,6 @@ export const CONFIG = {
       configObjects: {
         hero: {
           type: 'Player',
-          isPlayerControlled: true,
           x: 15 * PIXEL_SIZE,
           y: 18 * PIXEL_SIZE,
           index: 5
@@ -115,6 +129,14 @@ export const CONFIG = {
         // },
         // computer: { type: 'Item', x: 15 * PIXEL_SIZE, y: 18 * PIXEL_SIZE, index: 5 },
         // 'dog-bed': { type: 'Item', x: 15 * PIXEL_SIZE, y: 18 * PIXEL_SIZE, index: 5 }
+      },
+      portals: {
+        exit: {
+          transitionToMap: 'dorf',
+          x: 25 * PIXEL_SIZE,
+          y: 18 * PIXEL_SIZE,
+          direction: 'up'
+        }
       }
     }
   },

@@ -4,8 +4,6 @@ import { Map } from './Map';
 import { Keyboard } from '../components/Keyboard';
 
 import { DebugHud } from '../lib/DebugHud';
-import { STORAGE_KEYS, setStoredValue } from '../lib/Storage';
-import { CONFIG } from '../config';
 
 export class World {
   DOMGameContainer = null;
@@ -41,10 +39,10 @@ export class World {
     this.start();
   }
 
-  start() {
+  async start() {
     this.map = new Map({ world: this, layersContainer: this.layersContainer });
 
-    this.map.initMap(this.layersContainer);
+    await this.map.initMap(this.layersContainer);
 
     // init gameloop
     this.app.ticker.add(this.gameLoopReference);
@@ -91,16 +89,6 @@ export class World {
     new Keyboard('KeyC', () => {
       this.map.unmount();
     });
-
-    setInterval(() => {
-      const hero = this.map.gameObjects.hero;
-      const playerState = {
-        x: hero.x - (hero.x % CONFIG.PIXEL_SIZE),
-        y: hero.y - (hero.y % CONFIG.PIXEL_SIZE),
-        direction: hero.direction
-      };
-      setStoredValue(STORAGE_KEYS.player, playerState);
-    }, 5000);
   }
 
   bindHeroPositionCheck() {

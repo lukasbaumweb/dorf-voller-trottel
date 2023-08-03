@@ -12,6 +12,7 @@ import { Character } from './Character';
 import { GameEvent } from '../components/GameEvent';
 import { Item } from './Item';
 import { Marker } from './Marker';
+import { loadLevel } from '../lib/AssetLoader';
 
 export class Map {
   constructor({ map, app, layersContainer }) {
@@ -30,8 +31,9 @@ export class Map {
     this.layersContainer = layersContainer;
   }
 
-  initMap() {
+  async initMap() {
     const level = CONFIG.levels[getCurrentLevel()];
+    await loadLevel(getCurrentLevel());
 
     const map = level.map;
 
@@ -100,30 +102,18 @@ export class Map {
         x: obj.x,
         y: obj.y
       };
-      if (level[obj.name]) {
-        config = { ...config, ...level[obj.name] };
+      let instance;
+
+      const portal = level.portals && level.portals[obj.name];
+      if (portal) {
+        config = Object.assign(portal, config);
+        instance = new Portal(config);
+        this.portals[obj.name] = instance;
+      } else {
+        instance = new Marker(config);
+        this.markerObjects[obj.name] = instance;
       }
 
-      const instance = new Portal(config);
-
-      this.portals[obj.name] = instance;
-      instance.mount(this);
-    });
-
-    this.objects.forEach((obj) => {
-      let config = {
-        container: objectsContainer,
-        id: obj.name,
-        x: obj.x,
-        y: obj.y
-      };
-      if (level[obj.name]) {
-        config = { ...config, ...level[obj.name] };
-      }
-
-      const instance = config.type === 'Portal' ? new Portal(config) : new Marker(config);
-
-      this.markerObjects[obj.name] = instance;
       instance.mount(this);
     });
 
@@ -135,11 +125,32 @@ export class Map {
   movePlayerIfOnMarker() {
     const hero = this.gameObjects.hero;
 
-    const match = Object.values(this.markerObjects).find((object) => {
+    const match = Object.values(this.portals).find((object) => {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
     if (match) {
-      this.gameObjects.hero.y += CONFIG.PIXEL_SIZE;
+      const directions = ['down', 'up', 'right', 'left'].filter(
+        (direction) => !this.isSpaceTaken(this.gameObjects.hero.x, this.gameObjects.hero.y, direction)
+      );
+      console.log(directions);
+      if (directions.length > 0) {
+        switch (directions[0]) {
+          case 'down':
+            this.gameObjects.hero.y += CONFIG.PIXEL_SIZE;
+            break;
+          case 'up':
+            this.gameObjects.hero.y -= CONFIG.PIXEL_SIZE;
+            break;
+          case 'left':
+            this.gameObjects.hero.x -= CONFIG.PIXEL_SIZE;
+            break;
+          default:
+            this.gameObjects.hero.x += CONFIG.PIXEL_SIZE;
+            break;
+        }
+      } else {
+        console.error('Cannot move in any side. Player will be left staying on portal');
+      }
     }
   }
 
@@ -160,24 +171,31 @@ export class Map {
     for (let i = 0; i < parent.children.length; i++) {
       const child = parent.children[i];
       this.clearChildren(child);
-      child.destroy({ children: true, texture: true, baseTexture: true });
+      child.parent.removeChild(child);
     }
   }
 
   unmount() {
-    this.layers.forEach((c) => this.clearChildren(c));
-    this.layersContainer.children.forEach((c) => this.clearChildren(c));
-    Object.keys(this.gameObjects).forEach((obj) => {
-      this.gameObjects[obj].unmount();
+    Object.values(this.gameObjects).forEach((obj) => {
+      obj.unmount();
     });
 
+    Object.values(this.portals).forEach((obj) => {
+      obj.unmount();
+    });
+
+    Object.values(this.markerObjects).forEach((obj) => {
+      obj.unmount();
+    });
+
+    this.layers.forEach((child) => child.parent.removeChild(child));
+
     this.layers = [];
-    this.layersContainer.children = [];
     this.walls = {};
 
     this.configObjects = {};
-
     this.markerObjects = {};
+    this.portals = {};
     this.gameObjects = {};
   }
 
@@ -221,7 +239,6 @@ export class Map {
     const match = Object.values(this.gameObjects).find((object) => {
       return `${object.x},${object.y}` === `${nextCoords.x},${nextCoords.y}`;
     });
-    console.log(match);
 
     if (!this.isCutscenePlaying && match && match.talking.length) {
       const relevantScenario = match.talking.find((scenario) => {
@@ -236,9 +253,11 @@ export class Map {
   checkForPortals() {
     const hero = this.gameObjects.hero;
 
-    const match = Object.values(this.markerObjects).find((object) => {
+    const match = Object.values(this.portals).find((object) => {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
+
+    console.log(match);
 
     if (match && match.transitionToMap) {
       new TextMessage({
@@ -246,16 +265,22 @@ export class Map {
         onCancel: () => {
           console.debug('canceled');
         },
-        onAcceptText: 'Betreten',
+        onAcceptText: 'Betreten (Enter)',
         onComplete: () => {
+          console.log(match);
+          let targetPosition = CONFIG.levels[match.transitionToMap].configObjects.hero;
+          // FIXME: POsition after transitioning
+          if (match.transitionToMap === CONFIG.levels.dorf.id) {
+            targetPosition = { x: match.x, y: match.y, direction: match.direction };
+          }
           new GameEvent({
             map: this,
             event: {
               type: 'changeMap',
               transitionToMap: match.transitionToMap,
-              x: '',
-              y: '',
-              direction: 'up'
+              x: targetPosition.x,
+              y: targetPosition.y,
+              direction: targetPosition.direction
             }
           }).init();
         }

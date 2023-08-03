@@ -65,7 +65,7 @@ export class Character {
   mount(map) {
     if (this.isMounted) return;
 
-    console.debug(`Mounting ${this.id}`);
+    console.debug(`Mounting Character: ${this.id}`);
     this.map = map;
     this.sprite = this.animations[this.currentAnimation];
     this.sprite.anchor.set(0.5);
@@ -81,13 +81,11 @@ export class Character {
   }
 
   unmount() {
+    clearTimeout(this.retryTimeout);
     this.keyboard?.dispose();
-    try {
-      this.sprite.stop();
-      this.sprite.destroy();
-    } catch (error) {
-      console.error(error);
-    }
+    this.isMounted = false;
+    this.sprite.stop();
+    this.sprite.parent.removeChild(this.sprite);
   }
 
   update(cameraPerson) {

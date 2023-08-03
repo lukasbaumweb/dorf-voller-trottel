@@ -3,8 +3,6 @@ import { GameMenu } from './components/GameMenu';
 import { TextMessage } from './components/TextMessage';
 import { ONE_MINUTE } from './entities/Helper';
 import { World } from './entities/World';
-import { getCurrentLevel } from './gameState';
-import { loadLevel } from './lib/AssetLoader';
 import { DebugHud } from './lib/DebugHud';
 
 import { clearStoredValue, setStoredValue, STORAGE_KEYS, getStoredValue } from './lib/Storage';
@@ -15,7 +13,6 @@ const startGame = async () => {
   try {
     const debugHud = new DebugHud();
 
-    await loadLevel(getCurrentLevel());
     const app = new App();
     app.mount();
     const world = new World();

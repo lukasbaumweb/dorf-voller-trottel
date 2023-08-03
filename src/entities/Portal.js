@@ -36,7 +36,7 @@ export class Portal {
 
   mount(map) {
     if (this.isMounted) return;
-    console.debug(`Mounting ${this.id} ...`);
+    console.debug(`Mounting Portal: ${this.id} ...`);
     this.map = map;
     this.sprite = this.animation;
     this.sprite.zIndex = 5;
@@ -52,6 +52,8 @@ export class Portal {
   }
 
   update(cameraPerson) {
+    if (!this.isMounted) return;
+
     const x = this.x - cameraPerson.x - withGrid(CONFIG.OFFSET.x);
     const y = this.y - cameraPerson.y - withGrid(CONFIG.OFFSET.y);
 
@@ -59,6 +61,8 @@ export class Portal {
   }
 
   unmount() {
-    this.sprite.destroy({ children: true, texture: true, baseTexture: true });
+    this.isMounted = false;
+    this.sprite.stop();
+    this.sprite.parent.removeChild(this.sprite);
   }
 }
