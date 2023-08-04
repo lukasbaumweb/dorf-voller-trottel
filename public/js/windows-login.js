@@ -51,9 +51,11 @@ window.init = (root) => {
         if (raw !== null && raw !== 'null') {
           storyFlags = JSON.parse(raw || {});
         }
-        storyFlags['crack-password-of-erna'] = true;
+        storyFlags['help-erna'] = true;
         window.localStorage.setItem(key, JSON.stringify(storyFlags));
         document.getElementById('password').parentElement.innerHTML = '<h3>Herzlich Willkommen ...<h3>';
+        const evt = new window.CustomEvent('renderQuests');
+        document.dispatchEvent(evt);
       } else {
         document.getElementById('password').setCustomValidity('Falsches Passwort!');
         document.getElementById('password').setAttribute('placeholder', 'Falsches Passwort');

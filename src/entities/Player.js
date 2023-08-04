@@ -76,22 +76,22 @@ export class Player {
     this.sprite.loop = false;
     this.container.addChild(this.sprite);
 
-    this.saveInterval = setInterval(() => {
-      const hero = this.map.gameObjects.hero;
-      const playerState = {
-        x: hero.x - (hero.x % CONFIG.PIXEL_SIZE),
-        y: hero.y - (hero.y % CONFIG.PIXEL_SIZE),
-        direction: hero.direction
-      };
-      setStoredValue(STORAGE_KEYS.player, playerState);
-    }, 5000);
+    // this.saveInterval = setInterval(() => {
+    //   const hero = this.map.gameObjects.hero;
+    //   const playerState = {
+    //     x: hero.x - (hero.x % CONFIG.PIXEL_SIZE),
+    //     y: hero.y - (hero.y % CONFIG.PIXEL_SIZE),
+    //     direction: hero.direction
+    //   };
+    //   setStoredValue(STORAGE_KEYS.player, playerState);
+    // }, 5000);
 
     this.isMounted = true;
     this.sprite.play();
   }
 
   unmount() {
-    clearTimeout(this.saveInterval);
+    // clearTimeout(this.saveInterval);
     this.keyboard?.dispose();
     this.isMounted = false;
     this.sprite.stop();
@@ -196,6 +196,7 @@ export class Player {
         y: this.y,
         direction: this.direction
       };
+      setStoredValue(STORAGE_KEYS.player, state);
       emitEvent('PersonWalkingComplete', {
         whoId: this.id,
         ...state

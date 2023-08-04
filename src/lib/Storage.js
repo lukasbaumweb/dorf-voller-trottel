@@ -35,12 +35,15 @@ const getStoredValue = (key, defaultValue) => {
 };
 
 /**
+/**
  * Saves given value behind given key in local storage (localStorage)
  * @param {STORAGE_KEYS} key unique key of storage place where value should be stored
  * @param {object} value to be stored behind given key
+ * @param {boolean} silent if true updateOn timestamp won't be updated
  * @returns value of stored object
  */
-const setStoredValue = (key, value) => {
+
+const setStoredValue = (key, value, silent) => {
   if (!('localStorage' in window)) {
     console.warn('No localstorage found, Cannot save data');
     return;
@@ -53,7 +56,7 @@ const setStoredValue = (key, value) => {
   } else {
     window.localStorage.setItem(key, value);
   }
-  window.localStorage.setItem(STORAGE_KEYS.updatedOn, new Date().getTime());
+  !silent && window.localStorage.setItem(STORAGE_KEYS.updatedOn, new Date().getTime());
 };
 
 /**

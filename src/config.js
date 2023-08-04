@@ -1,5 +1,13 @@
 const PIXEL_SIZE = 16;
 
+export const STORY_FLAGS = {
+  'read-intro': true,
+  'talk-to-mayor': false,
+  'find-your-home': false,
+  'talk-to-mayor-2': false,
+  'help-erna': false
+};
+
 export const CONFIG = {
   PIXEL_SIZE,
   animationFrameLimit: 6,
@@ -85,7 +93,8 @@ export const CONFIG = {
           texture: 'public/images/suchbild.png',
           interactable: true,
           showModalOnClick: true,
-          modalContent: 'public/images/suchbild.png'
+          modalContent: 'public/images/suchbild.png',
+          required: ['talked-to-mayor']
         }
       },
       portals: {
@@ -129,7 +138,7 @@ export const CONFIG = {
           interactable: true,
           showModalOnClick: true,
           modalContent: 'public/images/dog.png',
-          title: 'Hinweis: Der Hund des Hauses'
+          title: 'Der Hund des Hauses'
         },
         computer: {
           type: 'Item',
@@ -192,25 +201,36 @@ export const CONFIG = {
   // TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
   quests: [
     {
-      key: 'talk-to-mayor',
-      name: 'Erste Quest',
-      description: 'Rede mit dem Bürgermeister!',
-      hint: 'show image',
-      image: ''
+      id: 'read-intro',
+      short: 'Lese das Intro',
+      long: 'Pfeiltasten -> Bewegen; Enter-Taste -> Interagieren'
     },
     {
-      key: 'find-your-home',
-      name: 'Zweite Quest',
-      description: 'Finde dein Büro!',
-      hint: 'show image',
-      image: ''
+      id: 'talk-to-mayor',
+      short: 'Rede mit dem Bürgermeister am Brunnen!',
+      long: 'Der Bürgermeister gibt dir aktuell die Aufträge, da die Bürger dich noch nicht kennen.'
     },
     {
-      key: 'crack-password-of-erna',
-      name: 'Dritte Quest',
-      description: 'Betrete das Haus der alten Dame und finde ihr Passwort heraus',
-      hint: 'show image',
-      image: ''
+      id: 'find-your-home',
+      short: 'Finde dein Büro!',
+      long: 'Suche einfach nach dem Haus mit blauen Dach im Südwesten der Insel'
+    },
+    {
+      id: 'crack-password-of-erna',
+      short: 'Betrete das Haus der alten Dame (Erna) und finde ihr Passwort heraus',
+      long: 'Ernas Haus hat ein orangenes Dach im Osten der Insel in der Nähe des Brunnes und mit einem Zaun um den Garten'
     }
-  ]
+  ],
+  monologs: {
+    'zero-quest': [
+      'Ohh… Du musst das neue Schaf in meiner Heerde sein (HiHi). Ich bin Fred, der Bürgermeister hier im Ort. Gerne erkläre ich Dir kurz, wie hier alles abläuft…',
+      'Die meisten laufen hier umher, indem Sie die Pfeiltasten benutzen. Um miteinander und mit Gegenständen zu interagieren, kannst du die Entertaste verwenden. Schau dich doch einfach ein wenig um und komm wieder zu mir, wenn du Hilfe brauchst oder eine Aufgabe erhalten willst.'
+    ],
+    'first-quest': [
+      'Da bist Du ja schon wieder. Das ging aber schnell. Ich dachte mir Du solltest wohl als erstes dein neues Domizil und Arbeitsstätte aufsuchen und dich ein wenig einrichten. Suche einfach nach dem Haus mit blauen Dach im Südwesten der Insel'
+    ],
+    'second-quest': [
+      'So nun startet der Ernst deine Karriere bei uns im Ort. Ich habe gehört Erna hat ein Computerproblem. Magst Du dich bitte darum kümmern, ich danke Dir im Voraus hierfür.'
+    ]
+  }
 };

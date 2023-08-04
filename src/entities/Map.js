@@ -25,6 +25,9 @@ export class Map {
 
     this.app = app;
     this.gameObjects = {};
+    this.markers = {};
+    this.items = {};
+    this.portals = {};
     this.layers = [];
     this.isCutscenePlaying = false;
     this.cameraPerson = null;
@@ -253,9 +256,10 @@ export class Map {
     });
 
     if (!this.isCutscenePlaying && match && match.talking.length) {
+      const currentProgress = getStoredValue(STORAGE_KEYS.playerStoryProgress);
       const relevantScenario = match.talking.find((scenario) => {
-        return (scenario.required || []).every((sf) => {
-          return getStoredValue(STORAGE_KEYS.playerStoryProgress).storyFlags[sf];
+        return (scenario.required || []).every((storyFlag) => {
+          return currentProgress[storyFlag];
         });
       });
       relevantScenario && this.startCutscene(relevantScenario.events);
@@ -269,16 +273,22 @@ export class Map {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
 
-    if (match && match.transitionToMap) {
+    if (!this.isCutscenePlaying && match && match.transitionToMap) {
       const onComplete = () => {
         let targetPosition = CONFIG.maps[match.transitionToMap].configObjects.hero;
+
         if (match.transitionToMap === CONFIG.maps.dorf.id) {
           const currentMap = getCurrentMap();
-          const targetPortal = Object.values(CONFIG.maps[match.transitionToMap].portals).filter(
-            ({ id }) => id === currentMap
-          );
-          targetPosition = { x: targetPortal.x, y: targetPortal.y, direction: targetPortal.direction };
+          const targetPortal = Object.values(CONFIG.maps[match.transitionToMap].portals)
+            .filter(({ id }) => id === currentMap)
+            .at(0);
+
+          console.log(targetPortal);
+          if (targetPortal !== undefined) {
+            targetPosition = { x: targetPortal.x, y: targetPortal.y, direction: targetPortal.direction };
+          }
         }
+
         new GameEvent({
           map: this,
           event: {
@@ -305,14 +315,10 @@ export class Map {
     const match = Object.values(this.markers).find((object) => {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
-    console.log(match);
 
     if (match) {
       new TextMessage({
         text: `${translate(match.id)}`,
-        onCancel: () => {
-          console.debug('canceled');
-        },
         onCancelText: translate('ignore'),
         onAcceptText: translate('examine'),
         onComplete: () => {

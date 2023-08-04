@@ -10,6 +10,9 @@ export class World {
   isMounted = false;
   timer;
 
+  g_TICK = 14; // 1000/14 = 71 frames per second
+  g_Time = 0;
+
   debounce = (callback, timeout = 300) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
@@ -34,8 +37,6 @@ export class World {
 
   init(appInstance) {
     this.mount(appInstance);
-
-    // TODO: Load game state from database (local or server?)
     this.start();
   }
 
@@ -48,7 +49,15 @@ export class World {
     this.app.ticker.add(this.gameLoopReference);
   }
 
-  gameLoopReference = (delta) => this.gameloop(this, delta);
+  gameLoopReference = (delta) => {
+    const timeNow = new Date().getTime();
+    const timeDiff = timeNow - this.g_Time;
+    if (timeDiff < this.g_TICK) return;
+
+    this.g_Time = timeNow;
+
+    this.gameloop(this, delta);
+  };
 
   gameloop(ctx, delta) {
     const cameraPerson = this.map.gameObjects.hero;
@@ -82,14 +91,18 @@ export class World {
     });
 
     new Keyboard('Enter', () => {
-      this.map.checkForActionCutscene();
-      this.map.checkForItems();
+      if (this.map.isMounted) {
+        this.map.checkForActionCutscene();
+        this.map.checkForItems();
+      }
     });
 
     new Keyboard('F10', () => {
-      console.debug('Game stopped completly!');
-      this.map.unmount();
-      this.app.ticker.remove(this.gameLoopReference);
+      if (this.map.isMounted) {
+        console.debug('Game stopped completly!');
+        this.map.unmount();
+        this.app.ticker.remove(this.gameLoopReference);
+      }
     });
   }
 

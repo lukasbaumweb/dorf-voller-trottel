@@ -1,4 +1,6 @@
+import { TextMessage } from './components/TextMessage';
 import { CONFIG } from './config';
+import { getPlayerState } from './gameState';
 
 const withGrid = (n) => {
   return n * CONFIG.PIXEL_SIZE;
@@ -25,15 +27,9 @@ const nextPosition = (initialX, initialY, direction) => {
 };
 
 const oppositeDirection = (direction) => {
-  if (direction === 'left') {
-    return 'right';
-  }
-  if (direction === 'right') {
-    return 'left';
-  }
-  if (direction === 'up') {
-    return 'down';
-  }
+  if (direction === 'left') return 'right';
+  if (direction === 'right') return 'left';
+  if (direction === 'up') return 'down';
   return 'up';
 };
 
@@ -73,6 +69,23 @@ const makeid = (length = 5) => {
   }
   return result;
 };
+
+const runMonolog = (messages = []) => {
+  if (messages.length === 0) return;
+  new TextMessage({
+    text: messages[0],
+    onComplete: () => {
+      runMonolog(messages.slice(1));
+    }
+  }).init();
+};
+
+const getCurrenTask = () => {
+  const storyProgress = getPlayerState();
+  const firstUndoneTask = Object.entries(storyProgress).find(([key, state]) => !state);
+  return firstUndoneTask.at(0);
+};
+
 export {
   withGrid,
   asGridCoord,
@@ -82,5 +95,7 @@ export {
   randomFromArray,
   wait,
   isNullOrUndefined,
-  makeid
+  makeid,
+  runMonolog,
+  getCurrenTask
 };

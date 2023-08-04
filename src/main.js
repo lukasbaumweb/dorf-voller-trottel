@@ -1,13 +1,14 @@
 import App from './components/App';
 import { GameMenu } from './components/GameMenu';
-import { TextMessage } from './components/TextMessage';
-import { ONE_MINUTE } from './entities/Helper';
+import { CONFIG } from './config';
 import { World } from './entities/World';
 import { DebugHud } from './lib/DebugHud';
+import { QuestMenu } from './components/QuestMenu';
 
 import { clearStoredValue, setStoredValue, STORAGE_KEYS, getStoredValue } from './lib/Storage';
 import { formatString, translate, translateTemplates } from './lib/Translator';
 import './style.css';
+import { getCurrenTask, runMonolog } from './utils';
 
 const startGame = async () => {
   try {
@@ -28,29 +29,42 @@ const startGame = async () => {
   }
 };
 
-const menu = new GameMenu();
-menu.onStartNewGame = async () => {
-  clearStoredValue();
-  setStoredValue(STORAGE_KEYS.username, document.getElementById('username').value);
-  await startGame();
-};
-menu.onLoadGame = async () => {
-  await startGame();
+const greetUser = () => {
   const savedUpdateOn = getStoredValue(STORAGE_KEYS.updatedOn, false);
-
-  if (savedUpdateOn && new Date().getTime() - new Date(savedUpdateOn).getTime() > ONE_MINUTE) {
+  console.log(savedUpdateOn);
+  if (savedUpdateOn) {
     const message = getStoredValue(
       STORAGE_KEYS.welcomeMessage,
       formatString(translate('firstGreet'), getStoredValue(STORAGE_KEYS.username, 'Spieler'))
     );
-    new TextMessage({
-      text: message
-    }).init();
     setStoredValue(
       STORAGE_KEYS.welcomeMessage,
       formatString(translate('greet'), getStoredValue(STORAGE_KEYS.username, 'Spieler'))
     );
+
+    runMonolog([message]);
+  } else {
+    const message = formatString(translate('firstGreet'), getStoredValue(STORAGE_KEYS.username, 'Spieler'));
+
+    // Get next quest
+    const currentTaskId = getCurrenTask();
+    const currentQuest = Object.entries(CONFIG.quests).find(([_, quest]) => quest.id === currentTaskId);
+    runMonolog([message, currentQuest[1].short]);
   }
+};
+const questMenu = new QuestMenu();
+const menu = new GameMenu();
+menu.onStartNewGame = async () => {
+  clearStoredValue();
+  setStoredValue(STORAGE_KEYS.username, document.getElementById('username').value.trim(), true);
+  await startGame();
+  greetUser();
+  questMenu.init();
+};
+menu.onLoadGame = async () => {
+  await startGame();
+  greetUser();
+  questMenu.init();
 };
 translateTemplates();
 

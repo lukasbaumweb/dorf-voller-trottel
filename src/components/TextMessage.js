@@ -79,16 +79,13 @@ export class TextMessage {
       text: this.text
     });
 
-    if (this.onCancel) {
-      this.element.querySelector('#btnCancel').addEventListener('click', () => {
-        this.onCancel();
-        this.done();
-      });
-      this.actionListener = new Keyboard('Escape', () => {
-        this.onCancel();
-        this.done();
-      });
-    }
+    const onCancel = () => {
+      this.done(false, true);
+      this.onCancel && this.onCancel();
+    };
+
+    this.element.querySelector('#btnCancel').addEventListener('click', onCancel);
+    this.actionListener = new Keyboard('Escape', onCancel);
 
     const onAcceptFunction = () => {
       this.done(true);
@@ -96,13 +93,17 @@ export class TextMessage {
     };
 
     this.element.querySelector('#btnEnter').addEventListener('click', onAcceptFunction);
-    this.actionListener = new Keyboard('Enter', onAcceptFunction);
+    this.actionListener = new Keyboard('Enter', () => {
+      this.done(true);
+    });
   }
 
-  done(dispose) {
-    if (this.revealingText.isDone || dispose) {
+  done(runOnComplete, runOnCancel) {
+    if (this.revealingText.isDone) {
       this.element.remove();
       this.actionListener.dispose();
+      runOnComplete && this.onComplete && this.onComplete();
+      runOnCancel && this.onCancel && this.onCancel();
     } else {
       this.revealingText.warpToDone();
     }
