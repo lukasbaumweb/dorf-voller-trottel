@@ -1,9 +1,9 @@
 import { Container } from 'pixi.js';
-import { nextPosition, withGrid } from '../utils';
+import { getGameBlocked, nextPosition, withGrid } from '../utils';
 import { Player } from './Player';
 import { CONFIG } from '../config';
 import { loadLayers, loadMapLayers, loadWalls, loadObjects } from '../lib/MapLoader';
-import { getCurrentMap } from '../gameState';
+import { checkDisqualifiedFlags, checkStoryFlag, getCurrentMap, getPlayerState } from '../gameState';
 import { Portal } from './Portal';
 import { STORAGE_KEYS, getStoredValue } from '../lib/Storage';
 import { TextMessage } from '../components/TextMessage';
@@ -32,9 +32,12 @@ export class Map {
     this.isCutscenePlaying = false;
     this.cameraPerson = null;
     this.layersContainer = layersContainer;
+    this.isMounted = false;
   }
 
   async initMap() {
+    this.isMounted = false;
+
     const level = CONFIG.maps[getCurrentMap()];
     await loadLevel(getCurrentMap());
 
@@ -109,6 +112,7 @@ export class Map {
       const marker = level.markers && level.markers[obj.name];
       const item = level.items && level.items[obj.name];
 
+      // console.debug(portal, marker, item);
       if (portal) {
         config = Object.assign(portal, config);
         instance = new Portal(config);
@@ -128,15 +132,17 @@ export class Map {
       }
     });
 
-    this.movePlayerIfOnPortal();
+    this.movePlayerIfOnPortalOrMarker();
 
+    this.isMounted = true;
     console.groupEnd();
   }
 
-  movePlayerIfOnPortal() {
+  movePlayerIfOnPortalOrMarker() {
     const hero = this.gameObjects.hero;
 
-    const match = Object.values(this.portals).find((object) => {
+    const targets = [...Object.values(this.markers), ...Object.values(this.portals)];
+    const match = targets.find((object) => {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
     if (match) {
@@ -247,7 +253,7 @@ export class Map {
   }
 
   checkForActionCutscene() {
-    if (window._game.isBlocked) return;
+    if (getGameBlocked()) return;
 
     const hero = this.gameObjects.hero;
     const nextCoords = nextPosition(hero.x, hero.y, hero.direction);
@@ -256,24 +262,31 @@ export class Map {
     });
 
     if (!this.isCutscenePlaying && match && match.talking.length) {
-      const currentProgress = getStoredValue(STORAGE_KEYS.playerStoryProgress);
+      const currentProgress = getPlayerState();
+
       const relevantScenario = match.talking.find((scenario) => {
-        return (scenario.required || []).every((storyFlag) => {
-          return currentProgress[storyFlag];
-        });
+        return (
+          (scenario.required || []).every((storyFlag) => {
+            return currentProgress[storyFlag];
+          }) && !(scenario.disqualify || []).some((storyFlag) => currentProgress[storyFlag])
+        );
       });
       relevantScenario && this.startCutscene(relevantScenario.events);
     }
   }
 
   checkForPortals() {
+    if (getGameBlocked()) return;
+
     const hero = this.gameObjects.hero;
 
     const match = Object.values(this.portals).find((object) => {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
 
-    if (!this.isCutscenePlaying && match && match.transitionToMap) {
+    if (!match || this.isCutscenePlaying) return;
+
+    if (match.transitionToMap && checkStoryFlag(match.required || [])) {
       const onComplete = () => {
         let targetPosition = CONFIG.maps[match.transitionToMap].configObjects.hero;
 
@@ -283,7 +296,6 @@ export class Map {
             .filter(({ id }) => id === currentMap)
             .at(0);
 
-          console.log(targetPortal);
           if (targetPortal !== undefined) {
             targetPosition = { x: targetPortal.x, y: targetPortal.y, direction: targetPortal.direction };
           }
@@ -310,19 +322,26 @@ export class Map {
   }
 
   checkForItems() {
+    if (getGameBlocked()) return;
+
     const hero = this.gameObjects.hero;
 
-    const match = Object.values(this.markers).find((object) => {
+    const match = [...Object.values(this.items), ...Object.values(this.markers)].find((object) => {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
+    console.debug(match);
 
-    if (match) {
+    if (match && checkStoryFlag(match.required) && checkDisqualifiedFlags(match.disqualify)) {
       new TextMessage({
         text: `${translate(match.id)}`,
         onCancelText: translate('ignore'),
         onAcceptText: translate('examine'),
         onComplete: () => {
           match.showModal();
+          this.movePlayerIfOnPortalOrMarker();
+        },
+        onCancel: () => {
+          this.movePlayerIfOnPortalOrMarker();
         }
       }).init();
     }

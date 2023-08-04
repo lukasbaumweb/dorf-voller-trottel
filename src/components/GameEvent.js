@@ -1,9 +1,10 @@
 import { reject } from 'lodash';
 import { CONFIG } from '../config';
-import { STORAGE_KEYS, setStoredValue, updateStoredValue } from '../lib/Storage';
+import { STORAGE_KEYS, getStoredValue, setStoredValue } from '../lib/Storage';
 import { isNullOrUndefined, oppositeDirection } from '../utils';
 import { SceneTransition } from './SceneTransition';
 import { TextMessage } from './TextMessage';
+import { setPlayerState } from '../gameState';
 
 export class GameEvent {
   constructor({ map, event }) {
@@ -65,15 +66,13 @@ export class GameEvent {
   }
 
   textMessage(resolve) {
-    console.log(this.event.faceHero);
     if (this.event.faceHero) {
       const obj = this.map.gameObjects[this.event.faceHero];
       obj.direction = oppositeDirection(this.map.gameObjects.hero.direction);
-      console.log(obj);
     }
 
     const message = new TextMessage({
-      text: this.event.text,
+      text: this.event.text.replace('<NAME>', getStoredValue(STORAGE_KEYS.username, '')),
       onComplete: () => resolve()
     });
     message.init();
@@ -109,7 +108,9 @@ export class GameEvent {
   }
 
   addStoryFlag(resolve) {
-    updateStoredValue(STORAGE_KEYS.playerStoryProgress, { [this.event.flag]: true });
+    setPlayerState(this.event.flag, true);
+    const evt = new window.CustomEvent('renderQuests');
+    document.dispatchEvent(evt);
     resolve();
   }
 

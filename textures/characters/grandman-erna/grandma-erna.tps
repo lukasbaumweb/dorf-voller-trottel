@@ -124,7 +124,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>dist/hero.json</filename>
+                <filename></filename>
             </struct>
         </map>
         <key>multiPackMode</key>
@@ -173,22 +173,22 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">sprites/hero-idle-down-1.png</key>
-            <key type="filename">sprites/hero-idle-down-2.png</key>
-            <key type="filename">sprites/hero-idle-left-1.png</key>
-            <key type="filename">sprites/hero-idle-left-2.png</key>
-            <key type="filename">sprites/hero-idle-right-1.png</key>
-            <key type="filename">sprites/hero-idle-right-2.png</key>
-            <key type="filename">sprites/hero-idle-up-1.png</key>
-            <key type="filename">sprites/hero-idle-up-2.png</key>
-            <key type="filename">sprites/hero-walk-down-1.png</key>
-            <key type="filename">sprites/hero-walk-down-2.png</key>
-            <key type="filename">sprites/hero-walk-left-1.png</key>
-            <key type="filename">sprites/hero-walk-left-2.png</key>
-            <key type="filename">sprites/hero-walk-right-1.png</key>
-            <key type="filename">sprites/hero-walk-right-2.png</key>
-            <key type="filename">sprites/hero-walk-up-1.png</key>
-            <key type="filename">sprites/hero-walk-up-2.png</key>
+            <key type="filename">sprites/idle-down-1.png</key>
+            <key type="filename">sprites/idle-down-2.png</key>
+            <key type="filename">sprites/idle-left-1.png</key>
+            <key type="filename">sprites/idle-left-2.png</key>
+            <key type="filename">sprites/idle-right-1.png</key>
+            <key type="filename">sprites/idle-right-2.png</key>
+            <key type="filename">sprites/idle-up-1.png</key>
+            <key type="filename">sprites/idle-up-2.png</key>
+            <key type="filename">sprites/walk-down-1.png</key>
+            <key type="filename">sprites/walk-down-2.png</key>
+            <key type="filename">sprites/walk-left-1.png</key>
+            <key type="filename">sprites/walk-left-2.png</key>
+            <key type="filename">sprites/walk-right-1.png</key>
+            <key type="filename">sprites/walk-right-2.png</key>
+            <key type="filename">sprites/walk-up-1.png</key>
+            <key type="filename">sprites/walk-up-2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -210,22 +210,22 @@
             <struct type="SpriteSheet">
                 <key>files</key>
                 <array>
-                    <filename>sprites/hero-idle-down-1.png</filename>
-                    <filename>sprites/hero-idle-down-2.png</filename>
-                    <filename>sprites/hero-idle-left-1.png</filename>
-                    <filename>sprites/hero-idle-left-2.png</filename>
-                    <filename>sprites/hero-idle-right-1.png</filename>
-                    <filename>sprites/hero-idle-right-2.png</filename>
-                    <filename>sprites/hero-idle-up-1.png</filename>
-                    <filename>sprites/hero-idle-up-2.png</filename>
-                    <filename>sprites/hero-walk-down-1.png</filename>
-                    <filename>sprites/hero-walk-down-2.png</filename>
-                    <filename>sprites/hero-walk-left-1.png</filename>
-                    <filename>sprites/hero-walk-left-2.png</filename>
-                    <filename>sprites/hero-walk-right-1.png</filename>
-                    <filename>sprites/hero-walk-right-2.png</filename>
-                    <filename>sprites/hero-walk-up-1.png</filename>
-                    <filename>sprites/hero-walk-up-2.png</filename>
+                    <filename>sprites/idle-down-1.png</filename>
+                    <filename>sprites/idle-down-2.png</filename>
+                    <filename>sprites/idle-left-1.png</filename>
+                    <filename>sprites/idle-left-2.png</filename>
+                    <filename>sprites/idle-right-1.png</filename>
+                    <filename>sprites/idle-right-2.png</filename>
+                    <filename>sprites/idle-up-1.png</filename>
+                    <filename>sprites/idle-up-2.png</filename>
+                    <filename>sprites/walk-down-1.png</filename>
+                    <filename>sprites/walk-down-2.png</filename>
+                    <filename>sprites/walk-left-1.png</filename>
+                    <filename>sprites/walk-left-2.png</filename>
+                    <filename>sprites/walk-right-1.png</filename>
+                    <filename>sprites/walk-right-2.png</filename>
+                    <filename>sprites/walk-up-1.png</filename>
+                    <filename>sprites/walk-up-2.png</filename>
                 </array>
             </struct>
         </map>

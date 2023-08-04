@@ -2,10 +2,12 @@ const PIXEL_SIZE = 16;
 
 export const STORY_FLAGS = {
   'read-intro': true,
-  'talk-to-mayor': false,
-  'find-your-home': false,
-  'talk-to-mayor-2': false,
-  'help-erna': false
+  'talked-to-mayor-for-first-time': false,
+  'found-his-home': false,
+  'talked-to-mayor-for-second-time': false,
+  'talked-to-grandma-erna-for-first-time': false,
+  'helped-erna': false,
+  'talked-to-mayor-for-third-time': false
 };
 
 export const CONFIG = {
@@ -20,8 +22,8 @@ export const CONFIG = {
   },
   textures: {
     hero: {
-      texture: 'public/textures/characters/hero.png',
-      config: 'public/textures/characters/hero.json'
+      texture: 'public/textures/characters/nerd.png',
+      config: 'public/textures/characters/nerd.json'
     },
     marker: { config: 'public/textures/utils/marker.json' }
   },
@@ -51,12 +53,44 @@ export const CONFIG = {
           config: 'public/textures/characters/old-man.json',
           talking: [
             {
+              required: ['read-intro'],
+              disqualify: ['talked-to-mayor-for-first-time'],
               events: [
                 {
                   type: 'textMessage',
-                  text: 'Wie geht Ihnen? Bestimmt gut.😊 Sie sehen ja gesund aus.',
+                  text: 'Ohh… Du musst das neue Schaf in meiner Heerde sein (HiHi). Ich bin Fred, der Bürgermeister hier im Ort. Gerne erkläre ich Dir kurz, wie hier alles abläuft…',
                   faceHero: 'old-man'
-                }
+                },
+                {
+                  type: 'textMessage',
+                  text: 'Die meisten laufen hier umher, indem Sie die Pfeiltasten benutzen. Um miteinander und mit Gegenständen zu interagieren, kannst du die Entertaste verwenden. Schau dich doch einfach ein wenig um und komm wieder zu mir, wenn du Hilfe brauchst oder eine Aufgabe erhalten willst.',
+                  faceHero: 'old-man'
+                },
+                { type: 'addStoryFlag', flag: 'talked-to-mayor-for-first-time' }
+              ]
+            },
+            {
+              required: ['found-his-home'],
+              disqualify: ['talked-to-mayor-for-second-time'],
+              events: [
+                {
+                  type: 'textMessage',
+                  text: 'Da bist Du ja schon wieder. Das ging aber schnell. Ich dachte mir Du solltest wohl als erstes dein neues Domizil und Arbeitsstätte aufsuchen und dich ein wenig einrichten. Suche einfach nach dem Haus mit blauen Dach im Südwesten der Insel',
+                  faceHero: 'old-man'
+                },
+                { type: 'addStoryFlag', flag: 'talked-to-mayor-for-second-time' }
+              ]
+            },
+            {
+              required: ['talked-to-mayor-for-second-time'],
+              disqualify: ['talked-to-mayor-for-third-time'],
+              events: [
+                {
+                  type: 'textMessage',
+                  text: 'So nun startet der Ernst deine Karriere bei uns im Ort. Ich habe gehört Erna hat ein Computerproblem. Magst Du dich bitte darum kümmern, ich danke Dir im Voraus hierfür.',
+                  faceHero: 'old-man'
+                },
+                { type: 'addStoryFlag', flag: 'talked-to-mayor-for-third-time' }
               ]
             }
           ],
@@ -84,17 +118,18 @@ export const CONFIG = {
           ]
         }
       },
-      items: {
-        'search-image': {
-          type: 'Item',
+      markers: {
+        'home-marker': {
+          type: 'Marker',
           x: 6 * PIXEL_SIZE,
           y: 23 * PIXEL_SIZE,
           index: 5,
-          texture: 'public/images/suchbild.png',
           interactable: true,
           showModalOnClick: true,
-          modalContent: 'public/images/suchbild.png',
-          required: ['talked-to-mayor']
+          modalContent: 'public/js/find-errors.js',
+          required: ['talked-to-mayor-for-second-time'],
+          disqualify: ['found-his-home'],
+          title: 'Finde alle Fehler im Bild'
         }
       },
       portals: {
@@ -102,7 +137,8 @@ export const CONFIG = {
         'large house': {},
         townhall: {},
         'small house': {
-          transitionToMap: 'small house'
+          transitionToMap: 'small house',
+          required: ['talked-to-mayor-for-third-time']
         }
       }
     },
@@ -121,6 +157,50 @@ export const CONFIG = {
           x: 15 * PIXEL_SIZE,
           y: 18 * PIXEL_SIZE,
           index: 5
+        },
+        'grandma-erna': {
+          type: 'NPC',
+          x: 24 * PIXEL_SIZE,
+          y: 10 * PIXEL_SIZE,
+          index: 5,
+          texture: 'public/textures/characters/grandma-erna.png',
+          config: 'public/textures/characters/grandma-erna.json',
+          talking: [
+            {
+              required: ['talked-to-mayor-for-second-time'],
+              disqualify: ['talked-to-grandma-erna-for-first-time'],
+              events: [
+                {
+                  type: 'textMessage',
+                  text: 'Oh, hallo junger Mann! Du musst <NAME>, der neue IT-Sicherheitsexperte sein. Wie schön, dass du endlich da bist. Dein Vorgänger, Ralf Reinfall, konnte mir leider nicht helfen. Der war aber auch eine Katastrophe auf zwei Beinen, sag ich dir! Und Hunde mochte er auch nicht. Wie kann man nur keine Hunde mögen?!!!1!?? Aber komm doch erstmal rein.“',
+                  faceHero: 'grandma-erna'
+                },
+                { type: 'addStoryFlag', flag: 'talked-to-grandma-erna-for-first-time' }
+              ]
+            }
+          ],
+          behaviorLoop: [
+            { type: 'stand', direction: 'down', time: 5000 },
+            { type: 'walk', direction: 'down' },
+            { type: 'walk', direction: 'down' },
+            { type: 'walk', direction: 'down' },
+            { type: 'stand', direction: 'down', time: 2000 },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'stand', direction: 'left', time: 2000 },
+            { type: 'walk', direction: 'up' },
+            { type: 'walk', direction: 'up' },
+            { type: 'walk', direction: 'up' },
+            { type: 'stand', direction: 'right', time: 5000 },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' }
+          ]
         }
       },
       items: {
@@ -170,19 +250,39 @@ export const CONFIG = {
 
       markers: {
         'calendar-marker': {
-          type: 'Marker'
+          type: 'Marker',
+          showTooltip: false,
+          showModalOnClick: true,
+          modalContent: 'public/images/calendar.png',
+          title: 'Hinweis: Ein Geburtstag scheint sehr wichtig zu sein'
         },
         'dog-marker': {
-          type: 'Marker'
+          type: 'Marker',
+          showTooltip: false,
+          showModalOnClick: true,
+          modalContent: 'public/images/dog.png',
+          title: 'Der Hund des Hauses'
         },
         'computer-marker': {
-          type: 'Marker'
+          type: 'Marker',
+          showTooltip: false,
+          showModalOnClick: true,
+          modalContent: 'public/js/windows-login.js',
+          title: 'Finde das Passwort heraus! Im Haus sind scheinbar Hinweise versteckt'
         },
         'dog bed-marker': {
-          type: 'Marker'
+          type: 'Marker',
+          showTooltip: false,
+          showModalOnClick: true,
+          modalContent: 'public/images/dog bed.png',
+          title: 'Hinweis: Hmmm 🤔 Ein Bett für ein Haustier scheint das zu sein'
         },
         'sniffing blanket-marker': {
-          type: 'Marker'
+          type: 'Marker',
+          showTooltip: false,
+          showModalOnClick: true,
+          modalContent: 'public/images/sniffing blanket.png',
+          title: 'Hinweis: Die personalisierte Decke wird regelmäßig gereinigt'
         }
       },
 
@@ -206,31 +306,29 @@ export const CONFIG = {
       long: 'Pfeiltasten -> Bewegen; Enter-Taste -> Interagieren'
     },
     {
-      id: 'talk-to-mayor',
+      id: 'talked-to-mayor-for-first-time',
       short: 'Rede mit dem Bürgermeister am Brunnen!',
       long: 'Der Bürgermeister gibt dir aktuell die Aufträge, da die Bürger dich noch nicht kennen.'
     },
     {
-      id: 'find-your-home',
+      id: 'talked-to-mayor-for-second-time',
+      short: 'Schaue dich um und rede anschlißend mit dem Bürgermeister am Brunnen, um einen Auftrag zu bekommen!',
+      long: 'Der Bürgermeister gibt dir aktuell die Aufträge, da die Bürger dich noch nicht kennen.'
+    },
+    {
+      id: 'found-his-home',
       short: 'Finde dein Büro!',
       long: 'Suche einfach nach dem Haus mit blauen Dach im Südwesten der Insel'
     },
     {
-      id: 'crack-password-of-erna',
+      id: 'talked-to-mayor-for-third-time',
+      short: 'Rede mit dem Bürgermeister am Brunnen!',
+      long: 'Der Bürgermeister gibt dir aktuell die Aufträge, da die Bürger dich noch nicht kennen.'
+    },
+    {
+      id: 'helped-erna',
       short: 'Betrete das Haus der alten Dame (Erna) und finde ihr Passwort heraus',
       long: 'Ernas Haus hat ein orangenes Dach im Osten der Insel in der Nähe des Brunnes und mit einem Zaun um den Garten'
     }
-  ],
-  monologs: {
-    'zero-quest': [
-      'Ohh… Du musst das neue Schaf in meiner Heerde sein (HiHi). Ich bin Fred, der Bürgermeister hier im Ort. Gerne erkläre ich Dir kurz, wie hier alles abläuft…',
-      'Die meisten laufen hier umher, indem Sie die Pfeiltasten benutzen. Um miteinander und mit Gegenständen zu interagieren, kannst du die Entertaste verwenden. Schau dich doch einfach ein wenig um und komm wieder zu mir, wenn du Hilfe brauchst oder eine Aufgabe erhalten willst.'
-    ],
-    'first-quest': [
-      'Da bist Du ja schon wieder. Das ging aber schnell. Ich dachte mir Du solltest wohl als erstes dein neues Domizil und Arbeitsstätte aufsuchen und dich ein wenig einrichten. Suche einfach nach dem Haus mit blauen Dach im Südwesten der Insel'
-    ],
-    'second-quest': [
-      'So nun startet der Ernst deine Karriere bei uns im Ort. Ich habe gehört Erna hat ein Computerproblem. Magst Du dich bitte darum kümmern, ich danke Dir im Voraus hierfür.'
-    ]
-  }
+  ]
 };

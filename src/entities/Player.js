@@ -36,22 +36,24 @@ export class Player {
     this.standBehaviorTimeout = 100;
     this.index = config.index || 100;
 
-    this.animationsMap = {
-      'idle-down': 'hero-idle-down',
-      'idle-right': 'hero-idle-right',
-      'idle-up': 'hero-idle-up',
-      'idle-left': 'hero-idle-left',
-      'walk-down': 'hero-walk-down',
-      'walk-right': 'hero-walk-right',
-      'walk-up': 'hero-walk-up',
-      'walk-left': 'hero-walk-left'
-    };
+    this.possibleAnimations = [
+      'idle-down',
+      'idle-right',
+      'idle-up',
+      'idle-left',
+      'walk-down',
+      'walk-right',
+      'walk-up',
+      'walk-left'
+    ];
+    this.animationPrefix = 'nerd-';
 
     this.animationsResources = Assets.cache.get(getAsset(CONFIG.textures.hero.config))?.data.animations;
+
     this.animations = {};
     this.currentAnimation = config.currentAnimation || `idle-${this.direction}`;
-    Object.values(this.animationsMap).forEach((anim) => {
-      this.animations[anim] = AnimatedSprite.fromFrames(this.animationsResources[anim]);
+    this.possibleAnimations.forEach((anim) => {
+      this.animations[anim] = AnimatedSprite.fromFrames(this.animationsResources[`${this.animationPrefix}${anim}`]);
     });
 
     this.animationFrameLimit = config.animationFrameLimit || CONFIG.animationFrameLimit;
@@ -66,7 +68,7 @@ export class Player {
   mount(map) {
     console.debug(`Mounting ${this.id}`);
     this.map = map;
-    this.sprite = this.animations[this.animationsMap[this.currentAnimation]];
+    this.sprite = this.animations[this.currentAnimation];
     this.sprite.anchor.set(0.5);
     this.sprite.zIndex = 5;
 
@@ -169,7 +171,7 @@ export class Player {
 
       if (this.standBehaviorTimeout) {
         clearTimeout(this.standBehaviorTimeout);
-        console.log('xlear');
+        console.debug('xlear');
       }
       this.standBehaviorTimeout = setTimeout(() => {
         emitEvent('PersonStandComplete', {
@@ -209,8 +211,7 @@ export class Player {
 
     if (this.movingProgressRemaining === 0) this.currentAnimation = 'idle-' + this.direction;
 
-    const nextAnimation = this.animationsMap[this.currentAnimation];
-    this.sprite.textures = this.animations[nextAnimation].textures;
+    this.sprite.textures = this.animations[this.currentAnimation].textures;
 
     if (this.movingProgressRemaining > 0) this.sprite.play();
   }

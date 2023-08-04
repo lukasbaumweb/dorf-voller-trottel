@@ -47,7 +47,7 @@ export class Character {
     this.animations = {};
     this.currentAnimation = config.currentAnimation || `idle-${this.direction}`;
     this.possibleAnimations.forEach((anim) => {
-      this.animations[anim] = AnimatedSprite.fromFrames(this.animationsResources[anim]);
+      this.animations[anim] = AnimatedSprite.fromFrames(this.animationsResources[config.id + '-' + anim]);
     });
 
     this.animationFrameLimit = config.animationFrameLimit || CONFIG.animationFrameLimit;

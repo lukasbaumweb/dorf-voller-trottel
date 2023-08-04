@@ -4,14 +4,15 @@ import { Map } from './Map';
 import { Keyboard } from '../components/Keyboard';
 
 import { DebugHud } from '../lib/DebugHud';
+import { getGameBlocked } from '../utils';
 
 export class World {
   DOMGameContainer = null;
   isMounted = false;
   timer;
 
-  g_TICK = 14; // 1000/14 = 71 frames per second
-  g_Time = 0;
+  tickRate = 14; // 1000/14 = 71 frames per second
+  tickTime = 0;
 
   debounce = (callback, timeout = 300) => {
     clearTimeout(this.timer);
@@ -51,10 +52,10 @@ export class World {
 
   gameLoopReference = (delta) => {
     const timeNow = new Date().getTime();
-    const timeDiff = timeNow - this.g_Time;
-    if (timeDiff < this.g_TICK) return;
+    const timeDiff = timeNow - this.tickTime;
+    if (timeDiff < this.tickRate) return;
 
-    this.g_Time = timeNow;
+    this.tickTime = timeNow;
 
     this.gameloop(this, delta);
   };
@@ -91,7 +92,7 @@ export class World {
     });
 
     new Keyboard('Enter', () => {
-      if (this.map.isMounted) {
+      if (this.map.isMounted && !getGameBlocked()) {
         this.map.checkForActionCutscene();
         this.map.checkForItems();
       }

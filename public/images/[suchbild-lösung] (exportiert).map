@@ -1,0 +1,19 @@
+<img src="[suchbild-lösung] (exportiert)" width="1200" height="610" border="0" usemap="#map" />
+
+<map name="map">
+<!-- #$-:Image map file created by GIMP Image Map plug-in -->
+<!-- #$-:GIMP Image Map plug-in by Maurits Rijk -->
+<!-- #$-:Please do not edit lines starting with "#$" -->
+<!-- #$VERSION:2.3 -->
+<!-- #$AUTHOR:lukas -->
+<area shape="rect" coords="513,115,582,134" href="serverraum" />
+<area shape="rect" coords="76,306,152,386" href="drucker" />
+<area shape="rect" coords="528,194,633,396" href="server" />
+<area shape="rect" coords="467,327,528,424" href="wasser" />
+<area shape="rect" coords="269,313,415,354" href="blaetterhaufen" />
+<area shape="rect" coords="408,477,465,518" href="usb-stick" />
+<area shape="rect" coords="810,419,859,452" href="post-it" />
+<area shape="rect" coords="802,293,987,418" href="monitor" />
+<area shape="rect" coords="643,431,770,524" href="food" />
+<area shape="rect" coords="1017,386,1109,464" href="fish-bowle" />
+</map>

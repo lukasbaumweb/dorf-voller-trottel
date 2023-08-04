@@ -86,6 +86,16 @@ const getCurrenTask = () => {
   return firstUndoneTask.at(0);
 };
 
+/**
+ * Set Blocked Status
+ * @param {boolean} value whether game is blocked or not
+ */
+const setGameBlocked = (value) => {
+  window._blocked = value;
+};
+
+const getGameBlocked = () => Boolean(window._blocked);
+
 export {
   withGrid,
   asGridCoord,
@@ -97,5 +107,7 @@ export {
   isNullOrUndefined,
   makeid,
   runMonolog,
-  getCurrenTask
+  getCurrenTask,
+  setGameBlocked,
+  getGameBlocked
 };

@@ -241,9 +241,8 @@ button:focus {
   flex: 1;
 }
 .modal-content > img {
-  width: inherit;
   object-fit: contain;
-  max-width: 75%;
+  max-width: 100%;
   max-height: 75%;
 }
 .modal-external-content-wrapper {
@@ -252,6 +251,17 @@ button:focus {
   max-height: 100vw;
   width: 100%;
   z-index: 251;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-external-content-wrapper > img {
+  width: 1200px;
+}
+
+.cross {
+  color: red;
+  font-size: 2rem;
 }
 /*
 * Windows Login Page

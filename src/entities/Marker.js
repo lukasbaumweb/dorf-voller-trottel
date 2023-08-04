@@ -6,6 +6,7 @@ import { PlayerKeyboard } from '../components/PlayerKeyboard';
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
 import { getAsset } from '../lib/AssetLoader';
+import { Modal } from '../components/Modal';
 
 export class Marker {
   constructor(config) {
@@ -16,6 +17,11 @@ export class Marker {
     this.transitionToMap = config.transitionToMap;
 
     this.sprite = null;
+    this.showTooltip = !!config.showTooltip;
+    this.clickable = !!config.clickable;
+    this.showModalOnClick = !!config.showModalOnClick;
+    this.modalContent = config.modalContent || null;
+    this.title = config.title || '';
 
     this.keyboard = new PlayerKeyboard();
     this.keyboard.init();
@@ -46,7 +52,7 @@ export class Marker {
     this.sprite.width = CONFIG.PIXEL_SIZE;
     this.sprite.height = CONFIG.PIXEL_SIZE;
 
-    // this.makeInteractable();
+    this.makeInteractable(this.showTooltip, this.clickable);
     this.sprite.animationSpeed = 1 / 8;
     this.sprite.loop = true;
     this.container.addChild(this.sprite);
@@ -68,22 +74,42 @@ export class Marker {
     this.sprite.parent.removeChild(this.sprite);
   }
 
-  makeInteractable() {
+  makeInteractable(showTooltip, clickable) {
     // Shows hand cursor
     this.sprite.buttonMode = true;
     this.sprite.eventMode = 'static';
 
-    const tooltip = new Tooltip();
-    tooltip.init();
+    let tooltip;
+    if (showTooltip) {
+      tooltip = new Tooltip();
+      tooltip.init();
+    }
 
-    this.sprite.on('pointerenter', (e) => {
+    this.sprite.on('pointerenter', () => {
       this.sprite.alpha = 0.5;
-      tooltip.showMessage(translate(this.id));
+      showTooltip && tooltip.showMessage(translate(this.id));
     });
 
-    this.sprite.on('pointerleave', () => {
-      this.sprite.alpha = 1;
-      tooltip.hide();
+    this.modal = new Modal({
+      modalContent: this.modalContent,
+      title: this.title
     });
+    this.modal.init();
+
+    if (clickable) {
+      this.sprite.on('click', () => {
+        this.modal.show();
+      });
+    }
+
+    this.sprite.on('pointerleave', (e) => {
+      this.sprite.alpha = 1;
+    });
+  }
+
+  showModal() {
+    if (this.modal) {
+      this.modal.show();
+    }
   }
 }

@@ -1,0 +1,150 @@
+{"frames": {
+
+"grandma-erna-idle-down-1.png":
+{
+	"frame": {"x":0,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-idle-down-2.png":
+{
+	"frame": {"x":16,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-idle-left-1.png":
+{
+	"frame": {"x":32,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-idle-left-2.png":
+{
+	"frame": {"x":48,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-idle-right-1.png":
+{
+	"frame": {"x":64,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-idle-right-2.png":
+{
+	"frame": {"x":80,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-idle-up-1.png":
+{
+	"frame": {"x":96,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-idle-up-2.png":
+{
+	"frame": {"x":112,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-walk-down-1.png":
+{
+	"frame": {"x":128,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-walk-down-2.png":
+{
+	"frame": {"x":144,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-walk-left-1.png":
+{
+	"frame": {"x":160,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-walk-left-2.png":
+{
+	"frame": {"x":176,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-walk-right-1.png":
+{
+	"frame": {"x":192,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-walk-right-2.png":
+{
+	"frame": {"x":208,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-walk-up-1.png":
+{
+	"frame": {"x":224,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+"grandma-erna-walk-up-2.png":
+{
+	"frame": {"x":240,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+}},
+"animations": {
+	"grandma-erna-idle-down": ["grandma-erna-idle-down-1.png","grandma-erna-idle-down-2.png"],
+	"grandma-erna-idle-left": ["grandma-erna-idle-left-1.png","grandma-erna-idle-left-2.png"],
+	"grandma-erna-idle-right": ["grandma-erna-idle-right-1.png","grandma-erna-idle-right-2.png"],
+	"grandma-erna-idle-up": ["grandma-erna-idle-up-1.png","grandma-erna-idle-up-2.png"],
+	"grandma-erna-walk-down": ["grandma-erna-walk-down-1.png","grandma-erna-walk-down-2.png"],
+	"grandma-erna-walk-left": ["grandma-erna-walk-left-1.png","grandma-erna-walk-left-2.png"],
+	"grandma-erna-walk-right": ["grandma-erna-walk-right-1.png","grandma-erna-walk-right-2.png"],
+	"grandma-erna-walk-up": ["grandma-erna-walk-up-1.png","grandma-erna-walk-up-2.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "grandma-erna.png",
+	"format": "RGBA8888",
+	"size": {"w":256,"h":16},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:081c5eb8d25e36d820a0b122bada644b:12401bdea8a9159bfea12b0637a8161f:7af3b1f1890bd8e55d37741e0612ea33$"
+}
+}

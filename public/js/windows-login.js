@@ -1,4 +1,4 @@
-window.init = (root) => {
+window.externalScriptRunner.register('find-errors', (root) => {
   const script = document.createElement('script');
   script.onload = function () {
     const html = `
@@ -54,8 +54,11 @@ window.init = (root) => {
         storyFlags['help-erna'] = true;
         window.localStorage.setItem(key, JSON.stringify(storyFlags));
         document.getElementById('password').parentElement.innerHTML = '<h3>Herzlich Willkommen ...<h3>';
-        const evt = new window.CustomEvent('renderQuests');
-        document.dispatchEvent(evt);
+        const evt1 = new window.CustomEvent('renderQuests');
+        const evt2 = new window.CustomEvent('addStoryFlag', { detail: { flag: 'helped-erna' } });
+
+        document.dispatchEvent(evt1);
+        document.dispatchEvent(evt2);
       } else {
         document.getElementById('password').setCustomValidity('Falsches Passwort!');
         document.getElementById('password').setAttribute('placeholder', 'Falsches Passwort');
@@ -85,4 +88,4 @@ window.init = (root) => {
   script.src = `${window.location.origin}/public/js/crypto-js.min.js`;
 
   document.head.appendChild(script);
-};
+});

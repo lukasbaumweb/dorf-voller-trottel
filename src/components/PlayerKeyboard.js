@@ -1,3 +1,5 @@
+import { getGameBlocked } from '../utils';
+
 export class PlayerKeyboard {
   constructor() {
     this.heldDirections = [];
@@ -24,7 +26,7 @@ export class PlayerKeyboard {
   }
 
   onKeyUp = (e) => {
-    if (window._game?.isBlocked) return;
+    if (getGameBlocked()) return;
 
     const dir = this.map[e.code];
     const index = this.heldDirections.indexOf(dir);
@@ -34,7 +36,7 @@ export class PlayerKeyboard {
   };
 
   onKeyDown = (e) => {
-    if (window._game?.isBlocked) return;
+    if (getGameBlocked()) return;
 
     const dir = this.map[e.code];
     if (dir && this.heldDirections.indexOf(dir) === -1) {

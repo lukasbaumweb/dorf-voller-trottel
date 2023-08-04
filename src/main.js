@@ -9,6 +9,7 @@ import { clearStoredValue, setStoredValue, STORAGE_KEYS, getStoredValue } from '
 import { formatString, translate, translateTemplates } from './lib/Translator';
 import './style.css';
 import { getCurrenTask, runMonolog } from './utils';
+import { initialize } from './lib/ExternalScriptRunner';
 
 const startGame = async () => {
   try {
@@ -31,7 +32,7 @@ const startGame = async () => {
 
 const greetUser = () => {
   const savedUpdateOn = getStoredValue(STORAGE_KEYS.updatedOn, false);
-  console.log(savedUpdateOn);
+
   if (savedUpdateOn) {
     const message = getStoredValue(
       STORAGE_KEYS.welcomeMessage,
@@ -68,6 +69,7 @@ menu.onLoadGame = async () => {
 };
 translateTemplates();
 
+initialize();
 menu.init();
 
 // new Keyboard('Escape', () => {

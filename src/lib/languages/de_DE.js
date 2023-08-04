@@ -5,7 +5,7 @@ export const deDE = {
       'Rette dein Dorf vor Hackern durch das Verbessern der IT-Sicherheitskenntnisse deiner Dorfkollegen. Du bist dabei der neu hinzugezogene IT-Sicherheitsexperte. Löse alle Aufgaben oder verlasse das Dorf voller Trottel!',
     username: 'Nutzername'
   },
-  home: 'Büro',
+  'home-marker': 'Büro',
   'small house': 'Haus der alten Dame',
   'large house': 'Haus des Bürgermeisters',
   townhall: 'Rathaus',
@@ -23,5 +23,6 @@ export const deDE = {
   cancel: 'Abbrechen',
   accept: 'Ok',
   ignore: 'Ignorieren',
-  examine: 'Ansehen'
+  examine: 'Ansehen',
+  dog: 'Hund'
 };

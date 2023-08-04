@@ -38,6 +38,8 @@ export class Tooltip {
     this.tooltipContainer.style.display = 'block';
 
     this.tooltipContainer.innerText = message;
+
+    this.timeout = setTimeout(() => this.hide(), 3000);
   }
 
   hide() {

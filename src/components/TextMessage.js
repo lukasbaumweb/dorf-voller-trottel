@@ -1,4 +1,5 @@
 import { translate } from '../lib/Translator';
+import { setGameBlocked } from '../utils';
 import { Keyboard } from './Keyboard';
 
 class RevealingText {
@@ -107,11 +108,11 @@ export class TextMessage {
     } else {
       this.revealingText.warpToDone();
     }
-    window._game.isBlocked = false;
+    setGameBlocked(false);
   }
 
   async init() {
-    window._game.isBlocked = true;
+    setGameBlocked(true);
     this.createElement();
     document.body.appendChild(this.element);
 

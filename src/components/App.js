@@ -30,9 +30,6 @@ export default class App {
     document.body.appendChild(this.DOMGameContainer);
 
     this.isMounted = true;
-    window._game = {
-      isBlocked: false
-    };
   }
 
   get instance() {

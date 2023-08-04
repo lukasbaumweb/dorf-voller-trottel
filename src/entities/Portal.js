@@ -13,6 +13,7 @@ export class Portal {
     this.transitionToMap = config.transitionToMap;
     this.text = config.text;
     this.onAcceptText = config.onAcceptText;
+    this.required = config.required || [];
 
     this.sprite = null;
 

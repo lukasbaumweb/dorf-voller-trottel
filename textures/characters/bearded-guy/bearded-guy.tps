@@ -124,7 +124,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../../../public/textures/characters/old-man.json</filename>
+                <filename>dist/bearded-guy.json</filename>
             </struct>
         </map>
         <key>multiPackMode</key>
@@ -169,26 +169,26 @@
             <key>defaultPivotPoint</key>
             <point_f>0,0</point_f>
             <key>writePivotPoints</key>
-            <true/>
+            <false/>
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">idle-down-1.png</key>
-            <key type="filename">idle-down-2.png</key>
-            <key type="filename">idle-left-1.png</key>
-            <key type="filename">idle-left-2.png</key>
-            <key type="filename">idle-right-1.png</key>
-            <key type="filename">idle-right-2.png</key>
-            <key type="filename">idle-up-1.png</key>
-            <key type="filename">idle-up-2.png</key>
-            <key type="filename">walk-down-1.png</key>
-            <key type="filename">walk-down-2.png</key>
-            <key type="filename">walk-left-1.png</key>
-            <key type="filename">walk-left-2.png</key>
-            <key type="filename">walk-right-1.png</key>
-            <key type="filename">walk-right-2.png</key>
-            <key type="filename">walk-up-1.png</key>
-            <key type="filename">walk-up-2.png</key>
+            <key type="filename">sprites/bearded-guy-idle-down-1.png</key>
+            <key type="filename">sprites/bearded-guy-idle-down-2.png</key>
+            <key type="filename">sprites/bearded-guy-idle-left-1.png</key>
+            <key type="filename">sprites/bearded-guy-idle-left-2.png</key>
+            <key type="filename">sprites/bearded-guy-idle-right-1.png</key>
+            <key type="filename">sprites/bearded-guy-idle-right-2.png</key>
+            <key type="filename">sprites/bearded-guy-idle-up-1.png</key>
+            <key type="filename">sprites/bearded-guy-idle-up-2.png</key>
+            <key type="filename">sprites/bearded-guy-walk-down-1.png</key>
+            <key type="filename">sprites/bearded-guy-walk-down-2.png</key>
+            <key type="filename">sprites/bearded-guy-walk-left-1.png</key>
+            <key type="filename">sprites/bearded-guy-walk-left-2.png</key>
+            <key type="filename">sprites/bearded-guy-walk-right-1.png</key>
+            <key type="filename">sprites/bearded-guy-walk-right-2.png</key>
+            <key type="filename">sprites/bearded-guy-walk-up-1.png</key>
+            <key type="filename">sprites/bearded-guy-walk-up-2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -210,22 +210,22 @@
             <struct type="SpriteSheet">
                 <key>files</key>
                 <array>
-                    <filename>idle-down-1.png</filename>
-                    <filename>idle-down-2.png</filename>
-                    <filename>idle-left-1.png</filename>
-                    <filename>idle-left-2.png</filename>
-                    <filename>idle-right-1.png</filename>
-                    <filename>idle-right-2.png</filename>
-                    <filename>idle-up-1.png</filename>
-                    <filename>idle-up-2.png</filename>
-                    <filename>walk-down-1.png</filename>
-                    <filename>walk-down-2.png</filename>
-                    <filename>walk-left-1.png</filename>
-                    <filename>walk-left-2.png</filename>
-                    <filename>walk-right-1.png</filename>
-                    <filename>walk-right-2.png</filename>
-                    <filename>walk-up-1.png</filename>
-                    <filename>walk-up-2.png</filename>
+                    <filename>sprites/bearded-guy-idle-down-1.png</filename>
+                    <filename>sprites/bearded-guy-idle-down-2.png</filename>
+                    <filename>sprites/bearded-guy-idle-left-1.png</filename>
+                    <filename>sprites/bearded-guy-idle-left-2.png</filename>
+                    <filename>sprites/bearded-guy-idle-right-1.png</filename>
+                    <filename>sprites/bearded-guy-idle-right-2.png</filename>
+                    <filename>sprites/bearded-guy-idle-up-1.png</filename>
+                    <filename>sprites/bearded-guy-idle-up-2.png</filename>
+                    <filename>sprites/bearded-guy-walk-down-1.png</filename>
+                    <filename>sprites/bearded-guy-walk-down-2.png</filename>
+                    <filename>sprites/bearded-guy-walk-left-1.png</filename>
+                    <filename>sprites/bearded-guy-walk-left-2.png</filename>
+                    <filename>sprites/bearded-guy-walk-right-1.png</filename>
+                    <filename>sprites/bearded-guy-walk-right-2.png</filename>
+                    <filename>sprites/bearded-guy-walk-up-1.png</filename>
+                    <filename>sprites/bearded-guy-walk-up-2.png</filename>
                 </array>
             </struct>
         </map>

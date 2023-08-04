@@ -67,7 +67,7 @@ export class Modal {
         wrapper.classList.add('modal-external-content-wrapper');
         this.contentHTML.innerHTML = '';
         this.contentHTML.appendChild(wrapper);
-        window.init(wrapper);
+        window.externalScriptRunner.call(wrapper);
       };
       externalScript.onerror = (err) => {
         console.error(err);
@@ -80,7 +80,6 @@ export class Modal {
     this.wrapperHTML.classList.add('show');
     this.wrapperHTML.style.display = 'flex';
     this.isVisible = true;
-    console.log(this);
     if (this.isMounted && !this.isPlayed) {
       if (this.modalContent !== null) {
         this.displayModalContent();
@@ -91,7 +90,6 @@ export class Modal {
   }
 
   hide() {
-    console.log('Hiding...');
     this.wrapperHTML.classList.remove('show');
     this.wrapperHTML.style.display = 'none';
     this.isVisible = false;

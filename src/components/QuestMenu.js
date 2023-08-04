@@ -6,8 +6,6 @@ const inVisibleIcon = '<i class="fa fa-chevron-right" aria-hidden="true"></i>';
 
 export class QuestMenu {
   constructor() {
-    this.progress = getPlayerState();
-    this.completeProgress = CONFIG.quests;
     this.visible = false;
   }
 
@@ -43,6 +41,7 @@ export class QuestMenu {
     document.getElementById('toggleVisibility').addEventListener('click', () => this.toggle());
 
     document.addEventListener('renderQuests', () => {
+      console.log(this.renderQuests);
       this.renderQuests();
     });
 
@@ -50,20 +49,18 @@ export class QuestMenu {
   }
 
   renderQuests() {
+    this.progress = getPlayerState();
+    this.completeProgress = CONFIG.quests;
     this.content.innerHTML = '';
     this.completeProgress.forEach((quest, index) => {
       const el = document.createElement('div');
       el.setAttribute('data-quest-key', quest.id);
 
       const isFinished = Boolean(this.progress[quest.id]);
-      const prevQuestFinsished =
-        index > 0 ? Boolean(!isFinished && this.progress[this.completeProgress[index - 1].id]) : true;
-      const nextQuestFinsished = Boolean(
-        index < this.completeProgress.length - 1 && !isFinished && this.progress[this.completeProgress[index + 1].id]
-      );
-      const isCurrent = Boolean(prevQuestFinsished && !isFinished && !nextQuestFinsished);
+      const prevQuestFinsished = index > 0 ? Boolean(this.progress[this.completeProgress[index - 1].id]) : true;
 
-      console.log({ isFinished, prevQuestFinsished, isCurrent, nextQuestFinsished });
+      const isCurrent = Boolean(prevQuestFinsished && !isFinished);
+
       if (isCurrent) {
         el.classList.add('current');
       } else {
