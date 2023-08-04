@@ -17,16 +17,16 @@ const getGlobalTextures = () => {
 };
 
 const getMap = (level) => {
-  const lvl = CONFIG.levels[level].map;
+  const lvl = CONFIG.maps[level].map;
   return [lvl.config, lvl.lowerImagePath, lvl.upperImagePath].map((p) => getAsset(p));
 };
 
 const getItems = (level) => {
-  const configObjects = CONFIG.levels[level].configObjects;
+  const configObjects = CONFIG.maps[level].configObjects;
   const results = [];
   Object.entries(configObjects)
-    .filter(([key, item]) => key !== 'hero')
-    .forEach(([key, item]) => {
+    .filter(([key]) => key !== 'hero')
+    .forEach(([, item]) => {
       if (item.texture) results.push(getAsset(item.texture));
       if (item.config) results.push(getAsset(item.config));
     });

@@ -17,7 +17,7 @@ export const CONFIG = {
     },
     marker: { config: 'public/textures/utils/marker.json' }
   },
-  levels: {
+  maps: {
     dorf: {
       id: 'dorf',
       width: 30,
@@ -74,8 +74,10 @@ export const CONFIG = {
             { type: 'walk', direction: 'right' },
             { type: 'walk', direction: 'right' }
           ]
-        },
-        calendar: {
+        }
+      },
+      items: {
+        'search-image': {
           type: 'Item',
           x: 6 * PIXEL_SIZE,
           y: 23 * PIXEL_SIZE,
@@ -91,12 +93,12 @@ export const CONFIG = {
         'large house': {},
         townhall: {},
         'small house': {
-          transitionToMap: 'old-lady-home'
+          transitionToMap: 'small house'
         }
       }
     },
-    'old-lady-home': {
-      id: 'old-lady-home',
+    'small house': {
+      id: 'small house',
       width: 30,
       height: 20,
       map: {
@@ -110,48 +112,103 @@ export const CONFIG = {
           x: 15 * PIXEL_SIZE,
           y: 18 * PIXEL_SIZE,
           index: 5
-        },
+        }
+      },
+      items: {
         calendar: {
           type: 'Item',
-          x: 16 * PIXEL_SIZE,
-          y: 8 * PIXEL_SIZE,
-          index: 5,
           texture: 'public/textures/items/calendar.png',
           interactable: true,
           showModalOnClick: true,
-          modalContent: 'public/images/calendar.png'
-        } //,
-        // dog: {
-        //   type: 'Item',
-        //   x: 15 * PIXEL_SIZE,
-        //   y: 18 * PIXEL_SIZE,
-        //   index: 5
-        // },
-        // computer: { type: 'Item', x: 15 * PIXEL_SIZE, y: 18 * PIXEL_SIZE, index: 5 },
-        // 'dog-bed': { type: 'Item', x: 15 * PIXEL_SIZE, y: 18 * PIXEL_SIZE, index: 5 }
+          modalContent: 'public/images/calendar.png',
+          title: 'Hinweis: Ein Geburtstag scheint sehr wichtig zu sein'
+        },
+        dog: {
+          type: 'Item',
+          texture: 'public/textures/items/dog.png',
+          interactable: true,
+          showModalOnClick: true,
+          modalContent: 'public/images/dog.png',
+          title: 'Hinweis: Der Hund des Hauses'
+        },
+        computer: {
+          type: 'Item',
+          texture: 'public/textures/items/computer.png',
+          interactable: true,
+          showModalOnClick: true,
+          modalContent: 'public/js/windows-login.js',
+          title: 'Finde das Passwort heraus! Im Haus sind scheinbar Hinweise versteckt'
+        },
+        'dog bed': {
+          type: 'Item',
+          texture: 'public/textures/items/dog bed.png',
+          interactable: true,
+          showModalOnClick: true,
+          modalContent: 'public/images/dog bed.png',
+          width: 2 * PIXEL_SIZE,
+          height: PIXEL_SIZE,
+          title: 'Hinweis: Hmmm 🤔 Ein Bett für ein Haustier scheint das zu sein'
+        },
+        'sniffing blanket': {
+          type: 'Item',
+          texture: 'public/textures/items/sniffing blanket.png',
+          interactable: true,
+          showModalOnClick: true,
+          modalContent: 'public/images/sniffing blanket.png',
+          title: 'Hinweis: Die personalisierte Decke wird regelmäßig gereinigt'
+        }
       },
+
+      markers: {
+        'calendar-marker': {
+          type: 'Marker'
+        },
+        'dog-marker': {
+          type: 'Marker'
+        },
+        'computer-marker': {
+          type: 'Marker'
+        },
+        'dog bed-marker': {
+          type: 'Marker'
+        },
+        'sniffing blanket-marker': {
+          type: 'Marker'
+        }
+      },
+
       portals: {
         exit: {
           transitionToMap: 'dorf',
           x: 25 * PIXEL_SIZE,
           y: 18 * PIXEL_SIZE,
-          direction: 'up'
+          direction: 'up',
+          text: 'leave building',
+          onAcceptText: 'leave'
         }
       }
     }
   },
+  // TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
   quests: [
     {
+      key: 'talk-to-mayor',
       name: 'Erste Quest',
       description: 'Rede mit dem Bürgermeister!',
-      // TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
       hint: 'show image',
       image: ''
     },
     {
+      key: 'find-your-home',
       name: 'Zweite Quest',
       description: 'Finde dein Büro!',
-      // TODO: Vielleicht Kompass einbauen, der in die Richtung zeigt
+      hint: 'show image',
+      image: ''
+    },
+    {
+      key: 'crack-password-of-erna',
+      name: 'Dritte Quest',
+      description: 'Betrete das Haus der alten Dame und finde ihr Passwort heraus',
       hint: 'show image',
       image: ''
     }

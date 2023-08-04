@@ -11,6 +11,8 @@ export class Portal {
     this.x = config.x || 0;
     this.y = config.y || 0;
     this.transitionToMap = config.transitionToMap;
+    this.text = config.text;
+    this.onAcceptText = config.onAcceptText;
 
     this.sprite = null;
 

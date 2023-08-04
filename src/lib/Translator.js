@@ -24,7 +24,15 @@ const languages = {
     'old-man': 'Bürgermeister Fred',
     firstGreet: 'Hallo {0}, willkommen im Dorf voller Drottel!',
     greet: 'Hallo {0}, willkommen zurück!',
-    calendar: 'Kalender'
+    calendar: 'Kalender',
+    'sniffing blanket': 'Schnüffeldecke',
+    'leave building': 'Gebäude verlassen',
+    leave: 'Verlassen',
+    enter: 'Betreten',
+    cancel: 'Abbrechen',
+    accept: 'Ok',
+    ignore: 'Ignorieren',
+    examine: 'Ansehen'
   }
 };
 

@@ -3,14 +3,18 @@ import { CONFIG } from '../config';
 import { withGrid } from '../utils';
 import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
-import { Modal } from '../lib/Modal';
+import { Modal } from '../components/Modal';
 
 export class Item {
   constructor(config) {
-    this.id = null;
+    console.debug('ItemConfig: ', config);
+
+    this.id = config.id || `${new Date().getTime()}`;
     this.isMounted = false;
     this.x = config?.x || 0;
     this.y = config?.y || 0;
+    this.width = config?.width || CONFIG.PIXEL_SIZE;
+    this.height = config?.height || CONFIG.PIXEL_SIZE;
     this.sprite = null;
 
     this.texture = config.texture;
@@ -19,6 +23,7 @@ export class Item {
     this.interactable = !!config.interactable;
     this.showModalOnClick = !!config.showModalOnClick;
     this.modalContent = config.modalContent || null;
+    this.title = config.title || '';
 
     // These happen once on map startup.
     this.behaviorLoop = config.behaviorLoop || [];
@@ -31,9 +36,10 @@ export class Item {
     console.debug(`Mounting Item: ${this.id}`);
     this.map = map;
     this.sprite = Sprite.from(this.texture);
-    this.sprite.height = CONFIG.PIXEL_SIZE;
-    this.sprite.width = CONFIG.PIXEL_SIZE;
-    this.sprite.anchor.set(0.5);
+    this.sprite.height = this.height;
+    this.sprite.width = this.width;
+    const xPivot = this.width > this.height ? 0.25 : 0.5;
+    this.sprite.anchor.set(xPivot, 0.5);
     this.sprite.zIndex = 5;
 
     this.interactable && this.makeInteractable(true, this.showModalOnClick);
@@ -71,17 +77,24 @@ export class Item {
     });
 
     if (clickable) {
-      const modal = new Modal({
-        modalContent: this.modalContent
+      this.modal = new Modal({
+        modalContent: this.modalContent,
+        title: this.title
       });
-      modal.init();
+      this.modal.init();
       this.sprite.on('click', () => {
-        modal.show();
+        this.modal.show();
       });
     }
 
     this.sprite.on('pointerleave', (e) => {
       this.sprite.alpha = 1;
     });
+  }
+
+  showModal() {
+    if (this.modal) {
+      this.modal.show();
+    }
   }
 }

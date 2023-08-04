@@ -5,7 +5,7 @@ import { isNullOrUndefined } from '../utils';
  */
 const STORAGE_KEYS = {
   language: 'language',
-  level: 'level',
+  map: 'map',
   player: 'player',
   gameScale: 'gameScale',
   welcomeMessage: 'welcomeMessage',

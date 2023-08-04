@@ -1,9 +1,10 @@
+import { translate } from '../lib/Translator';
 import { Keyboard } from './Keyboard';
 
 class RevealingText {
   constructor(config) {
     this.element = config.element;
-    this.text = config.text;
+    this.text = config.text || '';
     this.speed = config.speed || 60;
 
     this.timeout = null;
@@ -12,7 +13,7 @@ class RevealingText {
 
   revealOneCharacter(list) {
     const next = list.splice(0, 1)[0];
-    next.span.classList.add('revealed');
+    next?.span?.classList.add('revealed');
 
     if (list.length > 0) {
       this.timeout = setTimeout(() => {
@@ -33,7 +34,7 @@ class RevealingText {
 
   init() {
     const characters = [];
-    this.text.split('').forEach((character) => {
+    this.text?.split('').forEach((character) => {
       // Create each span, add to element in DOM
       const span = document.createElement('span');
       span.textContent = character;
@@ -51,12 +52,12 @@ class RevealingText {
 }
 
 export class TextMessage {
-  constructor({ text, onComplete, onCancel, onAcceptText, onCancelText }) {
+  constructor({ text, onComplete, onCancel, onAcceptText, onCancelText = translate('cancel') }) {
     this.text = text;
     this.onComplete = onComplete;
     this.onCancel = onCancel;
-    this.cancelBtnText = onCancelText || 'Cancel (Esc)';
-    this.acceptBtnText = onAcceptText || 'Ok (Enter)';
+    this.cancelBtnText = onCancelText ? onCancelText + ' (Esc)' : `${translate('cancel')} (Esc)`;
+    this.acceptBtnText = onAcceptText ? onAcceptText + ' (Enter)' : `${translate('accept')} (Enter)`;
 
     this.element = null;
   }
@@ -68,11 +69,7 @@ export class TextMessage {
     this.element.innerHTML = `
         <p class="message-content"></p>
         <div class="message-actions">
-          ${
-            this.onCancel
-              ? `<button class="message-action btn btn-error" id="btnCancel">${this.cancelBtnText}</button>`
-              : ''
-          }
+          <button class="message-action btn btn-error" id="btnCancel">${this.cancelBtnText}</button>
           <button class="message-action btn btn-error" id="btnEnter">${this.acceptBtnText}</button>  
         </div>
       `;

@@ -3,7 +3,7 @@ import { nextPosition, withGrid } from '../utils';
 import { Player } from './Player';
 import { CONFIG } from '../config';
 import { loadLayers, loadMapLayers, loadWalls, loadObjects } from '../lib/MapLoader';
-import { getCurrentLevel } from '../gameState';
+import { getCurrentMap } from '../gameState';
 import { Portal } from './Portal';
 import { STORAGE_KEYS, getStoredValue } from '../lib/Storage';
 import { TextMessage } from '../components/TextMessage';
@@ -16,7 +16,7 @@ import { loadLevel } from '../lib/AssetLoader';
 
 export class Map {
   constructor({ map, app, layersContainer }) {
-    const level = getCurrentLevel();
+    const level = getCurrentMap();
 
     this.id = level.id || `ID: ${new Date().getTime()}-${Math.random() * 1000}`;
     this.walls = level.walls || {};
@@ -32,8 +32,8 @@ export class Map {
   }
 
   async initMap() {
-    const level = CONFIG.levels[getCurrentLevel()];
-    await loadLevel(getCurrentLevel());
+    const level = CONFIG.maps[getCurrentMap()];
+    await loadLevel(getCurrentMap());
 
     const map = level.map;
 
@@ -54,19 +54,20 @@ export class Map {
     this.layers.find((l) => l.name === 'map (upper)').addChild(this.maps.upper);
     this.mountObjects();
 
-    console.debug(this.layers);
+    // console.debug(this.layers);
   }
 
   mountObjects() {
     console.groupCollapsed('Mounting objects');
-    const level = CONFIG.levels[getCurrentLevel()];
+    const level = CONFIG.maps[getCurrentMap()];
 
     const charactersContainer = this.layersContainer.children.find((layer) => layer.name === '######players######');
     const objectsContainer = this.layersContainer.children.find((layer) => layer.name === 'objects');
 
     this.configObjects = level.configObjects || {};
-    this.markerObjects = level.markerObjects || {};
+    this.markers = level.markers || {};
     this.portals = {};
+    this.items = {};
 
     Object.keys(this.configObjects).forEach((key) => {
       const object = this.configObjects[key];
@@ -85,9 +86,6 @@ export class Map {
 
         const combined = Object.assign(object, saved);
         instance = new Character(combined);
-      } else if (object.type === 'Item') {
-        object.container = objectsContainer;
-        instance = new Item(object);
       }
 
       this.gameObjects[key] = instance;
@@ -105,24 +103,34 @@ export class Map {
       let instance;
 
       const portal = level.portals && level.portals[obj.name];
+      const marker = level.markers && level.markers[obj.name];
+      const item = level.items && level.items[obj.name];
+
       if (portal) {
         config = Object.assign(portal, config);
         instance = new Portal(config);
         this.portals[obj.name] = instance;
-      } else {
+      } else if (marker) {
+        config = Object.assign(marker, config);
         instance = new Marker(config);
-        this.markerObjects[obj.name] = instance;
+        this.markers[obj.name] = instance;
+      } else if (item) {
+        config = Object.assign(item, config);
+        instance = new Item(config);
+        this.items[obj.name] = instance;
       }
 
-      instance.mount(this);
+      if (portal || marker || item) {
+        instance.mount(this);
+      }
     });
 
-    this.movePlayerIfOnMarker();
+    this.movePlayerIfOnPortal();
 
     console.groupEnd();
   }
 
-  movePlayerIfOnMarker() {
+  movePlayerIfOnPortal() {
     const hero = this.gameObjects.hero;
 
     const match = Object.values(this.portals).find((object) => {
@@ -132,7 +140,6 @@ export class Map {
       const directions = ['down', 'up', 'right', 'left'].filter(
         (direction) => !this.isSpaceTaken(this.gameObjects.hero.x, this.gameObjects.hero.y, direction)
       );
-      console.log(directions);
       if (directions.length > 0) {
         switch (directions[0]) {
           case 'down':
@@ -184,7 +191,11 @@ export class Map {
       obj.unmount();
     });
 
-    Object.values(this.markerObjects).forEach((obj) => {
+    Object.values(this.markers).forEach((obj) => {
+      obj.unmount();
+    });
+
+    Object.values(this.items).forEach((obj) => {
       obj.unmount();
     });
 
@@ -194,9 +205,10 @@ export class Map {
     this.walls = {};
 
     this.configObjects = {};
-    this.markerObjects = {};
+    this.markers = {};
     this.portals = {};
     this.gameObjects = {};
+    this.items = {};
   }
 
   isSpaceTaken(currentX, currentY, direction) {
@@ -257,32 +269,54 @@ export class Map {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
 
+    if (match && match.transitionToMap) {
+      const onComplete = () => {
+        let targetPosition = CONFIG.maps[match.transitionToMap].configObjects.hero;
+        if (match.transitionToMap === CONFIG.maps.dorf.id) {
+          const currentMap = getCurrentMap();
+          const targetPortal = Object.values(CONFIG.maps[match.transitionToMap].portals).filter(
+            ({ id }) => id === currentMap
+          );
+          targetPosition = { x: targetPortal.x, y: targetPortal.y, direction: targetPortal.direction };
+        }
+        new GameEvent({
+          map: this,
+          event: {
+            type: 'changeMap',
+            transitionToMap: match.transitionToMap,
+            x: targetPosition.x,
+            y: targetPosition.y,
+            direction: targetPosition.direction || 'down'
+          }
+        }).init();
+      };
+
+      new TextMessage({
+        text: translate(match.text) || `${translate(match.id)} ${translate('enter')}`,
+        onAcceptText: translate(match.onAcceptText) || translate('enter'),
+        onComplete
+      }).init();
+    }
+  }
+
+  checkForItems() {
+    const hero = this.gameObjects.hero;
+
+    const match = Object.values(this.markers).find((object) => {
+      return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
+    });
     console.log(match);
 
-    if (match && match.transitionToMap) {
+    if (match) {
       new TextMessage({
-        text: `${translate(match.id)} betreten`,
+        text: `${translate(match.id)}`,
         onCancel: () => {
           console.debug('canceled');
         },
-        onAcceptText: 'Betreten (Enter)',
+        onCancelText: translate('ignore'),
+        onAcceptText: translate('examine'),
         onComplete: () => {
-          console.log(match);
-          let targetPosition = CONFIG.levels[match.transitionToMap].configObjects.hero;
-          // FIXME: POsition after transitioning
-          if (match.transitionToMap === CONFIG.levels.dorf.id) {
-            targetPosition = { x: match.x, y: match.y, direction: match.direction };
-          }
-          new GameEvent({
-            map: this,
-            event: {
-              type: 'changeMap',
-              transitionToMap: match.transitionToMap,
-              x: targetPosition.x,
-              y: targetPosition.y,
-              direction: targetPosition.direction
-            }
-          }).init();
+          match.showModal();
         }
       }).init();
     }

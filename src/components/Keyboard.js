@@ -2,7 +2,7 @@ export class Keyboard {
   constructor(keyCode, callback) {
     let keySafe = true;
     this.keydownFunction = function (event) {
-      // console.log(event.code);
+      // console.debug(event.code);
       if (event.code === keyCode) {
         if (keySafe) {
           keySafe = false;

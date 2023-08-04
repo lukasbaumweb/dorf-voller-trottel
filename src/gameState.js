@@ -1,11 +1,12 @@
+import { CONFIG } from './config';
 import { STORAGE_KEYS, getStoredValue, setStoredValue, updateStoredValue } from './lib/Storage';
 
-export const setCurrentLevel = (value) => {
-  setStoredValue(STORAGE_KEYS.level, value);
+export const setCurrentMap = (value) => {
+  setStoredValue(STORAGE_KEYS.map, value);
 };
 
-export const getCurrentLevel = () => {
-  return getStoredValue(STORAGE_KEYS.level, 'dorf');
+export const getCurrentMap = () => {
+  return getStoredValue(STORAGE_KEYS.map, CONFIG.maps.dorf.id);
 };
 
 export const getPlayerState = () => {

@@ -1,4 +1,5 @@
-import { Keyboard } from './../components/Keyboard';
+import { makeid } from '../utils';
+import { Keyboard } from './Keyboard';
 
 export class Modal {
   wrapperHTML;
@@ -6,10 +7,12 @@ export class Modal {
   headerHTML;
   contentHTML;
 
-  constructor({ modalContent }) {
+  constructor({ modalContent, title }) {
+    this.id = makeid(5);
     this.isMounted = false;
     this.isVisible = false;
-
+    this.isPlayed = false;
+    this.title = title;
     this.modalContent = modalContent;
   }
 
@@ -24,8 +27,9 @@ export class Modal {
 
     this.header = document.createElement('div');
     this.header.classList.add('modal-header');
-    this.header.innerHTML =
-      '<button class="modal-close-btn" id="closeModal"><img src="public/icons/close.svg" /></button>';
+    this.header.innerHTML = `<h3 class="modal-title"">${
+      this.title || ''
+    }<h3><button class="modal-close-btn" id="closeModal${this.id}"><img src="public/icons/close.svg" /></button>`;
     this.modalHTML.appendChild(this.header);
 
     this.contentHTML = document.createElement('div');
@@ -35,17 +39,11 @@ export class Modal {
 
     document.body.appendChild(this.wrapperHTML);
 
-    if (this.modalContent !== null) {
-      this.displayModalContent();
-    }
-    this.attachEventListeners();
-    this.isMounted = false;
+    this.isMounted = true;
   }
 
   attachEventListeners() {
-    document.getElementById('closeModal').addEventListener('click', () => {
-      this.hide();
-    });
+    document.getElementById(`closeModal${this.id}`).addEventListener('click', () => this.hide());
 
     new Keyboard('Escape', () => this.hide());
   }
@@ -59,6 +57,22 @@ export class Modal {
   displayModalContent() {
     if (this.isImg()) {
       this.contentHTML.innerHTML = `<img src="${this.modalContent}" />`;
+    } else if (this.modalContent.endsWith('.html')) {
+      this.contentHTML.innerHTML = `<iframe src="${this.modalContent}" height="100%" width="100%"></iframe>`;
+    } else if (this.modalContent.endsWith('.js')) {
+      const externalScript = document.createElement('script');
+      externalScript.src = this.modalContent;
+      externalScript.onload = () => {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('modal-external-content-wrapper');
+        this.contentHTML.innerHTML = '';
+        this.contentHTML.appendChild(wrapper);
+        window.init(wrapper);
+      };
+      externalScript.onerror = (err) => {
+        console.error(err);
+      };
+      document.head.appendChild(externalScript);
     }
   }
 
@@ -66,12 +80,20 @@ export class Modal {
     this.wrapperHTML.classList.add('show');
     this.wrapperHTML.style.display = 'flex';
     this.isVisible = true;
+    console.log(this);
+    if (this.isMounted && !this.isPlayed) {
+      if (this.modalContent !== null) {
+        this.displayModalContent();
+      }
+      this.attachEventListeners();
+      this.isPlayed = true;
+    }
   }
 
   hide() {
+    console.log('Hiding...');
     this.wrapperHTML.classList.remove('show');
     this.wrapperHTML.style.display = 'none';
-
     this.isVisible = false;
   }
 

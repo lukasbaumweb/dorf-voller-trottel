@@ -9,6 +9,7 @@ import { getAsset } from '../lib/AssetLoader';
 
 export class Marker {
   constructor(config) {
+    console.debug('MarkerConfig: ', config);
     this.id = config.id;
     this.x = config.x || 0;
     this.y = config.y || 0;
@@ -45,7 +46,7 @@ export class Marker {
     this.sprite.width = CONFIG.PIXEL_SIZE;
     this.sprite.height = CONFIG.PIXEL_SIZE;
 
-    this.makeInteractable();
+    // this.makeInteractable();
     this.sprite.animationSpeed = 1 / 8;
     this.sprite.loop = true;
     this.container.addChild(this.sprite);

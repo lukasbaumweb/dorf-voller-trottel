@@ -62,11 +62,15 @@ export class World {
       object.update(cameraPerson);
     });
 
-    Object.values(this.map.markerObjects).forEach((object) => {
+    Object.values(this.map.markers).forEach((object) => {
       object.update(cameraPerson);
     });
 
     Object.values(this.map.portals).forEach((object) => {
+      object.update(cameraPerson);
+    });
+
+    Object.values(this.map.items).forEach((object) => {
       object.update(cameraPerson);
     });
   }
@@ -79,15 +83,13 @@ export class World {
 
     new Keyboard('Enter', () => {
       this.map.checkForActionCutscene();
+      this.map.checkForItems();
     });
 
-    new Keyboard('KeyP', () => {
+    new Keyboard('F10', () => {
       console.debug('Game stopped completly!');
-      this.app.ticker.remove(this.gameLoopReference);
-    });
-
-    new Keyboard('KeyC', () => {
       this.map.unmount();
+      this.app.ticker.remove(this.gameLoopReference);
     });
   }
 
