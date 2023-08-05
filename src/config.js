@@ -70,7 +70,7 @@ export const CONFIG = {
               ]
             },
             {
-              required: ['found-his-home'],
+              required: ['talked-to-mayor-for-first-time'],
               disqualify: ['talked-to-mayor-for-second-time'],
               events: [
                 {
@@ -82,7 +82,7 @@ export const CONFIG = {
               ]
             },
             {
-              required: ['talked-to-mayor-for-second-time'],
+              required: ['found-his-home'],
               disqualify: ['talked-to-mayor-for-third-time'],
               events: [
                 {
@@ -160,8 +160,8 @@ export const CONFIG = {
         },
         'grandma-erna': {
           type: 'NPC',
-          x: 24 * PIXEL_SIZE,
-          y: 10 * PIXEL_SIZE,
+          x: 15 * PIXEL_SIZE,
+          y: 15 * PIXEL_SIZE,
           index: 5,
           texture: 'public/textures/characters/grandma-erna.png',
           config: 'public/textures/characters/grandma-erna.json',
@@ -175,31 +175,40 @@ export const CONFIG = {
                   text: 'Oh, hallo junger Mann! Du musst <NAME>, der neue IT-Sicherheitsexperte sein. Wie schön, dass du endlich da bist. Dein Vorgänger, Ralf Reinfall, konnte mir leider nicht helfen. Der war aber auch eine Katastrophe auf zwei Beinen, sag ich dir! Und Hunde mochte er auch nicht. Wie kann man nur keine Hunde mögen?!!!1!?? Aber komm doch erstmal rein.“',
                   faceHero: 'grandma-erna'
                 },
-                { type: 'addStoryFlag', flag: 'talked-to-grandma-erna-for-first-time' }
+                { type: 'addStoryFlag', flag: 'talked-to-grandma-erna-for-first-time' },
+                {
+                  type: 'textMessage',
+                  text: 'Helfe der alten Dame ihr Passwort zu finden. Im Haus findest du 4 Hinweise, die auf das richtige Passwort schließen lassen. Wenn du alle Hinweise gefunden hast, gib das Passwort am Computer der alten Dame ein. Ob du wirklich richtig liegst, siehst du, wenn der Bildschirm angeht. <br/>Viel Erfolg!'
+                }
               ]
             }
           ],
           behaviorLoop: [
+            { type: 'stand', direction: 'down', time: 3000 },
+            { type: 'walk', direction: 'down' },
             { type: 'stand', direction: 'down', time: 5000 },
-            { type: 'walk', direction: 'down' },
-            { type: 'walk', direction: 'down' },
-            { type: 'walk', direction: 'down' },
-            { type: 'stand', direction: 'down', time: 2000 },
-            { type: 'walk', direction: 'left' },
-            { type: 'walk', direction: 'left' },
-            { type: 'walk', direction: 'left' },
-            { type: 'walk', direction: 'left' },
-            { type: 'walk', direction: 'left' },
-            { type: 'stand', direction: 'left', time: 2000 },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'walk', direction: 'right' },
+            { type: 'stand', direction: 'up', time: 6000 },
             { type: 'walk', direction: 'up' },
-            { type: 'walk', direction: 'up' },
-            { type: 'walk', direction: 'up' },
-            { type: 'stand', direction: 'right', time: 5000 },
-            { type: 'walk', direction: 'right' },
-            { type: 'walk', direction: 'right' },
-            { type: 'walk', direction: 'right' },
-            { type: 'walk', direction: 'right' },
-            { type: 'walk', direction: 'right' }
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' },
+            { type: 'walk', direction: 'left' }
           ]
         }
       },

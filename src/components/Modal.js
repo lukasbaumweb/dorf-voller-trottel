@@ -1,4 +1,4 @@
-import { makeid } from '../utils';
+import { makeid, setGameBlocked } from '../utils';
 import { Keyboard } from './Keyboard';
 
 export class Modal {
@@ -77,6 +77,7 @@ export class Modal {
   }
 
   show() {
+    setGameBlocked(true);
     this.wrapperHTML.classList.add('show');
     this.wrapperHTML.style.display = 'flex';
     this.isVisible = true;
@@ -93,6 +94,7 @@ export class Modal {
     this.wrapperHTML.classList.remove('show');
     this.wrapperHTML.style.display = 'none';
     this.isVisible = false;
+    setGameBlocked(false);
   }
 
   toggle() {

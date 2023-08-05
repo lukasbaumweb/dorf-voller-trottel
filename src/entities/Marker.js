@@ -23,6 +23,9 @@ export class Marker {
     this.modalContent = config.modalContent || null;
     this.title = config.title || '';
 
+    this.required = config.required || null;
+    this.disqualify = config.disqualify || null;
+
     this.keyboard = new PlayerKeyboard();
     this.keyboard.init();
     this.isStanding = true;

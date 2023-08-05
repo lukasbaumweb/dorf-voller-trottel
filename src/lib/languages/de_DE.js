@@ -24,5 +24,10 @@ export const deDE = {
   accept: 'Ok',
   ignore: 'Ignorieren',
   examine: 'Ansehen',
-  dog: 'Hund'
+  dog: 'Hund',
+  'calendar-marker': 'Kalender',
+  'dog-marker': 'Hund',
+  'computer-marker': 'PC',
+  'dog bed-marker': 'Bett',
+  'sniffing blanket-marker': 'Schnüffeldecke'
 };
