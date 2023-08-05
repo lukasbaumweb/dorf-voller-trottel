@@ -9,7 +9,8 @@ import { clearStoredValue, setStoredValue, STORAGE_KEYS, getStoredValue } from '
 import { formatString, translate, translateTemplates } from './lib/Translator';
 import './style.css';
 import { getCurrenTask, runMonolog } from './utils';
-import { initialize } from './lib/ExternalScriptRunner';
+import { initExternalScriptRunner } from './lib/ExternalScriptRunner';
+import { initToastMessenger } from './components/ToastMessenger';
 
 const startGame = async () => {
   try {
@@ -69,7 +70,9 @@ menu.onLoadGame = async () => {
 };
 translateTemplates();
 
-initialize();
+initExternalScriptRunner();
+initToastMessenger();
+
 menu.init();
 
 // new Keyboard('Escape', () => {

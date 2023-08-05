@@ -1,3 +1,4 @@
+import { Modal } from './components/Modal';
 import { CONFIG, STORY_FLAGS } from './config';
 import { STORAGE_KEYS, getStoredValue, setStoredValue, updateStoredValue } from './lib/Storage';
 
@@ -29,20 +30,39 @@ export const initialize = () => {
     console.debug(`Flag: ${detail.flag}`);
     const evt = new window.CustomEvent('renderQuests');
     document.dispatchEvent(evt);
+
+    const currentQuest = Object.values(CONFIG.quests).find((q) => q.id === detail.flag);
+    if (currentQuest) {
+      const toastEvt = new window.CustomEvent('showToastMessage', {
+        detail: {
+          text: `Glückwunsch. Quest abgeschlossen: ${currentQuest.short}`,
+          onClick: () => {
+            if (currentQuest) {
+              const modal = new Modal({
+                modalContent: currentQuest.award,
+                title: currentQuest.short
+              });
+              modal.init();
+              modal.show();
+            }
+          }
+        }
+      });
+      document.dispatchEvent(toastEvt);
+    }
   });
   window[GLOBAL_KEY] = true;
 };
 
-export const checkStoryFlag = (storyFlags = []) => {
+export const checkStoryFlag = (storyFlags) => {
   const currentProgress = getPlayerState();
   return (storyFlags || []).every((storyFlag) => {
     return currentProgress[storyFlag];
   });
 };
 
-export const checkDisqualifiedFlags = (storyFlags = []) => {
+export const checkDisqualifiedFlags = (storyFlags) => {
   const currentProgress = getPlayerState();
-  console.log(currentProgress, storyFlags);
   return !(storyFlags || []).some((storyFlag) => {
     return currentProgress[storyFlag];
   });

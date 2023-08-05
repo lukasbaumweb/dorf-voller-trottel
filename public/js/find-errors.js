@@ -19,7 +19,7 @@ window.externalScriptRunner.register('find-errors', (wrapper) => {
 
   const checkCompletion = () => {
     const allFinsihed = Object.values(targets).every((target) => Boolean(target.found));
-
+    console.debug('Allfinished', allFinsihed);
     if (allFinsihed) {
       const evt = new window.CustomEvent('addStoryFlag', { detail: { flag: 'found-his-home' } });
       document.dispatchEvent(evt);
@@ -70,7 +70,6 @@ window.externalScriptRunner.register('find-errors', (wrapper) => {
 
   Object.entries(targets).forEach(([id, values]) => {
     if (values.found) {
-      console.log(id);
       addCross(document.getElementById(`area-${id}`));
     }
   });

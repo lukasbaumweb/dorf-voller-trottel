@@ -1,5 +1,6 @@
 import { CONFIG } from '../config';
 import { getPlayerState } from '../gameState';
+import { Modal } from './Modal';
 
 const visibleIcon = '<i class="fa fa-chevron-left" aria-hidden="true"></i>';
 const inVisibleIcon = '<i class="fa fa-chevron-right" aria-hidden="true"></i>';
@@ -41,7 +42,6 @@ export class QuestMenu {
     document.getElementById('toggleVisibility').addEventListener('click', () => this.toggle());
 
     document.addEventListener('renderQuests', () => {
-      console.log(this.renderQuests);
       this.renderQuests();
     });
 
@@ -66,13 +66,25 @@ export class QuestMenu {
       } else {
         el.classList.add(isFinished ? 'finished' : 'unfinished');
       }
+
+      const awardIcon = `<i class="fa fa-trophy trophyAward" id="trophyAward${quest.id}" aria-hidden="true"></i>`;
+
       el.innerHTML = `<i class="fa fa-${isFinished ? 'check-' : ''}circle${
         isFinished ? '' : '-o'
-      }" aria-hidden="true"></i><p title="${quest.long || 'Keine Beschreibung vorhanden'}">${
-        quest.short
-      } <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+      }" aria-hidden="true"></i>
+      ${quest.award ? awardIcon : '<span class="spacer"></span>'}<p title="${
+        quest.long || 'Keine Beschreibung vorhanden'
+      }">${quest.short} <i class="fa fa-question-circle-o" aria-hidden="true"></i>
       </p>`;
       this.content.appendChild(el);
+
+      if (isFinished && quest.award) {
+        const modal = new Modal({ modalContent: quest.award, title: quest.awardTitle });
+        modal.init();
+        document.getElementById(`trophyAward${quest.id}`).addEventListener('click', () => {
+          modal.show();
+        });
+      }
     });
   }
 

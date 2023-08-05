@@ -4,6 +4,7 @@ import { withGrid } from '../utils';
 import { PlayerKeyboard } from '../components/PlayerKeyboard';
 
 import { getAsset } from '../lib/AssetLoader';
+import { checkDisqualifiedFlags, checkStoryFlag } from '../gameState';
 
 export class Portal {
   constructor(config) {
@@ -38,7 +39,7 @@ export class Portal {
   }
 
   mount(map) {
-    if (this.isMounted) return;
+    if (this.isMounted || !this.transitionToMap) return;
     console.debug(`Mounting Portal: ${this.id} ...`);
     this.map = map;
     this.sprite = this.animation;
@@ -60,12 +61,21 @@ export class Portal {
     const x = this.x - cameraPerson.x - withGrid(CONFIG.OFFSET.x);
     const y = this.y - cameraPerson.y - withGrid(CONFIG.OFFSET.y);
 
+    if (!checkStoryFlag(this.required || []) && checkDisqualifiedFlags(this.disqualify || [])) {
+      this.sprite.visible = false;
+    } else {
+      this.sprite.visible = true;
+    }
     this.sprite.position.set(x, y);
   }
 
   unmount() {
     this.isMounted = false;
-    this.sprite.stop();
-    this.sprite.parent.removeChild(this.sprite);
+    try {
+      this.sprite?.stop();
+    } catch (error) {
+      console.error(error);
+    }
+    this.sprite?.parent.removeChild(this.sprite);
   }
 }

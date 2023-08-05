@@ -58,12 +58,12 @@ export const CONFIG = {
               events: [
                 {
                   type: 'textMessage',
-                  text: 'Ohh… Du musst das neue Schaf in meiner Heerde sein (HiHi). Ich bin Fred, der Bürgermeister hier im Ort. Gerne erkläre ich Dir kurz, wie hier alles abläuft…',
+                  text: '„Ohh… Du musst das neue Schaf in meiner Heerde sein (HiHi). Ich bin Fred, der Bürgermeister hier im Ort. Gerne erkläre ich Dir kurz, wie hier alles abläuft…“',
                   faceHero: 'old-man'
                 },
                 {
                   type: 'textMessage',
-                  text: 'Die meisten laufen hier umher, indem Sie die Pfeiltasten benutzen. Um miteinander und mit Gegenständen zu interagieren, kannst du die Entertaste verwenden. Schau dich doch einfach ein wenig um und komm wieder zu mir, wenn du Hilfe brauchst oder eine Aufgabe erhalten willst.',
+                  text: '„Die meisten laufen hier umher, indem Sie die Pfeiltasten benutzen. Um miteinander und mit Gegenständen zu interagieren, kannst du die Entertaste verwenden. Schau dich doch einfach ein wenig um und komm wieder zu mir, wenn du Hilfe brauchst oder eine Aufgabe erhalten willst.“',
                   faceHero: 'old-man'
                 },
                 { type: 'addStoryFlag', flag: 'talked-to-mayor-for-first-time' }
@@ -75,7 +75,7 @@ export const CONFIG = {
               events: [
                 {
                   type: 'textMessage',
-                  text: 'Da bist Du ja schon wieder. Das ging aber schnell. Ich dachte mir Du solltest wohl als erstes dein neues Domizil und Arbeitsstätte aufsuchen und dich ein wenig einrichten. Suche einfach nach dem Haus mit blauen Dach im Südwesten der Insel',
+                  text: '„Da bist Du ja schon wieder. Das ging aber schnell. Ich dachte mir Du solltest wohl als erstes dein neues Domizil und Arbeitsstätte aufsuchen und dich ein wenig einrichten. Suche einfach nach dem Haus mit blauen Dach im Südwesten der Insel.“',
                   faceHero: 'old-man'
                 },
                 { type: 'addStoryFlag', flag: 'talked-to-mayor-for-second-time' }
@@ -87,7 +87,7 @@ export const CONFIG = {
               events: [
                 {
                   type: 'textMessage',
-                  text: 'So nun startet der Ernst deine Karriere bei uns im Ort. Ich habe gehört Erna hat ein Computerproblem. Magst Du dich bitte darum kümmern, ich danke Dir im Voraus hierfür.',
+                  text: '„So nun startet der Ernst deiner Karriere bei uns im Ort. Ich habe gehört Erna hat ein Computerproblem. Magst Du dich bitte darum kümmern, ich danke Dir im Voraus hierfür.“',
                   faceHero: 'old-man'
                 },
                 { type: 'addStoryFlag', flag: 'talked-to-mayor-for-third-time' }
@@ -129,7 +129,9 @@ export const CONFIG = {
           modalContent: 'public/js/find-errors.js',
           required: ['talked-to-mayor-for-second-time'],
           disqualify: ['found-his-home'],
-          title: 'Finde alle Fehler im Bild'
+          title: 'Finde alle Fehler im Bild',
+          description:
+            'Dein Vorgänger, Ralf Reinfall, hat sein Büro wüst hinterlassen. Er nah es auch nicht so ernst mit der IT-Sicherheit. Finde 10 Fehler im Bild, die IT-Sicherheitslücken darstellen und beweise, dass Du ein echter Security-Sherlock bist! Los geht’s! Viel Erfolg beim Suchen!'
         }
       },
       portals: {
@@ -172,13 +174,13 @@ export const CONFIG = {
               events: [
                 {
                   type: 'textMessage',
-                  text: 'Oh, hallo junger Mann! Du musst <NAME>, der neue IT-Sicherheitsexperte sein. Wie schön, dass du endlich da bist. Dein Vorgänger, Ralf Reinfall, konnte mir leider nicht helfen. Der war aber auch eine Katastrophe auf zwei Beinen, sag ich dir! Und Hunde mochte er auch nicht. Wie kann man nur keine Hunde mögen?!!!1!?? Aber komm doch erstmal rein.“',
+                  text: '„Oh, hallo junger Mann! Du musst <NAME>, der neue IT-Sicherheitsexperte sein. Wie schön, dass Du endlich da bist. Dein Vorgänger, Ralf Reinfall, konnte mir leider nicht helfen. Der war aber auch eine Katastrophe auf zwei Beinen, sag ich dir! Und Hunde mochte er auch nicht. Wie kann man nur keine Hunde mögen?!!!1!?? Aber komm doch erstmal rein.“',
                   faceHero: 'grandma-erna'
                 },
                 { type: 'addStoryFlag', flag: 'talked-to-grandma-erna-for-first-time' },
                 {
                   type: 'textMessage',
-                  text: 'Helfe der alten Dame ihr Passwort zu finden. Im Haus findest du 4 Hinweise, die auf das richtige Passwort schließen lassen. Wenn du alle Hinweise gefunden hast, gib das Passwort am Computer der alten Dame ein. Ob du wirklich richtig liegst, siehst du, wenn der Bildschirm angeht. <br/>Viel Erfolg!'
+                  text: 'Helfe der alten Dame ihr Passwort zu finden. Im Haus findest Du 4 Hinweise, die auf das richtige Passwort schließen lassen. Wenn Du alle Hinweise gefunden hast, gib das Passwort am Computer der alten Dame ein. Ob Du wirklich richtig liegst, siehst Du, wenn der Bildschirm angeht. Viel Erfolg!'
                 }
               ]
             }
@@ -327,7 +329,9 @@ export const CONFIG = {
     {
       id: 'found-his-home',
       short: 'Finde dein Büro!',
-      long: 'Suche einfach nach dem Haus mit blauen Dach im Südwesten der Insel'
+      long: 'Suche einfach nach dem Haus mit blauen Dach im Südwesten der Insel',
+      award: 'public/images/quest-auszeichnung-cybersherlock.png',
+      awardTitle: 'Auszeichnung: Cyber Sherlock'
     },
     {
       id: 'talked-to-mayor-for-third-time',
@@ -337,7 +341,9 @@ export const CONFIG = {
     {
       id: 'helped-erna',
       short: 'Betrete das Haus der alten Dame (Erna) und finde ihr Passwort heraus',
-      long: 'Ernas Haus hat ein orangenes Dach im Osten der Insel in der Nähe des Brunnes und mit einem Zaun um den Garten'
+      long: 'Ernas Haus hat ein orangenes Dach im Osten der Insel in der Nähe des Brunnes und mit einem Zaun um den Garten',
+      award: 'public/images/quest-auszeichnung-paul.png',
+      awardTitle: 'Auszeichnung: Passwort Hacker'
     }
   ]
 };

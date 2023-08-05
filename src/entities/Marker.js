@@ -7,6 +7,8 @@ import { Tooltip } from '../lib/Tooltip';
 import { translate } from '../lib/Translator';
 import { getAsset } from '../lib/AssetLoader';
 import { Modal } from '../components/Modal';
+import { checkDisqualifiedFlags, checkStoryFlag } from '../gameState';
+import { TextMessage } from '../components/TextMessage';
 
 export class Marker {
   constructor(config) {
@@ -25,6 +27,7 @@ export class Marker {
 
     this.required = config.required || null;
     this.disqualify = config.disqualify || null;
+    this.description = config.description || '';
 
     this.keyboard = new PlayerKeyboard();
     this.keyboard.init();
@@ -67,6 +70,12 @@ export class Marker {
   update(cameraPerson) {
     const x = this.x - cameraPerson.x - withGrid(CONFIG.OFFSET.x);
     const y = this.y - cameraPerson.y - withGrid(CONFIG.OFFSET.y);
+
+    if (!checkStoryFlag(this.required || []) && checkDisqualifiedFlags([...this.disqualify])) {
+      this.sprite.visible = false;
+    } else {
+      this.sprite.visible = true;
+    }
 
     this.sprite.position.set(x, y);
   }
@@ -111,8 +120,14 @@ export class Marker {
   }
 
   showModal() {
-    if (this.modal) {
-      this.modal.show();
-    }
+    new TextMessage({
+      text: this.description,
+      onAcceptText: translate(this.onAcceptText) || translate('enter'),
+      onComplete: () => {
+        if (this.modal) {
+          this.modal.show();
+        }
+      }
+    }).init();
   }
 }
