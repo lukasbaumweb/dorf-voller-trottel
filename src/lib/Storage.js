@@ -12,7 +12,8 @@ const STORAGE_KEYS = {
   npc: 'npc',
   updatedOn: 'updatedOn',
   playerStoryProgress: 'playerStoryProgress',
-  username: 'username'
+  username: 'username',
+  'search-image-state': 'search-image-state'
 };
 
 /**
