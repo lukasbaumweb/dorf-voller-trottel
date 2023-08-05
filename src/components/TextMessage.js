@@ -90,13 +90,10 @@ export class TextMessage {
 
     const onAcceptFunction = () => {
       this.done(true);
-      this.onComplete && this.onComplete();
     };
 
     this.element.querySelector('#btnEnter').addEventListener('click', onAcceptFunction);
-    this.actionListener = new Keyboard('Enter', () => {
-      this.done(true);
-    });
+    this.actionListener = new Keyboard('Enter', onAcceptFunction);
   }
 
   done(runOnComplete, runOnCancel) {

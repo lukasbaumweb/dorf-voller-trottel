@@ -329,7 +329,6 @@ export class Map {
     const match = [...Object.values(this.items), ...Object.values(this.markers)].find((object) => {
       return `${object.x},${object.y}` === `${hero.x},${hero.y}`;
     });
-    console.debug(match);
 
     if (match && checkStoryFlag(match.required) && checkDisqualifiedFlags(match.disqualify)) {
       new TextMessage({

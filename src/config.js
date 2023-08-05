@@ -131,7 +131,7 @@ export const CONFIG = {
           disqualify: ['found-his-home'],
           title: 'Finde alle Fehler im Bild',
           description:
-            'Dein Vorgänger, Ralf Reinfall, hat sein Büro wüst hinterlassen. Er nah es auch nicht so ernst mit der IT-Sicherheit. Finde 10 Fehler im Bild, die IT-Sicherheitslücken darstellen und beweise, dass Du ein echter Security-Sherlock bist! Los geht’s! Viel Erfolg beim Suchen!'
+            'Dein Vorgänger, Ralf Reinfall, hat sein Büro wüst hinterlassen. Er nahm es auch nicht so ernst mit der IT-Sicherheit. Finde 10 Fehler im Bild, die IT-Sicherheitslücken darstellen und beweise, dass Du ein echter Security-Sherlock bist! Los geht’s! Viel Erfolg beim Suchen!'
         }
       },
       portals: {
