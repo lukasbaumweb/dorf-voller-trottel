@@ -87,7 +87,7 @@ export const CONFIG = {
               events: [
                 {
                   type: 'textMessage',
-                  text: '„So nun startet der Ernst deiner Karriere bei uns im Ort. Ich habe gehört Erna hat ein Computerproblem. Magst Du dich bitte darum kümmern, ich danke Dir im Voraus hierfür.“',
+                  text: '„So nun startet der Ernst deiner Karriere bei uns im Ort. Ich habe gehört Erna hat ein Computerproblem. Magst Du Dich darum kümmern? Sie wohnt in dem Haus mit dem gelben Dach und dem großen Garten. Aber Vorsicht vor dem Hund, der kleine Racker mag keine Fremden (HiHi)! Ich danke Dir im Voraus hierfür!“',
                   faceHero: 'old-man'
                 },
                 { type: 'addStoryFlag', flag: 'talked-to-mayor-for-third-time' }
