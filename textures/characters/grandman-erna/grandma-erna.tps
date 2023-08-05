@@ -124,7 +124,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename></filename>
+                <filename>../../../public/textures/characters/grandma-erna.json</filename>
             </struct>
         </map>
         <key>multiPackMode</key>
@@ -173,22 +173,22 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">sprites/idle-down-1.png</key>
-            <key type="filename">sprites/idle-down-2.png</key>
-            <key type="filename">sprites/idle-left-1.png</key>
-            <key type="filename">sprites/idle-left-2.png</key>
-            <key type="filename">sprites/idle-right-1.png</key>
-            <key type="filename">sprites/idle-right-2.png</key>
-            <key type="filename">sprites/idle-up-1.png</key>
-            <key type="filename">sprites/idle-up-2.png</key>
-            <key type="filename">sprites/walk-down-1.png</key>
-            <key type="filename">sprites/walk-down-2.png</key>
-            <key type="filename">sprites/walk-left-1.png</key>
-            <key type="filename">sprites/walk-left-2.png</key>
-            <key type="filename">sprites/walk-right-1.png</key>
-            <key type="filename">sprites/walk-right-2.png</key>
-            <key type="filename">sprites/walk-up-1.png</key>
-            <key type="filename">sprites/walk-up-2.png</key>
+            <key type="filename">sprites/grandma-erna-idle-down-1.png</key>
+            <key type="filename">sprites/grandma-erna-idle-down-2.png</key>
+            <key type="filename">sprites/grandma-erna-idle-left-1.png</key>
+            <key type="filename">sprites/grandma-erna-idle-left-2.png</key>
+            <key type="filename">sprites/grandma-erna-idle-right-1.png</key>
+            <key type="filename">sprites/grandma-erna-idle-right-2.png</key>
+            <key type="filename">sprites/grandma-erna-idle-up-1.png</key>
+            <key type="filename">sprites/grandma-erna-idle-up-2.png</key>
+            <key type="filename">sprites/grandma-erna-walk-down-1.png</key>
+            <key type="filename">sprites/grandma-erna-walk-down-2.png</key>
+            <key type="filename">sprites/grandma-erna-walk-left-1.png</key>
+            <key type="filename">sprites/grandma-erna-walk-left-2.png</key>
+            <key type="filename">sprites/grandma-erna-walk-right-1.png</key>
+            <key type="filename">sprites/grandma-erna-walk-right-2.png</key>
+            <key type="filename">sprites/grandma-erna-walk-up-1.png</key>
+            <key type="filename">sprites/grandma-erna-walk-up-2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -210,22 +210,22 @@
             <struct type="SpriteSheet">
                 <key>files</key>
                 <array>
-                    <filename>sprites/idle-down-1.png</filename>
-                    <filename>sprites/idle-down-2.png</filename>
-                    <filename>sprites/idle-left-1.png</filename>
-                    <filename>sprites/idle-left-2.png</filename>
-                    <filename>sprites/idle-right-1.png</filename>
-                    <filename>sprites/idle-right-2.png</filename>
-                    <filename>sprites/idle-up-1.png</filename>
-                    <filename>sprites/idle-up-2.png</filename>
-                    <filename>sprites/walk-down-1.png</filename>
-                    <filename>sprites/walk-down-2.png</filename>
-                    <filename>sprites/walk-left-1.png</filename>
-                    <filename>sprites/walk-left-2.png</filename>
-                    <filename>sprites/walk-right-1.png</filename>
-                    <filename>sprites/walk-right-2.png</filename>
-                    <filename>sprites/walk-up-1.png</filename>
-                    <filename>sprites/walk-up-2.png</filename>
+                    <filename>sprites/grandma-erna-idle-down-1.png</filename>
+                    <filename>sprites/grandma-erna-idle-down-2.png</filename>
+                    <filename>sprites/grandma-erna-idle-left-1.png</filename>
+                    <filename>sprites/grandma-erna-idle-left-2.png</filename>
+                    <filename>sprites/grandma-erna-idle-right-1.png</filename>
+                    <filename>sprites/grandma-erna-idle-right-2.png</filename>
+                    <filename>sprites/grandma-erna-idle-up-1.png</filename>
+                    <filename>sprites/grandma-erna-idle-up-2.png</filename>
+                    <filename>sprites/grandma-erna-walk-down-1.png</filename>
+                    <filename>sprites/grandma-erna-walk-down-2.png</filename>
+                    <filename>sprites/grandma-erna-walk-left-1.png</filename>
+                    <filename>sprites/grandma-erna-walk-left-2.png</filename>
+                    <filename>sprites/grandma-erna-walk-right-1.png</filename>
+                    <filename>sprites/grandma-erna-walk-right-2.png</filename>
+                    <filename>sprites/grandma-erna-walk-up-1.png</filename>
+                    <filename>sprites/grandma-erna-walk-up-2.png</filename>
                 </array>
             </struct>
         </map>
